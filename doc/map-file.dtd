@@ -1,0 +1,115 @@
+<!--
+   
+   This is the DTD definition file for the map files in the Jagsat
+   project for the Project Course in Âbo Akademy.
+   
+   (c) Juan Pedro Bolívar Puente 2009
+
+-->
+
+<!-- 
+
+   Root element. The attribute 'bg' is the relative path to the
+   background image and is compulsory
+
+-->
+<!ELEMENT map (meta?,(continent|link)*)>
+<!ATTLIST map
+	  bg CDATA #REQUIRED>
+
+<!-- 
+
+   Meta-information about the map that can be used in the map selector
+   or just for credit purposes.
+
+-->
+<!ELEMENT meta (author?, description?)>
+<!ELEMENT author (#PCDATA)> 
+<!ELEMENT description (#PCDATA)>
+
+<!-- 
+
+   A continent is a group of regions. It may contain a unique 'name'
+   attribute that gives a referentiable and showable name for
+   it. Also, it may contain a 'troops' parameter that indicates the
+   number of reinforcements that owning this continent rewards the
+   player.
+
+-->
+<!ELEMENT continent (region*)>
+<!ATTLIST continent
+	  name   CDATA #IMPLIED
+	  troops CDATA "0">
+
+<!--
+
+   A region is a country or a delimited area that the player can
+   own. Its click area can be defined by either a circle or a
+   polygon. The optional 'name' parameter can be used to give it a
+   unique name to reference it in the linkions.
+
+-->
+<!ELEMENT region (point|circle|polygon)>
+<!ATTLIST region
+	  name CDATA #IMPLIED>
+
+<!--
+
+   A circle is defined by a point and a radius. The 'radius' is an
+   attribute while the center must be specified using a point.
+
+-->
+<!ELEMENT circle (point)>
+<!ATTLIST circle
+	  radius CDATA #IMPLIED>
+
+<!--
+   
+   A poligon defined by the sequence of points that determine its
+   frontier polyline.
+
+-->
+<!ELEMENT polygon (point*)>
+
+<!--
+
+   A point must contain an 'x' and 'y' attribute defining its absolute
+   coordinates.
+
+-->
+<!ELEMENT point EMPTY>
+<!ATTLIST point
+	  x CDATA "0"
+	  y CDATA "0">
+
+<!--
+   
+   Use 'link' to link several regions so they can be considered
+   nerby countries and units can move between them. Note that all the
+   linkions are bi-directional. It contains a sequence of
+   nodes. Depending on the value of the 'type' attribute this will
+   behave:
+
+   - line: The given nodes are going to be sequentially. For example,
+   if the nodes named 'a', 'b', 'c' and 'd' are given, the following
+   set of linkions will be created: 'a-b, b-c, c-d'
+   
+   - circle: Same as line, but the last and first nodes are
+   linked. In the previous example, 'a-b, b-c, c-d, d-a' links
+   would be created.
+
+   - pairs: The links would be created in pair. In the previous
+   example, 'a-b, c-d' links would be created.
+
+   - clique: The given nodes are linked to form a clique or
+   complete graph. In the previus example, 'a-b, a-c, a-d, b-c, b-d,
+   c-d' would be created.
+
+-->
+<!ELEMENT link (node*)>
+<!ATTLIST link 
+	  type (line|circle|pairs|clique) "line">
+<!ELEMENT node EMPTY>
+<!ATTLIST node 
+	  name CDATA #REQUIRED>
+

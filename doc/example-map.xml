@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map SYSTEM "map-file.dtd">
+
+<map bg="world.png">
+  <meta>
+    <author>John Foo</author>
+    <description>Conquer the world!</description>
+  </meta>
+
+  <continent name="europe"
+	     troops="5">
+    <region name="spain">
+      <circle>
+	<point x="10" y="20"/>
+      </circle>
+    </region>
+
+    <region name="finland">
+      <polygon>
+	<point x="10" y="20"/>
+      </polygon>
+    </region>
+  </continent>
+
+  <link type="clique">
+    <node name="spain"/>
+    <node name="finland"/>
+  </link>
+</map>
