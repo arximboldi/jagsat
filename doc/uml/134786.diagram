@@ -1,0 +1,100 @@
+format 69
+
+statecanvas 128002 state_ref 129154 // in-game-menu
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  color transparent xyzwh 71 50 2000 575 429
+end
+statecanvas 128130 state_ref 135682 // in-game-menu-hidden
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 108 145 2005 175 35
+end
+statecanvas 128258 state_ref 135810 // showing-in-game-menu
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 106 251 2005 187 35
+end
+statecanvas 128386 state_ref 135938 // choose-save-game
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 122 369 2005 153 35
+end
+statecanvas 128514 state_ref 136066 // confirm-name
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 472 366 2005 117 35
+end
+statecanvas 128642 state_ref 136194 // showing-in-game-help
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 447 248 2005 179 35
+end
+pseudostatecanvas 128770 pseudostate_ref 135682 // entry_point
+   xyz 185 92 3005 label_xy 160 73
+end
+pseudostatecanvas 130690 pseudostate_ref 135810 // exit_point
+   xyz 453 103 3005 label_xy 481 104
+end
+transitioncanvas 128898 transition_ref 136834 // <transition>
+  
+  from ref 128770 z 3006 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129794 transition_ref 137218 // <transition>
+  
+  from ref 128258 z 2006 label "hide-in-game-menu" xyz 169.5 223.5 3000 to point 248 209
+  line 129922 z 2006 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130178 transition_ref 137346 // <transition>
+  
+  from ref 128258 z 2006 label "show-in-game-help" xyz 312 237 3000 to point 368 255
+  line 130306 z 2006 to ref 128642
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130434 transition_ref 137474 // <transition>
+  
+  from ref 128642 z 2006 label "close-in-game-help" xyz 318.5 277.5 3000 to point 367 271
+  line 130562 z 2006 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130818 transition_ref 137602 // <transition>
+  decenter_begin 950
+  
+  from ref 128258 z 3006 to ref 130690
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130946 transition_ref 137730 // <transition>
+  
+  from ref 128258 z 2006 label "save-game" xyz 124 317 3000 to ref 128386
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131074 transition_ref 137858 // <transition>
+  
+  from ref 128386 z 2006 label "name-chosen
+ [valid_name (name)]" xyz 301 411.5 3000 to point 373 403
+  line 131714 z 2006 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131202 transition_ref 137986 // <transition>
+  
+  from ref 128386 z 2006 label "name-chosen
+ [!valid_name (name)]" xyz 128 435 3000 to point 158 432
+  line 131330 z 2006 to point 230 432
+  line 131458 z 2006 to ref 128386
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131586 transition_ref 138114 // <transition>
+  
+  from ref 128514 z 2006 label "confirm-cancel" xyz 327 371 3000 to point 363 361
+  line 131842 z 2006 to ref 128386
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132354 transition_ref 137090 // <transition>
+  
+  from ref 128130 z 2006 label "show-in-game-menu" xyz 89.5 189 3000 to point 132 212
+  line 132482 z 2006 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132610 transition_ref 138370 // <transition>
+  
+  from ref 128514 z 2006 label "confirm-ok / 
+save_game(name)" xyz 402 308 3000 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+end

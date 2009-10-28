@@ -1,0 +1,82 @@
+format 70
+
+statecanvas 128002 state_ref 128898 // init-game
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  color transparent xyzwh 35 79 2000 715 423
+end
+statecanvas 128130 state_ref 149762 // give-objectives
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 73 179 2005 209 65
+end
+statecanvas 128258 state_ref 149890 // give-regions
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 509 180 2005 187 65
+end
+pseudostatecanvas 128386 pseudostate_ref 149122 // entry_point
+   xyz 166 129 3005 label_xy 139 109
+end
+note 128642 "for p in players:
+  p.obj = objectives[rand (0, len (objectives))]
+  objectives -= p.obj"
+  xyzwh 16 255 2000 307 87
+note 129026 "for p in players:
+  un-pass (p)
+  p.can_pass = false
+"
+  xyzwh 338 225 2005 155 71
+note 129282 "p = 0
+for x in range (0, total_regions):
+  r = regions [rand (0, len (regions))]
+  regions -= r
+  r.owner = players [p]
+  players[p].regions += r
+  p = (p + 1) % num_players"
+  xyzwh 494 38 2000 265 117
+statecanvas 129538 state_ref 150018 // place-troops
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 509 297 2005 219 129
+end
+pseudostatecanvas 131586 pseudostate_ref 149250 // exit_point
+   xyz 123 436 3005 label_xy 104 455
+end
+transitioncanvas 128514 transition_ref 153602 // <transition>
+  
+  from ref 128386 z 3006 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128898 transition_ref 153730 // <transition>
+  
+  from ref 128130 z 2006 label "pass(_) [num_pass = num_player] / 
+reset_passed ()
+" xyz 281 176 2006 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129666 transition_ref 153858 // <transition>
+  decenter_end 442
+  
+  from ref 128258 z 2006 label "click-region(r)
+[r.owner.troops > 0]" xyz 606 254 2006 to ref 129538
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130178 transition_ref 154114 // <transition>
+  
+  from ref 129538 z 2006 label "click-region (r)
+ [r.owner.troops > 0]" xyz 343 332 2006 to point 486 323
+  line 130306 z 2006 to point 486 360
+  line 130434 z 2006 to ref 129538
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131714 transition_ref 154370 // <transition>
+  geometry HVr
+  
+  from ref 129538 z 3006 label "pass(p) [num_pass == num_player] / player = rand (0, num_player)" xyz 180 450 3006 to point 616 443
+  line 131842 z 3006 to ref 131586
+  write_horizontally default show_definition default drawing_language default
+end
+line 128770 -_-_
+  from ref 128642 z 2006 to ref 128130
+line 129154 -_-_
+  from ref 129026 z 2007 to ref 128898
+line 129410 -_-_
+  from ref 129282 z 2006 to ref 128258
+end

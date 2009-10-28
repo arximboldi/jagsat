@@ -1,0 +1,105 @@
+format 70
+
+statecanvas 128002 state_ref 128770 // player-menu(p)
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  color transparent xyzwh 40 37 2000 773 485
+end
+statecanvas 128130 state_ref 136322 // player-menu-hidden
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 234 137 2005 163 35
+end
+statecanvas 128258 state_ref 136450 // showing-player-menu
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 229 210 2005 175 35
+end
+statecanvas 128386 state_ref 136578 // showing-player-objective
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 76 340 2005 199 35
+end
+statecanvas 128514 state_ref 136706 // showing-player-cards
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 357 364 2005 175 35
+end
+statecanvas 128642 state_ref 143234 // passed
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 549 184 2005 203 81
+end
+pseudostatecanvas 128770 pseudostate_ref 142338 // entry_point
+   xyz 307 89 3005 label_xy 281 72
+end
+transitioncanvas 128898 transition_ref 144898 // <transition>
+  
+  from ref 128770 z 3006 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129026 transition_ref 145026 // <transition>
+  
+  from ref 128130 z 2006 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129154 transition_ref 145154 // <transition>
+  
+  from ref 128258 z 2006 label "pass(p)
+ [p.can_pass]" xyz 426 173 2006 to point 466 205
+  line 129282 z 2006 to ref 128642
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129410 transition_ref 145282 // <transition>
+  
+  from ref 128642 z 2006 label "un-pass(p)" xyz 434 241 2006 to point 465 237
+  line 129538 z 2006 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129794 transition_ref 145410 // <transition>
+  
+  from ref 128258 z 2006 label "show-objective(p)" xyz 177 262 2006 to point 226 287
+  line 129922 z 2006 to ref 128386
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130050 transition_ref 145538 // <transition>
+  
+  from ref 128386 z 2006 label "hide-objective(p)" xyz 214 319 2006 to point 255 301
+  line 130178 z 2006 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130690 transition_ref 145666 // <transition>
+  
+  from ref 128258 z 2006 label "undo(p)
+ [p.can_undo] / 
+do_undo(p)" xyz 86 203 2006 to point 191 205
+  line 130818 z 2006 to point 191 240
+  line 130946 z 2006 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131074 transition_ref 145794 // <transition>
+  
+  from ref 128258 z 2006 label "show-cards(p)" xyz 371 285 2006 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 133762 transition_ref 146434 // <transition>
+  
+  from ref 128514 z 2006 label "toggle-card(c) / 
+c.selected = !c.selected" xyz 178 409 2006 to point 301 392
+  line 133890 z 2006 to point 312 420
+  line 134018 z 2006 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 136578 transition_ref 146562 // <transition>
+  
+  from ref 128514 z 2006 label "drop-cards / 
+p.cards -= {c : c ? p.cards & c.selected }" xyz 342 451 2006 to point 408 441
+  line 136706 z 2006 to point 456 442
+  line 136834 z 2006 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 137090 transition_ref 146818 // <transition>
+  
+  from ref 128514 z 2006 label "use-cards / 
+sc = { c : c ? p.cards & c.selected }
+p.cards -= valid_cards (sc)
+p.troops += value (sc)" xyz 577 321 2006 to point 592 359
+  line 137218 z 2006 to point 592 397
+  line 137346 z 2006 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+end

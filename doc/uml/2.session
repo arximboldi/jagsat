@@ -1,0 +1,13 @@
+window_sizes 764 776 300 458 582 120
+diagrams
+  active  statediagram_ref 148098 // attack-phase
+    202 582 100 4 60 0
+  statediagram_ref 141570 // one-turn-diagram
+    776 465 100 4 0 0
+end
+show_stereotypes
+selected state_ref 128258 // game
+open
+  state_ref 128002 // main-machine
+end
+end

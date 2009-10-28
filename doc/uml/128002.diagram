@@ -1,0 +1,62 @@
+format 69
+
+statecanvas 128002 state_ref 128130 // main-menu
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 115 121 2000 99 35
+end
+statecanvas 128130 state_ref 128258 // game
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 309 123 2000 59 35
+end
+statecanvas 128258 state_ref 128386 // game-result
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 412 125 2000 107 35
+end
+pseudostatecanvas 128386 pseudostate_ref 128002 // initial
+   xyz 54 129 2000
+end
+pseudostatecanvas 130434 pseudostate_ref 128130 // final
+   xyz 153 42 2000
+end
+transitioncanvas 128514 transition_ref 128002 // <transition>
+  
+  from ref 128386 z 2001 to ref 128002
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128642 transition_ref 128130 // <transition>
+  
+  from ref 128002 z 2001 label "load-game" xyz 219 103 2001 to point 257 118
+  line 129026 z 2001 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128770 transition_ref 128258 // <transition>
+  
+  from ref 128002 z 2001 label "start-game" xyz 222 159 2001 to point 258 156
+  line 128898 z 2001 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129154 transition_ref 128386 // <transition>
+  
+  from ref 128130 z 2001 label "win" xyz 375 123 2001 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129282 transition_ref 128514 // <transition>
+  
+  from ref 128130 z 2001 label "quit-game" xyz 232 197 2001 to point 335 194
+  line 129794 z 2001 to point 201 194
+  line 129410 z 2001 to ref 128002
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129922 transition_ref 128642 // <transition>
+  
+  from ref 128258 z 2001 label "done" xyz 293 224 2001 to point 462 220
+  line 130178 z 2001 to point 162 220
+  line 130050 z 2001 to ref 128002
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131458 transition_ref 128898 // <transition>
+  
+  from ref 128002 z 2001 label "quit-app" xyz 108 86 2001 to ref 130434
+  write_horizontally default show_definition default drawing_language default
+end
+end

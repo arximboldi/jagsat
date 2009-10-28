@@ -1,0 +1,110 @@
+format 70
+
+statecanvas 128002 state_ref 129026 // one-turn
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  color transparent xyzwh 73 30 2995 669 423
+end
+statecanvas 128514 state_ref 150146 // troop-phase
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 271 114 3010 109 35
+end
+pseudostatecanvas 128642 pseudostate_ref 149378 // exit_point
+   xyz 136 301 3010 label_xy 110 322
+end
+pseudostatecanvas 128770 pseudostate_ref 149506 // entry_point
+   xyz 104 119 3010 label_xy 78 104
+end
+pseudostatecanvas 128898 pseudostate_ref 149634 // exit_point
+   xyz 698 121 3010 label_xy 698 140
+end
+statecanvas 129026 state_ref 156674 // move-phase
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 418 293 3010 107 35
+end
+statecanvas 129154 state_ref 156802 // attack-phase
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 543 114 3010 115 35
+end
+note 133890 "can_move_troops (ra, rb, n):
+  ra.troops - ra.used >= n &
+  rb.owner = p &
+  rb in ra.neighbours"
+  xyzwh 143 354 3000 225 89
+note 134018 "do_move_troops (ra, rb, n):
+  rb.troops += n
+  rb.used += n
+  ra.troops -= n"
+  xyzwh 584 337 3000 169 105
+transitioncanvas 129282 transition_ref 160898 // <transition>
+  decenter_end 428
+  
+  from ref 128770 z 3011 label "/ p.take_troops()
+for i in players:
+  un-pass (p)
+  p.can_pass = false" xyz 132 130 3011 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130050 transition_ref 161026 // <transition>
+  
+  from ref 128514 z 3011 label "[p.troops > 0] / 
+p.can_pass = false" xyz 159 58 3011 to point 264 94
+  line 130178 z 3011 to point 296 76
+  line 130306 z 3011 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130434 transition_ref 161154 // <transition>
+  
+  from ref 128514 z 3011 label "
+ [p.troops = 0] / 
+p.can_pass = true" xyz 389 46 3011 to point 360 74
+  line 130562 z 3011 to point 393 96
+  line 130690 z 3011 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131202 transition_ref 161282 // <transition>
+  decenter_end 402
+  
+  from ref 128514 z 3011 label "place-troop(p, r)
+ [r.troops > 0 & r.owner = p] / 
+p.troops--
+r.troops++" xyz 228 185 3011 to point 339 180
+  line 131330 z 3011 to point 303 180
+  line 131458 z 3011 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132226 transition_ref 161410 // <transition>
+  
+  from ref 128514 z 3011 label "pass(p) / un-pass(p)" xyz 396 113 3011 to ref 129154
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132866 transition_ref 161538 // <transition>
+  geometry HVr
+  
+  from ref 129154 z 3011 label "pass(p) / un-pass(p)" xyz 555 157 3011 to point 598 308
+  line 132994 z 3011 to ref 129026
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 133122 transition_ref 161666 // <transition>
+  
+  from ref 129026 z 3011 label "move-troop(ra, rb, n)
+ [can_move_troops (ra, rb, n)] / 
+do_move_troops (ra, rb, n)" xyz 378 368 3011 to point 449 362
+  line 133250 z 3011 to point 488 362
+  line 133378 z 3011 to ref 129026
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 133506 transition_ref 161794 // <transition>
+  
+  from ref 129154 z 3011 to ref 128898
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 133634 transition_ref 161922 // <transition>
+  
+  from ref 129026 z 3011 label "pass (p) / un-pass (p)" xyz 231 293 3011 to ref 128642
+  write_horizontally default show_definition default drawing_language default
+end
+line 134146 -_-_
+  from ref 133890 z 3012 to ref 133122
+line 134274 -_-_
+  from ref 134018 z 3014 to ref 133378
+end

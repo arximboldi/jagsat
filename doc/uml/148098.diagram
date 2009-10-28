@@ -1,0 +1,146 @@
+format 70
+
+statecanvas 128002 state_ref 156802 // attack-phase
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  color transparent xyzwh 22 29 2000 787 499
+end
+statecanvas 128130 state_ref 156930 // choose-attack
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 202 135 2005 121 35
+end
+pseudostatecanvas 128258 pseudostate_ref 156162 // exit_point
+   xyz 42 207 3005 label_xy 37 226
+end
+statecanvas 129666 state_ref 157058 // combat
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 538 134 2005 73 35
+end
+statecanvas 130050 state_ref 157186 // evaluate-mission
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 191 314 2005 141 35
+end
+statecanvas 130178 state_ref 157314 // exile
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 612 377 2005 53 35
+end
+pseudostatecanvas 131330 pseudostate_ref 156290 // entry_point
+   xyz 42 143 3005 label_xy 37 162
+end
+note 134146 "draw_match(ta, td):
+  attacker.used +=
+    defender.troops - td
+  attacker.troops = ta
+  defender.troops = td"
+  xyzwh 5 381 2005 173 97
+note 134274 "win_match(ta, td):
+  defender.used =
+    defender.troops
+  attacker.troops -= 
+    defender.troops
+  defender.owner = p
+  "
+  xyzwh 125 474 2010 183 117
+note 134402 "loose_match(ta, td):
+  defender.troops -= attacker.troops
+  if defender.troops < 0:
+    attacker.troops += defender.troops + 1
+    defender.troops = 1
+  attacker.owner = defender.owner"
+  xyzwh 295 446 2005 295 121
+pseudostatecanvas 134914 pseudostate_ref 156418 // exit_point
+   xyz 43 322 3005 label_xy 43 341
+end
+transitioncanvas 129282 transition_ref 162178 // <transition>
+  
+  from ref 128130 z 2006 label "click-region(r)
+ [r.owner = p &
+r.troops - r.used > 1] / 
+attacker = r" xyz 106 53 3000 to point 279 102
+  line 129410 z 2006 to point 242 102
+  line 129538 z 2006 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129794 transition_ref 162306 // <transition>
+  
+  from ref 128130 z 2006 label "click-region(r)
+ [attacker != none &
+r in attacker.neighbours &
+r.owner != p] / 
+defender = r" xyz 332 56.5 3000 to point 425 137
+  line 132482 z 2006 to ref 129666
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130306 transition_ref 162434 // <transition>
+  geometry HVr
+  
+  from ref 129666 z 2006 label "finish-game (ta, td, e)
+ [ta=0, td>0] / 
+loose_match(ta, td)" xyz 425 330 3000 to point 572 329
+  line 133762 z 2006 to ref 130050
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130434 transition_ref 162562 // <transition>
+  geometry HV
+  
+  from ref 129666 z 2006 label "finish-game (ta, td, e)
+ [ta > 0, td > 0, e]" xyz 638 170 3000 to point 636 149
+  line 133250 z 2006 to ref 130178
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130562 transition_ref 162690 // <transition>
+  geometry VHr
+  
+  from ref 130178 z 2006 label "[defender.troops = 0] / 
+win_match(ta, td)" xyz 364.5 398.5 3000 to point 259 392
+  line 133506 z 2006 to ref 130050
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130818 transition_ref 162946 // <transition>
+  
+  from ref 130178 z 2006 label "click-region(r)
+ [r in defender.neighbours] / 
+r.troops++
+defender.troops--" xyz 597.5 424.5 3000 to point 711 365
+  line 130946 z 2006 to point 711 412
+  line 131074 z 2006 to ref 130178
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131202 transition_ref 163074 // <transition>
+  
+  from ref 130050 z 2006 label "no-win" xyz 265 229 3000 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131714 transition_ref 163202 // <transition>
+  
+  from ref 131330 z 3006 label "/ for r in regions:
+  r.used = 1" xyz 77.5 137 3000 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131842 transition_ref 163330 // <transition>
+  decenter_begin 165
+  
+  from ref 128130 z 3006 to point 219 213
+  line 134786 z 3006 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132610 transition_ref 163458 // <transition>
+  
+  from ref 129666 z 2006 label "finish-game (ta, td, e)
+ [ta>0 & td>0 & e] / 
+draw_match(ta, td)" xyz 348.5 166 3000 to point 424 160
+  line 132738 z 2006 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 133890 transition_ref 163586 // <transition>
+  
+  from ref 129666 z 2006 label "finnish-game(ta, td, e)
+ [ta>0 & td=0] / 
+win_match(ta, td)" xyz 385 227 3000 to ref 130050
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 135042 transition_ref 163714 // <transition>
+  
+  from ref 130050 z 3006 to ref 134914
+  write_horizontally default show_definition default drawing_language default
+end
+end

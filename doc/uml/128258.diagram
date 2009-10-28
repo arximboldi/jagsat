@@ -1,0 +1,84 @@
+format 70
+
+statecanvas 128002 state_ref 128258 // game
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  color transparent xyzwh 61 30 2000 541 369
+end
+statecanvas 128386 state_ref 128770 // player-menu(p)
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 260 328 2005 129 35
+end
+statecanvas 128514 state_ref 128898 // init-phase
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 200 106 2005 93 35
+end
+statecanvas 128642 state_ref 129026 // one-turn
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 358 105 2005 121 35
+end
+pseudostatecanvas 129410 pseudostate_ref 128770 // entry_point
+   xyz 97 221 3005 label_xy 72 240
+end
+pseudostatecanvas 129666 pseudostate_ref 128898 // entry_point
+   xyz 92 74 3005 label_xy 67 93
+end
+statecanvas 129794 state_ref 129154 // in-game-menu
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 262 212 2005 121 35
+end
+pseudostatecanvas 130562 pseudostate_ref 135426 // exit_point
+   xyz 534 112 3005 label_xy 534 131
+end
+pseudostatecanvas 130818 pseudostate_ref 135554 // exit_point
+   xyz 533 220 3005 label_xy 511 239
+end
+note 131586 "There should be a concurrent player-menu per player. We abuse the UML notation parametricing the menu with (p), the actual player that menu belongs to."
+  xyzwh 448 303 2005 249 107
+pseudostatecanvas 132738 pseudostate_ref 148994 // deep_history
+   xyz 162 71 2010
+end
+transitioncanvas 129922 transition_ref 129282 // <transition>
+  
+  from ref 129410 z 3006 to ref 129794
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130050 transition_ref 129410 // <transition>
+  
+  from ref 129410 z 3006 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130178 transition_ref 135938 // <transition>
+  
+  from ref 129410 z 3006 to ref 128386
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130434 transition_ref 136194 // <transition>
+  
+  from ref 128514 z 2006 label "next-turn" xyz 294 101 3000 to ref 128642
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130690 transition_ref 136322 // <transition>
+  
+  from ref 128642 z 3006 to ref 130562
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131458 transition_ref 136706 // <transition>
+  
+  from ref 129794 z 3006 to ref 130818
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132226 transition_ref 153346 // <transition>
+  
+  from ref 128642 z 2006 label "next-turn / player = (player + 1) % num_players" xyz 270 64.5 3000 to point 435 81
+  line 132354 z 2006 to point 397 81
+  line 132482 z 2006 to ref 128642
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132866 transition_ref 153474 // <transition>
+  
+  from ref 129666 z 3006 to ref 132738
+  write_horizontally default show_definition default drawing_language default
+end
+line 131714 -_-_ decenter_begin 400
+  from ref 131586 z 2006 to ref 128386
+end
