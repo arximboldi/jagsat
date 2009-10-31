@@ -7,7 +7,10 @@
     <description>Made the continent reinforcements 2,3,4,5,6,7 (can easliy be changed) </description>
   </meta>
 
-<continent name="europe"
+
+<!-- continent europe -->
+
+  <continent name="europe"
 	     troops="5">
     <region name="spain">
       <circle>
@@ -34,7 +37,6 @@
 	<point x="10" y="20"/>
       </circle>
     </region>
-
     <region name="scandinavia">
       <polygon>
 	<point x="10" y="20"/>
@@ -52,7 +54,9 @@
     </region>
   </continent>
 
-<continent name="north amerika"
+<!-- continent north america -->
+
+  <continent name="north amerika"
 	     troops="6">
     <region name="alaska">
       <polygon>
@@ -106,7 +110,9 @@
     </region>
   </continent>
 
-<continent name="south amerika"
+<!-- continent south america -->
+
+  <continent name="south amerika"
 	     troops="3">
     <region name="venezuela">
       <circle>
@@ -135,7 +141,10 @@
     </region>
   </continent>
 
-<continent name="africa"
+
+<!-- continent africa -->
+
+  <continent name="africa"
 	     troops="4">
     <region name="algeria">
       <circle>
@@ -169,7 +178,9 @@
     </region>
   </continent>
 
-<continent name="asia"
+<!-- continent asia -->
+
+  <continent name="asia"
 	     troops="7">
     <region name="ural">
       <circle>
@@ -223,7 +234,9 @@
     </region>
   </continent>
 
-<continent name="australia"
+<!-- continent australia -->
+
+  <continent name="australia"
 	     troops="2">
     <region name="indonesia">
       <circle>
@@ -247,223 +260,241 @@
     </region>   
   </continent>
 
-<link type="clique">
+<!-- continent australia links -->
+
+  <link type="clique">
 
     <node name="indonesia"/>
     <node name="new guinea"/>
     <node name="western australia"/>
     <node name="eastern australia"/>
- </link>
+  </link>
 
-<link type="circle">
+<!-- continent south america links -->
+
+  <link type="circle">
     <node name="wenezuela"/>
     <node name="colombia"/>
     <node name="brazil"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="wenezuela"/>
     <node name="brazil"/>
     <node name="peru"/>
 
-<link type="circle">
+  <link type="circle">
     <node name="argentina"/>
     <node name="brazil"/>
     <node name="peru"/>
-</link>
+  </link>
 
-<link type="circle">
+<!-- continent africa links -->
+
+  <link type="circle">
     <node name="algeria"/>
     <node name="egypt"/>
     <node name="tanzania"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="algeria"/>
     <node name="congo"/>
     <node name="tanzania"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="south africa"/>
     <node name="congo"/>
     <node name="tanzania"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="south africa"/>
     <node name="madagascar"/>
     <node name="tanzania"/>
-</link>
-<link type="circle">
+  </link>
+
+<!-- continent north america links -->
+
+  <link type="circle">
     <node name="mexico"/>
     <node name="florida"/>
     <node name="texas"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="new york"/>
     <node name="florida"/>
     <node name="texas"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="eastern canada"/>
     <node name="california"/>
     <node name="texas"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="eastern canada"/>
     <node name="california"/>
     <node name="texas"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="eastern canada"/>
     <node name="new york"/>
     <node name="eastern canada"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="eastern canada"/>
     <node name="california"/>
     <node name="western canada"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="western canada"/>
     <node name="california"/>
     <node name="alaska"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="eastern canada"/>
     <node name="northern canada"/>
     <node name="western canada"/>
-</link>
-<link type="circle">
+  </link>
+
+<!-- continent europe links -->
+
+  <link type="circle">
     <node name="iceland"/>
     <node name="scandinavia"/>
     <node name="united kingdom"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="western europe"/>
     <node name="scandinavia"/>
     <node name="united kingdom"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="western europe"/>
     <node name="scandinavia"/>
     <node name="st. petersburg"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="western europe"/>
     <node name="eastern europe"/>
     <node name="st. petersburg"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="western europe"/>
     <node name="eastern europe"/>
     <node name="balkan"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="western europe"/>
     <node name="spain"/>
     <node name="balkan"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="western europe"/>
     <node name="spain"/>
     <node name="united kingdom"/>
-</link>
-<link type="clique">
+  </link>
+
+<!-- continent asia links -->
+
+  <link type="clique">
 
     <node name="yakutsk"/>
     <node name="chersky"/>
     <node name="mongolia"/>
     <node name="japan"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="mongolia"/>
     <node name="japan"/>
     <node name="china"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="mongolia"/>
     <node name="siberia"/>
     <node name="china"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="ural"/>
     <node name="siberia"/>
     <node name="china"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="ural"/>
     <node name="iran"/>
     <node name="china"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="india"/>
     <node name="iran"/>
     <node name="china"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="india"/>
     <node name="iran"/>
     <node name="saudi arabia"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="india"/>
     <node name="thailand"/>
     <node name="china"/>
-</link>
-<link type="line">
+  </link>
+
+<!-- intercontinental links -->
+
+  <link type="line">
     <node name="thailand"/>
     <node name="indonesia"/>
-</link>
-<link type="line">
+  </link>
+  <link type="line">
     <node name="chersky"/>
     <node name="alaska"/>
-</link>
-<link type="line">
+  </link>
+  <link type="line">
     <node name="brazil"/>
     <node name="algeria"/>
-</link>
-<link type="line">
+  </link>
+  <link type="line">
     <node name="greenland"/>
     <node name="iceland"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="colombia"/>
     <node name="venezuela"/>
     <node name="mexico"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="spain"/>
     <node name="balkan"/>
     <node name="algeria"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="algeria"/>
     <node name="balkan"/>
     <node name="egypt"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="egypt"/>
     <node name="balkan"/>
     <node name="saudi arabia"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="balkan"/>
     <node name="eastern europe"/>
     <node name="saudi arabia"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="eastern europe"/>
     <node name="iran"/>
     <node name="saudi arabia"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="eastern europe"/>
     <node name="st. petersburg"/>
     <node name="iran"/>
-</link>
-<link type="circle">
+  </link>
+  <link type="circle">
     <node name="ural"/>
     <node name="st. petersburg"/>
     <node name="iran"/>
-</link>
+  </link>
  
 
 </map>
