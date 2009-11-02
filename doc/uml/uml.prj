@@ -1,6 +1,6 @@
 format 70
 "uml"
-  revision 5
+  revision 6
   modified_by 2 "raskolnikov"
 
 
@@ -8,7 +8,7 @@ format 70
   // class settings
   default_attribute_visibility private default_relation_visibility private default_operation_visibility public
   //class diagram settings
-  draw_all_relations yes hide_attributes no hide_operations no hide_getset_operations no show_members_full_definition no show_members_visibility no show_members_stereotype no show_members_multiplicity no show_members_initialization no show_attribute_modifiers no member_max_width 127 show_parameter_dir yes show_parameter_name yes package_name_in_tab no class_drawing_mode natural drawing_language uml show_context_mode no auto_label_position yes show_relation_modifiers no show_relation_visibility no show_infonote no shadow yes show_stereotype_properties no
+  draw_all_relations yes hide_attributes no hide_operations no hide_getset_operations no show_members_full_definition no show_members_visibility no show_members_stereotype no show_members_multiplicity no show_members_initialization no show_attribute_modifiers no member_max_width 127 show_parameter_dir yes show_parameter_name yes package_name_in_tab yes class_drawing_mode natural drawing_language uml show_context_mode no auto_label_position yes show_relation_modifiers no show_relation_visibility no show_infonote no shadow yes show_stereotype_properties no
   //use case diagram settings
   package_name_in_tab no show_context no auto_label_position yes draw_all_relations yes class_drawing_mode actor shadow yes show_stereotype_properties no
   //sequence diagram settings
@@ -36,7 +36,7 @@ format 70
 
   mark_for_import
   
-  classview 128002 "class-design"
+  classview 128002 "state-machine"
     //class diagram settings
     draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
     //collaboration diagram settings
@@ -659,4 +659,990 @@ p.troops += value (sc)"
       end
     end
   end
+
+  classview 134530 "classes"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    classdiagram 154626 "class-diagram"
+      draw_all_relations yes hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition yes show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language python show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 128002 "GameState"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128258 // <directional composition>
+	relation 128258 *-->
+	  a role_name "" private
+	    python "${comment}${self}${name} = ${type}()
+"
+	    classrelation_ref 128258 // <directional composition>
+	  b parent class_ref 128386 // PlayerState
+      end
+
+      classrelation 131970 // <directional composition>
+	relation 131842 *-->
+	  a role_name "" private
+	    python "${comment}${self}${name} = ${type}()
+"
+	    classrelation_ref 131970 // <directional composition>
+	  b parent class_ref 128130 // RegionState
+      end
+    end
+
+    class 128130 "RegionState"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      attribute 129026 "definition"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      classrelation 128386 // <unidirectional association>
+	relation 128386 --->
+	  a role_name "" private
+	    python "${comment}${self}${name} = ${value}
+"
+	    classrelation_ref 128386 // <unidirectional association>
+	  b parent class_ref 128642 // RegionDef
+      end
+
+      attribute 129666 "troops"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 129794 "used_troops"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 129922 "owner"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      classrelation 129154 // <unidirectional association>
+	relation 129154 --->
+	  a role_name "" private
+	    python "${comment}${self}${name} = ${value}
+"
+	    classrelation_ref 129154 // <unidirectional association>
+	  b parent class_ref 128386 // PlayerState
+      end
+
+      attribute 130434 "on_troops_change"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 130562 "on_owner_change"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 131074 "on_used_troops_change"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+    end
+
+    class 128258 "MapDef"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 128002 "MapDef"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "name" explicit_type "string"
+	
+	
+	
+	python_def "${@}${static}${abstract}def ${name}${(}${p0}${v0}${)}:
+${docstring}${body}
+"
+	
+      end
+
+      attribute 128130 "regions"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 128258 "continents"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 128898 "file_name"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      classrelation 128514 // <directional composition>
+	relation 128514 *-->
+	  a role_name "" private
+	    python "${comment}${self}${name} = ${type}()
+"
+	    classrelation_ref 128514 // <directional composition>
+	  b parent class_ref 128642 // RegionDef
+      end
+
+      classrelation 128642 // <directional composition>
+	relation 128642 *-->
+	  a role_name "" private
+	    python "${comment}${self}${name} = ${type}()
+"
+	    classrelation_ref 128642 // <directional composition>
+	  b parent class_ref 128898 // ContinentDef
+      end
+    end
+
+    class 128386 "PlayerState"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      attribute 128002 "regions"
+	private type class_ref 128130 // RegionState
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      classrelation 128130 // <directional aggregation>
+	relation 128130 o-->
+	  a role_name "" private
+	    python "${comment}${self}${name} = ${value}
+"
+	    classrelation_ref 128130 // <directional aggregation>
+	  b parent class_ref 128130 // RegionState
+      end
+
+      attribute 128514 "mission"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 128642 "troops"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 128770 "cards"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 129154 "definition"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      classrelation 129026 // <unidirectional association>
+	relation 129026 --->
+	  a role_name "" private
+	    python "${comment}${self}${name} = ${value}
+"
+	    classrelation_ref 129026 // <unidirectional association>
+	  b parent class_ref 129026 // PlayerDef
+      end
+
+      attribute 130946 "on_pass"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      operation 128514 "pass"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	python_def "${@}${static}${abstract}def ${name}${(}${)}:
+${docstring}${body}
+"
+	
+      end
+    end
+
+    class 128642 "RegionDef"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      attribute 130050 "name"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 130178 "neighbours"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 130306 "continent"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      classrelation 131842 // <unidirectional association>
+	relation 131714 --->
+	  a role_name "" private
+	    python "${comment}${self}${name} = ${value}
+"
+	    classrelation_ref 131842 // <unidirectional association>
+	  b parent class_ref 128898 // ContinentDef
+      end
+    end
+
+    class 128770 "State"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 128898 "ContinentDef"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 131714 // <directional aggregation>
+	relation 131586 o-->
+	  a role_name "" private
+	    python "${comment}${self}${name} = ${value}
+"
+	    classrelation_ref 131714 // <directional aggregation>
+	  b parent class_ref 128642 // RegionDef
+      end
+
+      attribute 130690 "name"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 130818 "regions"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+    end
+
+    class 129026 "PlayerDef"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      attribute 129282 "name"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 129410 "color"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      attribute 129538 "position"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+    end
+
+    class 129154 "MainMenu"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129282 // <generalisation>
+	relation 129282 ---|>
+	  a public
+	    python "${type}"
+	    classrelation_ref 129282 // <generalisation>
+	  b parent class_ref 128770 // State
+      end
+
+      classrelation 130306 // <dependency>
+	relation 130306 -_->
+	  a default
+	    python "${type}"
+	    classrelation_ref 130306 // <dependency>
+	  b parent class_ref 128770 // State
+      end
+
+    end
+
+    class 129282 "Game"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129410 // <generalisation>
+	relation 129410 ---|>
+	  a public
+	    python "${type}"
+	    classrelation_ref 129410 // <generalisation>
+	  b parent class_ref 128770 // State
+      end
+
+      operation 128130 "load_game"
+	class_operation public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	python_def "${@}${static}${abstract}def ${name}${(}${)}:
+${docstring}${body}
+"
+	
+      end
+
+      classrelation 130178 // <dependency>
+	relation 130178 -_->
+	  a default
+	    python "${type}"
+	    classrelation_ref 130178 // <dependency>
+	  b parent class_ref 128770 // State
+      end
+
+      operation 128258 "new_game"
+	class_operation public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	python_def "${@}${static}${abstract}def ${name}${(}${)}:
+${docstring}${body}
+"
+	
+      end
+
+      operation 128386 "save_game"
+	class_operation public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	python_def "${@}${static}${abstract}def ${name}${(}${)}:
+${docstring}${body}
+"
+	
+      end
+
+      classrelation 131202 // <unidirectional association>
+	relation 131202 --->
+	  a role_name "" private
+	    python "${comment}${self}${name} = ${value}
+"
+	    classrelation_ref 131202 // <unidirectional association>
+	  b parent class_ref 128002 // GameState
+      end
+    end
+
+    class 129410 "GameSetup"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129538 // <generalisation>
+	relation 129538 ---|>
+	  a public
+	    python "${type}"
+	    classrelation_ref 129538 // <generalisation>
+	  b parent class_ref 128770 // State
+      end
+
+      classrelation 130434 // <dependency>
+	relation 130434 -_->
+	  a default
+	    python "${type}"
+	    classrelation_ref 130434 // <dependency>
+	  b parent class_ref 129282 // Game
+      end
+    end
+
+    class 129538 "GameRound"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129666 // <generalisation>
+	relation 129666 ---|>
+	  a public
+	    python "${type}"
+	    classrelation_ref 129666 // <generalisation>
+	  b parent class_ref 128770 // State
+      end
+
+      classrelation 130562 // <dependency>
+	relation 130562 -_->
+	  a default
+	    python "${type}"
+	    classrelation_ref 130562 // <dependency>
+	  b parent class_ref 129282 // Game
+      end
+    end
+
+    class 129666 "TroopPhase"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129794 // <generalisation>
+	relation 129794 ---|>
+	  a public
+	    python "${type}"
+	    classrelation_ref 129794 // <generalisation>
+	  b parent class_ref 128770 // State
+      end
+
+      classrelation 130690 // <dependency>
+	relation 130690 -_->
+	  a default
+	    python "${type}"
+	    classrelation_ref 130690 // <dependency>
+	  b parent class_ref 129410 // GameSetup
+      end
+    end
+
+    class 129794 "AttackPhase"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129922 // <generalisation>
+	relation 129922 ---|>
+	  a public
+	    python "${type}"
+	    classrelation_ref 129922 // <generalisation>
+	  b parent class_ref 128770 // State
+      end
+
+      classrelation 130818 // <dependency>
+	relation 130818 -_->
+	  a default
+	    python "${type}"
+	    classrelation_ref 130818 // <dependency>
+	  b parent class_ref 129410 // GameSetup
+      end
+    end
+
+    class 129922 "MovePhase"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130050 // <generalisation>
+	relation 130050 ---|>
+	  a public
+	    python "${type}"
+	    classrelation_ref 130050 // <generalisation>
+	  b parent class_ref 128770 // State
+      end
+
+      classrelation 130946 // <dependency>
+	relation 130946 -_->
+	  a default
+	    python "${type}"
+	    classrelation_ref 130946 // <dependency>
+	  b parent class_ref 129410 // GameSetup
+      end
+    end
+
+    class 130050 "MapComponent"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 128898 "show_used_troops"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	python_def "${@}${static}${abstract}def ${name}${(}${)}:
+${docstring}${body}
+"
+	
+      end
+
+      attribute 131202 "on_pick_region"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      operation 129154 "highlight_region"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	python_def "${@}${static}${abstract}def ${name}${(}${)}:
+${docstring}${body}
+"
+	
+      end
+
+      operation 129282 "hide_used_troops"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	python_def "${@}${static}${abstract}def ${name}${(}${)}:
+${docstring}${body}
+"
+	
+      end
+    end
+
+    class 130178 "GamePickler"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 128642 "persistent_id"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "obj" explicit_type ""
+	
+	
+	
+	python_def "${@}${static}${abstract}def ${name}${(}${p0}${v0}${)}:
+${docstring}${body}
+"
+	
+      end
+
+      classrelation 132098 // <generalisation>
+	relation 131970 ---|>
+	  a public
+	    python "${type}"
+	    classrelation_ref 132098 // <generalisation>
+	  b parent class_ref 130434 // Pickler
+      end
+    end
+
+    class 130306 "GameUnpickler"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 128770 "persistent_load"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "id" explicit_type ""
+	
+	
+	
+	python_def "${@}${static}${abstract}def ${name}${(}${p0}${v0}${)}:
+${docstring}${body}
+"
+	
+      end
+
+      classrelation 132226 // <generalisation>
+	relation 132098 ---|>
+	  a public
+	    python "${type}"
+	    classrelation_ref 132226 // <generalisation>
+	  b parent class_ref 130562 // Unpickler
+      end
+    end
+
+    class 130434 "Pickler"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 130562 "Unpickler"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 130690 "PlayerMenuComponent"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      attribute 131330 "on_pass"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl "${comment}${self}${name} = ${value}
+"
+	idl_decl ""
+      end
+
+      operation 129410 "enable_pass"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	python_def "${@}${static}${abstract}def ${name}${(}${)}:
+${docstring}${body}
+"
+	
+      end
+
+      operation 129538 "disable_pass"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	python_def "${@}${static}${abstract}def ${name}${(}${)}:
+${docstring}${body}
+"
+	
+      end
+    end
+
+    class 130818 "InGameMenuComponent"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 130946 "Gesture"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 131074 "CircleGesture"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 132354 // <generalisation>
+	relation 132226 ---|>
+	  a public
+	    python "${type}"
+	    classrelation_ref 132354 // <generalisation>
+	  b parent class_ref 130946 // Gesture
+      end
+    end
+
+    class 131202 "LineGesture"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 132482 // <generalisation>
+	relation 132354 ---|>
+	  a public
+	    python "${type}"
+	    classrelation_ref 132482 // <generalisation>
+	  b parent class_ref 130946 // Gesture
+      end
+    end
+  end
+
+  package_ref 128002 // definition
+
+  package_ref 128130 // state
+
+  package_ref 128258 // behaviour
+
+  package_ref 128386 // ui
 end
