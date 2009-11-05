@@ -164,7 +164,7 @@ Options:
                 self._file_logger = StdLogListener (LOG_INFO,
                                                    self._log_file,
                                                    self._log_file)
-                GlobalLog ().add_listener (self._file_logger)
+                GlobalLog ().connect (self._file_logger)
             except Exception, e:
                 _log.warning ("Could not open log file, " + fname)
 

@@ -54,10 +54,11 @@ class XmlConfBackend (NullBackend):
         try:
             fh = open (self.file_name, 'r')
         except IOError, e:
-            raise XmlConfError ('Could not open config file. ' +
+            raise XmlConfError (message =
+                                'Could not open config file. ' +
                                 'If this is the first time you ' +
                                 'run the application it might be created later.',
-                                LOG_WARNING)
+                                level = LOG_WARNING)
         
         parser.parse (fh)
         fh.close ()

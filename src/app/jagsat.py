@@ -3,7 +3,7 @@
 #
 #  This software is in development and the distribution terms have not
 #  been decided yet. Therefore, its distribution outside the JAGSAT
-#  project team or the Project Course evalautors in Âbo Akademy is
+#  project team or the Project Course evalautors in Abo Akademy is
 #  completly forbidden without explicit permission of their authors.
 #
 
@@ -14,17 +14,19 @@ _log = get_log (__name__)
 
 class JagsatApp (AppBase):
 
+    NAME = 'jagsat'
+    
     OPTIONS = AppBase.OPTIONS + \
 """
 Game options:
   -m, --map <file>   Map file to load.
 """
 
-    LICENSE =
+    LICENSE = \
 """
   This software is in development and the distribution terms have not
   been decided yet. Therefore, its distribution outside the JAGSAT
-  project team or the Project Course evalautors in Âbo Akademy is
+  project team or the Project Course evalautors in Abo Akademy is
   completly forbidden without explicit permission of their authors.
 """
 
@@ -33,7 +35,7 @@ Game options:
 
     def __init__ (self, *a, **k):
         super (JagsatApp, self).__init__ (*a, **k)
-        self._arg_map = OptionWith ()
+        self._arg_map = OptionWith (str)
         
     def do_prepare (self, args):
         args.add ('m', 'map', self._arg_map)
