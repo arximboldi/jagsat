@@ -7,12 +7,6 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
-import sys
-sys.path.append ('lib')
+from base.error import LoggableError
 
-import unittest
-
-from test.model_map import *
-
-if __name__ == '__main__':
-    unittest.main ()
+class ModelError (LoggableError): pass

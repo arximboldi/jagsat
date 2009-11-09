@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE map SYSTEM "map-file.dtd">
+<!DOCTYPE map SYSTEM "file:///home/raskolnikov/devel/jagsat/svn/trunk/doc/file-formats/map-file.dtd">
 
 <map bg="world.png">
   <meta>

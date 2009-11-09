@@ -22,7 +22,7 @@ from conf import NullBackend, ConfNode, ConfError
 from log import *
 
 from xml.sax import make_parser, SAXException
-from xml.sax.handler import ContentHandler
+from xml_util import AutoContentHandler
 
 def read_bool (msg):
     return True if msg.lower () == 'true' else False
@@ -38,11 +38,15 @@ class XmlConfError (ConfError):
 
 class XmlConfBackend (NullBackend):
 
-    def __init__ (self, fname, *a, **k):
-        self.save_on_change = k.pop ('update_on_change', False)
-        self.save_on_nudge  = k.pop ('update_on_nudge', False)
-        self.file_name = fname
+    def __init__ (self, fname,
+                  update_on_change = False,
+                  update_on_nudge  = False,
+                  *a, **k):
         super (XmlConfBackend, self).__init__ (*a, **k)
+        
+        self.save_on_change = update_on_change
+        self.save_on_nudge  = update_on_nudge
+        self.file_name = fname
         
     def _do_load (self, node, overwrite):
         setter = ConfNode.set_value if overwrite else ConfNode.default
@@ -111,53 +115,36 @@ class XmlConfWriter (object):
         else:
             self._fh.write ('/>\n')
         
-class XmlSaxConfParser (ContentHandler):
+class XmlSaxConfParser (AutoContentHandler):
 
     def __init__ (self,
                   conf_node = None,
-                  setter = ConfNode.set_value):
+                  setter = ConfNode.set_value,
+                  *a, **k):
+        super (XmlSaxConfParser, self).__init__ (*a, **k)
         self._curr_node = conf_node if conf_node else ConfNode ()
         self._curr_type = None
-        self._depth = 0
         self._setter = setter
 
     def conf_node (self):
         return self._curr_node
-    
-    def startElement (self, name, attrs):
-        self.dispatch_element ('_start_element_', name, attrs)
-        self._depth += 1
-        
-    def endElement (self, name):
-        self.dispatch_element ('_end_element_', name, {})
-        self._depth -= 1
-        
-    def characters (self, chars):
-        pass
-    
-    def dispatch_element (self, prev, name, attrs):
-        attr = prev + name
-        if hasattr (self, attr):
-            getattr (self, attr) (name, attrs)
-        else:
-            raise XmlConfError ('Unknown node: ' + name)
 
-    def _start_element_config (self, name, attrs):
+    def _new_config (self, attrs):
         if self._depth != 0:
             raise XmlConfError ('Unexpected \'config\' tag')
         self._curr_node.rename (attrs ['name'])
         self._fill_node (attrs)
         
-    def _end_element_config (self, name, attrs):
+    def _end_config (self):
         pass
     
-    def _start_element_node (self, name, attrs):
+    def _new_node (self, attrs):
         if self._depth < 1:
             raise XmlConfError ('Unexpected \'node\' tag')
         self._curr_node = self._curr_node.child (attrs ['name'])
         self._fill_node (attrs)
         
-    def _end_element_node (self, name, attrs):
+    def _end_node (self):
         self._curr_node = self._curr_node.parent ()
 
     def _fill_node (self, attrs):

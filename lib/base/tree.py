@@ -61,7 +61,10 @@ class AutoTree (object):
     node can only belong to one AutoTree.
     """
     
-    def __init__ (self, *a, **k):
+    def __init__ (self,
+                  name = None,
+                  auto_tree_traits = AutoTreeTraits,
+                  *a, **k):
         """
         Constructor.
 
@@ -72,12 +75,12 @@ class AutoTree (object):
 
           - name: Name to give to this node.
         """
-
-        self._traits = k.pop ('auto_tree_traits', AutoTreeTraits)
-        self._name = k.pop ('name', self._traits.name_type ())
+        super (AutoTree, self).__init__ (*a, **k)
+        
+        self._traits = auto_tree_traits
+        self._name = self._traits.name_type () if name is None else name
         self._parent = None
         self._childs = {}
-        super (AutoTree, self).__init__ (*a, **k)
         
 
     def child (self, name):
