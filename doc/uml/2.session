@@ -12,6 +12,6 @@ open
   class_ref 130306 // GameUnpickler
   class_ref 130690 // PlayerMenuComponent
   
-  package_ref 128002 // definition
+package_ref 128002 // definition
 end
 end

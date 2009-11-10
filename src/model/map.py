@@ -19,7 +19,6 @@ class MapError (ModelError):
 
 
 def load_map (file_name):
-
     try:
         reader = MapContentHandler ()
         parser = make_parser ()
@@ -157,6 +156,7 @@ class MetaDef (object):
         self.author = author
         self.description = ''
 
+
 class MapDef (object):
 
     def __init__ (self,
@@ -168,11 +168,12 @@ class MapDef (object):
         if regions is None:
             regions = []
 
-        self.regions    = dict ([(r.name, r) for r in regions])
+        self.regions    = dict ((r.name, r) for r in regions)
         self.continents = \
-            dict ([(r.continent.name, r.continent) for r in regions])
+            dict ((r.continent.name, r.continent) for r in regions)
 
         self.meta = None
+
 
 class ContinentDef (object):
 
@@ -204,7 +205,6 @@ class RegionDef (object):
         self.continent  = continent
         self.neighbours = [] if neighbours is None else neighbours
         self.shape      = shape
-
 
     def link (self, r):
         self.neighbours.append (r)

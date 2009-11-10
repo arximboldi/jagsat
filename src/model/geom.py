@@ -14,6 +14,10 @@ class Point (object):
         self.x = x
         self.y = y
 
+    def sqr_distance (self, b):
+        return (self.x-b.x)**2 + (self.y-b.y)**2
+
+
 class Circle (object):
 
     def __init__ (self, center = None, radius = 1, *a, **k):
@@ -21,9 +25,26 @@ class Circle (object):
         self.center = Point() if center is None else center
         self.radius = radius
 
+
 class Polygon (object):
 
     def __init__ (self, points = None, *a, **k):
         super (Polygon, self).__init__ (*a, **k)
         self.points = points
 
+
+class Line (object):
+
+    def __init__ (self, pa = None, pb = None, *a, **k):
+        super (Line, self).__init__ (*a, **k)
+        self.pa = Point () if pa is None else pa
+        self.pb = Point () if pb is None else pb
+
+
+@multimethod (Point, Circle)
+def intersects (a, b):
+    return a.sqr_distance (b.center) < b.radius**2
+
+@multimethod (Circle, Point)
+def intersects (a, b):
+    return intersects (b, a)

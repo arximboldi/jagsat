@@ -7,16 +7,19 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
+from base.arg_parser import OptionWith
 from base.log import get_log
-from base.app import *
 
+from game import *
+from sandbox import Sandbox
 _log = get_log (__name__)
 
-class JagsatApp (AppBase):
+
+class JagsatApp (GameApp):
 
     NAME = 'jagsat'
     
-    OPTIONS = AppBase.OPTIONS + \
+    OPTIONS = GameApp.OPTIONS + \
 """
 Game options:
   -m, --map <file>   Map file to load.
@@ -36,10 +39,9 @@ Game options:
     def __init__ (self, *a, **k):
         super (JagsatApp, self).__init__ (*a, **k)
         self._arg_map = OptionWith (str)
+        self.root_state = Sandbox
         
     def do_prepare (self, args):
+        GameApp.do_prepare (self, args)
         args.add ('m', 'map', self._arg_map)
-        
-    def do_execute (self, args):
-        _log.info ("Starting application...")        
-        _log.info ("Quiting... Have a nice day ;)")
+
