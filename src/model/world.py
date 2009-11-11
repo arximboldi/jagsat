@@ -41,6 +41,7 @@ def create_player (cfg):
                    cfg.child ('color').value,
                    cfg.child ('position').value)
 
+
 class World (object):
 
     def __init__ (self, map_ = None, players = None, *a, **k):
