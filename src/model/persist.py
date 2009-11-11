@@ -7,13 +7,10 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
-import sys
-sys.path.append ('lib')
+from World import *
 
-import unittest
+def load_game (name):
+    pass
 
-from test.model_map import *
-from test.model_world import *
-
-if __name__ == '__main__':
-    unittest.main ()
+def save_game (game, name):
+    pass

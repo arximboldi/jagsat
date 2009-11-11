@@ -7,6 +7,8 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
+from base.util import multimethod
+
 class Point (object):
 
     def __init__ (self, x = 0, y = 0, *a, **k):

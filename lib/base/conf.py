@@ -88,11 +88,20 @@ class NullBackend (object):
 
 class ConfNode (ConfSubject, AutoTree):
     
-    def __init__ (self, *a, **k):
+    def __init__ (self, content = None, *a, **k):
         super (ConfNode, self).__init__ (*a, **k)
         self._val = None
         self._backend = NullBackend ()
+        if content:
+            self.fill (content)
 
+    def fill (self, dict_):
+        for key, val in dict_.iteritems ():
+            if isinstance (val, dict):
+                self.child (key).fill (val)
+            else:
+                self.child (key).value = val
+    
     def parent (self):
         return self._parent
 

@@ -97,7 +97,6 @@ Options:
 
             ret_val = self.do_execute (args.free_args)
             self.save_config ()
-            self.close_log ()
         except AppSuccess, e:
             ret_val = os.EX_OK
         except LoggableError, e:
@@ -109,7 +108,8 @@ Options:
             ret_val = os.EX_SOFTWARE
         
         self.do_release ()
-
+        self.close_log ()
+        
         return ret_val
         
     def print_help (self):

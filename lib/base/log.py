@@ -24,6 +24,7 @@ It also defines the following log levels:
  - LOG_FATAL, LOG_ERROR, LOG_WARNING, LOG_INFO and LOG_DEBUG.
 """
 
+from connection import Trackable
 from observer import make_observer
 from tree import AutoTree, AutoTreeTraits
 from singleton import Singleton

@@ -54,7 +54,7 @@ def multimethod (*types):
         mm.register (types, function)
         mm.__lastreg__ = function
         return mm
-
+    return register
 
 class memoize:
     """

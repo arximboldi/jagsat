@@ -8,6 +8,7 @@
 #
 
 from tf.behavior.sm import State
+import model.world
 
 class Sandbox (State):
     pass
