@@ -48,13 +48,16 @@ class World (object):
         assert map_
         super (World, self).__init__ (*a, **k)
 
-        self._map     = map_
+        self.map     = map_
         self._players = {} if players is None \
                            else dict ((p.name, p) for p in players)
         self._regions = dict ((r.name, Region (r)) for r in map_.regions.itervalues ())
         
     def region (self, name):
         return self._regions [name]
+
+    def iterregions (self):
+        return self._regions.itervalues ()
 
 
 RegionSubject, RegionListener = \

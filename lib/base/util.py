@@ -73,7 +73,7 @@ class memoize:
         return ret
 
 
-def printf (message):
+def printfn (message):
     print message
 
 

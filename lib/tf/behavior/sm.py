@@ -27,7 +27,7 @@ class StateMachine(object):
     chain of states.
     """
 
-    def __init__(self, name, start_state):
+    def __init__(self, name, start_state, *args, **kwargs):
         self.name = name
         self._statelist = []
         self._gameloop = None
@@ -35,14 +35,16 @@ class StateMachine(object):
         self._rootstate._statemachine = self
         self._rootstate._gameloop = None
         self._start_state_for_root = start_state
+        self._root_args   = args
+        self._root_kwargs = kwargs
 
-    def start(self, gameloop, *a, **k):
+    def start(self, gameloop):
         print "tf: Starting execution of statemachine", self.name
         #, "(statemachine", self._state._statemachine, ")"
-        gameloop.add_statemachine (self)
         self._rootstate._gameloop = gameloop
-        self._rootstate.enter_substate(self._start_state_for_root, *a, **k)
-        
+        self._rootstate.enter_substate(self._start_state_for_root,
+                                       *self._root_args, **self._root_kwargs)
+    
     def do_statemachine(self, gameloop):
         #print "Executing statemachine", self.name
         ret = self._rootstate.work()

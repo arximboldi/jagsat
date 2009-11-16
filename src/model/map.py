@@ -90,7 +90,7 @@ class MapContentHandler (AutoContentHandler):
     def _end_circle (self):
         if len (self.points) > 0:
             self.shape.center = self.points [0]
-        self.map.shape = self.shape
+        self.region.shape = self.shape
         self.shape = None
         self.points = None
 
@@ -179,7 +179,8 @@ class MapDef (object):
         self.continents = \
             dict ((r.continent.name, r.continent) for r in regions)
 
-        self.meta = None
+        self.meta = meta
+        self.background = background
 
 
 class ContinentDef (object):

@@ -35,5 +35,5 @@ class Sandbox (State):
               'map' : 'doc/map/worldmap.xml' })
 
         world = create_game (cfg)
-        comp = WorldComponent (layer)
-        
+        comp = WorldComponent (layer, world)
+

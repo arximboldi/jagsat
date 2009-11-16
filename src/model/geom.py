@@ -8,6 +8,7 @@
 #
 
 from base.util import multimethod
+from exceptions import NotImplementedError
 
 class Point (object):
 
@@ -18,6 +19,10 @@ class Point (object):
 
     def sqr_distance (self, b):
         return (self.x-b.x)**2 + (self.y-b.y)**2
+
+    @property
+    def center (self):
+        return self
 
 
 class Circle (object):
@@ -34,7 +39,11 @@ class Polygon (object):
         super (Polygon, self).__init__ (*a, **k)
         self.points = points
 
+    @property
+    def center (self):
+        raise NotImplementedError
 
+    
 class Line (object):
 
     def __init__ (self, pa = None, pb = None, *a, **k):
@@ -42,6 +51,10 @@ class Line (object):
         self.pa = Point () if pa is None else pa
         self.pb = Point () if pb is None else pb
 
+    @property
+    def center (self):
+        raise NotImplementedError
+    
 
 @multimethod (Point, Circle)
 def intersects (a, b):

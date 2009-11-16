@@ -71,9 +71,10 @@ Display options:
                                       self._window,
                                       self._game_loop,
                                       None)
-        self._state_machine = StateMachine (self.NAME, self.root_state)
-        self._state_machine.start (self._game_loop, self)
-        
+        self._state_machine = StateMachine (self.NAME, self.root_state, system = self)
+        #self._state_machine.start (self._game_loop, self)
+
+        self._game_loop.add_statemachine (self._state_machine)
         _log.info ("Starting game...")
         self.do_loop ()
         

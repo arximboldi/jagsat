@@ -1423,14 +1423,20 @@ class Line(Component):
 
 class Circle(Component):
 
-    def __init__(self, parent, radius, ic, oc, ot):
+    def __init__(self,
+                 parent = None,
+                 radius = 10,
+                 ic = sf.Color (0, 0, 0),
+                 ot = 2.0,
+                 oc = sf.Color (255, 255, 255)):
+        assert parent
         Component.__init__(self, parent)
         x = radius
         y = radius
         self._sprite = sf.Shape.Circle(x, y, radius, ic, ot, oc)
         self._width = radius * 2
         self._height = radius * 2
-
+    
     def _get_unscaled_width(self):
         return self._width
 
