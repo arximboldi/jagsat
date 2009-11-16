@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE map SYSTEM "doc/file-formats/map-file.dtd">
+<!DOCTYPE map SYSTEM "map-file.dtd">
 
 <map bg="world.png">
   <meta>
@@ -8,264 +8,259 @@
   </meta>
 
 
-  <!-- continent europe -->
+<!-- continent europe -->
 
   <continent name="europe"
 	     troops="5">
     <region name="spain">
       <circle>
-	<point x="10" y="20"/>
+	<point x="117" y="35"/>
       </circle>
     </region>
     <region name="balkan">
       <circle>
-	<point x="10" y="20"/>
+	<point x="128" y="33"/>
       </circle>
     </region>
-    <region name="united kingdom">
+   <region name="united kingdom">
       <circle>
-	<point x="10" y="20"/>
+	<point x="116" y="24"/>
       </circle>
     </region>
-    <region name="western europe">
+   <region name="western europe">
       <circle>
-	<point x="10" y="20"/>
+	<point x="123" y="27"/>
       </circle>
     </region>   
-    <region name="eastern europe">
+   <region name="eastern europe">
       <circle>
-	<point x="10" y="20"/>
+	<point x="138" y="29"/>
       </circle>
     </region>
     <region name="scandinavia">
       <polygon>
-	<point x="10" y="20"/>
+	<point x="132" y="16"/>
       </polygon>
     </region>
     <region name="iceland">
       <polygon>
-	<point x="10" y="20"/>
+	<point x="105" y="15"/>
       </polygon>
     </region>
     <region name="st. petersburg">
       <polygon>
-	<point x="10" y="20"/>
+	<point x="145" y="21"/>
       </polygon>
     </region>
   </continent>
 
-  <!-- continent north america -->
+<!-- continent north america -->
 
   <continent name="north amerika"
 	     troops="6">
     <region name="alaska">
       <polygon>
-	<point x="10" y="20"/>
+	<point x="15" y="15"/>
       </polygon>
     </region>
-    <region name="western canada">
+    <region name="Western canada">
       <circle>
-	<point x="10" y="20"/>
+	<point x="35" y="16"/>
       </circle>
     </region>
     <region name="eastern canada">
       <circle>
-	<point x="10" y="20"/>
+	<point x="50" y="14"/>
       </circle>
     </region>
-    <region name="northern canada">
+   <region name="northern canada">
       <circle>
 	<point x="10" y="20"/>
       </circle>
     </region>
     <region name="greenland">
       <polygon>
-	<point x="10" y="20"/>
+	<point x="89" y="9"/>
       </polygon>
     </region>
-    <region name="california">
+   <region name="california">
       <circle>
-	<point x="10" y="20"/>
+	<point x="37" y="27"/>
       </circle>
     </region>   
-    <region name="texas">
+   <region name="texas">
       <circle>
-	<point x="10" y="20"/>
+	<point x="42" y="37"/>
       </circle>
     </region>
     <region name="florida">
       <polygon>
-	<point x="10" y="20"/>
+	<point x="57" y="39"/>
       </polygon>
     </region>
     <region name="new york">
       <polygon>
-	<point x="10" y="20"/>
+	<point x="56" y="27"/>
       </polygon>
     </region>
     <region name="mexico">
       <polygon>
-	<point x="10" y="20"/>
+	<point x="54" y="53"/>
       </polygon>
     </region>
   </continent>
 
-  <!-- continent south america -->
+<!-- continent south america -->
 
-  <continent name="south america"
+  <continent name="south amerika"
 	     troops="3">
     <region name="venezuela">
       <circle>
-	<point x="10" y="20"/>
+	<point x="136" y="81"/>
       </circle>
     </region>
     <region name="colombia">
       <circle>
-	<point x="10" y="20"/>
+	<point x="71" y="62"/>
       </circle>
     </region>
-    <region name="brazil">
+   <region name="brazil">
       <circle>
-	<point x="10" y="20"/>
+	<point x="82" y="77"/>
       </circle>
     </region>
-    <region name="peru">
+   <region name="peru">
       <circle>
-	<point x="10" y="20"/>
+	<point x="71" y="80"/>
       </circle>
     </region>   
-    <region name="argentina">
+   <region name="argentina">
       <circle>
-	<point x="10" y="20"/>
+	<point x="70" y="97"/>
       </circle>
     </region>
   </continent>
 
 
-  <!-- continent africa -->
+<!-- continent africa -->
 
   <continent name="africa"
 	     troops="4">
     <region name="algeria">
       <circle>
-	<point x="10" y="20"/>
+	<point x="115" y="51"/>
       </circle>
     </region>
     <region name="egypt">
       <circle>
-	<point x="10" y="20"/>
+	<point x="130" y="50"/>
       </circle>
     </region>
-    <region name="congo">
+   <region name="congo">
       <circle>
-	<point x="10" y="20"/>
+	<point x="128" y="66"/>
       </circle>
     </region>
-    <region name="south africa">
+   <region name="south afrika">
       <circle>
-	<point x="10" y="20"/>
+	<point x="136" y="81"/>
       </circle>
     </region>   
-    <region name="tanzania">
+   <region name="tanzania">
       <circle>
-	<point x="10" y="20"/>
+	<point x="140" y="62"/>
       </circle>
     </region>
-    <region name="madagascar">
+   <region name="madagascar">
       <circle>
-	<point x="10" y="20"/>
+	<point x="151" y="82"/>
       </circle>
     </region>
   </continent>
 
-  <!-- continent asia -->
+<!-- continent asia -->
 
   <continent name="asia"
 	     troops="7">
     <region name="ural">
       <circle>
-	<point x="10" y="20"/>
+	<point x="164" y="20"/>
       </circle>
     </region>
     <region name="siberia">
       <circle>
-	<point x="10" y="20"/>
+	<point x="181" y="20"/>
       </circle>
     </region>
-    <region name="yakutsk">
+   <region name="yakutsk">
       <circle>
-	<point x="10" y="20"/>
+	<point x="197" y="14"/>
       </circle>
     </region>
-    <region name="chersky">
+   <region name="chersky">
       <circle>
-	<point x="10" y="20"/>
+	<point x="223" y="15"/>
       </circle>
     </region>   
-    <region name="japan">
+   <region name="japan">
       <circle>
-	<point x="10" y="20"/>
+	<point x="216" y="37"/>
       </circle>
     </region>
-    <region name="china">
+   <region name="china">
       <circle>
-	<point x="10" y="20"/>
+	<point x="187" y="37"/>
       </circle>
     </region>
-    <region name="india">
+   <region name="india">
       <circle>
-	<point x="10" y="20"/>
+	<point x="175" y="48"/>
       </circle>
     </region>
-    <region name="iran">
+   <region name="iran">
       <circle>
-	<point x="10" y="20"/>
+	<point x="163" y="39"/>
       </circle>
     </region>
-    <region name="saudi arabia">
+   <region name="saudi arabia">
       <circle>
-	<point x="10" y="20"/>
+	<point x="149" y="47"/>
       </circle>
     </region>
-    <region name="thailand">
+   <region name="thailand">
       <circle>
-	<point x="10" y="20"/>
-      </circle>
-    </region>
-    <region name="mongolia">
-      <circle>
-	<point x="10" y="20"/>
+	<point x="190" y="52"/>
       </circle>
     </region>
   </continent>
 
-  <!-- continent australia -->
+<!-- continent australia -->
 
   <continent name="australia"
 	     troops="2">
     <region name="indonesia">
       <circle>
-	<point x="10" y="20"/>
+	<point x="198" y="66"/>
       </circle>
     </region>
     <region name="new guinea">
       <circle>
-	<point x="10" y="20"/>
+	<point x="218" y="70"/>
       </circle>
     </region>
-    <region name="western australia">
+   <region name="western australia">
       <circle>
-	<point x="10" y="20"/>
+	<point x="205" y="86"/>
       </circle>
     </region>
-    <region name="eastern australia">
+   <region name="eastern australia">
       <circle>
-	<point x="10" y="20"/>
+	<point x="220" y="88"/>
       </circle>
     </region>   
   </continent>
 
-  <!-- continent australia links -->
+<!-- continent australia links -->
 
   <link type="clique">
 
@@ -275,15 +270,15 @@
     <node name="eastern australia"/>
   </link>
 
-  <!-- continent south america links -->
+<!-- continent south america links -->
 
   <link type="circle">
-    <node name="venezuela"/>
+    <node name="wenezuela"/>
     <node name="colombia"/>
     <node name="brazil"/>
   </link>
   <link type="line">
-    <node name="venezuela"/>
+    <node name="wenezuela"/>
     <node name="brazil"/>
   </link>
 
@@ -293,7 +288,7 @@
     <node name="peru"/>
   </link>
 
-  <!-- continent africa links -->
+<!-- continent africa links -->
 
   <link type="line">
     <node name="algeria"/>
@@ -315,7 +310,7 @@
     <node name="tanzania"/>
   </link>
 
-  <!-- continent north america links -->
+<!-- continent north america links -->
 
   <link type="line">
     <node name="florida"/>
@@ -352,7 +347,7 @@
     <node name="texas"/>
   </link>
 
-  <!-- continent europe links -->
+<!-- continent europe links -->
 
   <link type="line">
     <node name="eastern europe"/>
@@ -383,7 +378,7 @@
     <node name="balkan"/>
   </link>
 
-  <!-- continent asia links -->
+<!-- continent asia links -->
 
   <link type="clique">
 
@@ -424,7 +419,7 @@
     <node name="china"/>
   </link>
 
-  <!-- intercontinental links -->
+<!-- intercontinental links -->
 
   <link type="line">
     <node name="thailand"/>
@@ -467,6 +462,6 @@
     <node name="st. petersburg"/>
     <node name="iran"/>
   </link>
-  
+ 
 
 </map>
