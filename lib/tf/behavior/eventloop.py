@@ -146,6 +146,9 @@ class EventLoop:
         except (Exception, ), e:
             s = traceback.format_exc()
             s = unicode(s, "UTF-8")
-            lr = self.mainwindow.views[-1].layers[-1]
-            tf.gfx.widget.debug.create_error(s,
-                                             lr)
+            try:
+                lr = self.mainwindow.views[-1].layers[-1]
+                tf.gfx.widget.debug.create_error(s,
+                                                 lr)
+            except IndexError, e:
+                print "(FIXME, USE LOG), ERROR: ", s

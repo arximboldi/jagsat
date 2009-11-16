@@ -36,12 +36,13 @@ class StateMachine(object):
         self._rootstate._gameloop = None
         self._start_state_for_root = start_state
 
-    def start(self, gameloop):
+    def start(self, gameloop, *a, **k):
         print "tf: Starting execution of statemachine", self.name
         #, "(statemachine", self._state._statemachine, ")"
+        gameloop.add_statemachine (self)
         self._rootstate._gameloop = gameloop
-        self._rootstate.enter_substate(self._start_state_for_root)
-
+        self._rootstate.enter_substate(self._start_state_for_root, *a, **k)
+        
     def do_statemachine(self, gameloop):
         #print "Executing statemachine", self.name
         ret = self._rootstate.work()

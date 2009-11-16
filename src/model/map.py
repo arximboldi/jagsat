@@ -8,10 +8,13 @@
 #
 
 from weakref import ref
+from base.log import get_log
 from base.xml_util import AutoContentHandler
 from xml.sax import SAXException, make_parser
 from error import ModelError
 from geom import *
+
+_log = get_log (__name__)
 
 
 class MapError (ModelError):
@@ -119,8 +122,12 @@ class MapContentHandler (AutoContentHandler):
         self.link = None
 
     def _new_node (self, attrs):
-        self.link.append (self.map.regions [attrs ['name']])
-
+        try:
+            self.link.append (self.map.regions [attrs ['name']])
+        except Exception, e:
+            _log.debug (str (e))
+            raise MapError (str (e))
+    
     def _do_link_line (self):
         if len (self.link) > 1:
             old = self.link [0]

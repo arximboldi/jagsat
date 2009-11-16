@@ -13,7 +13,7 @@ from base.conf import GlobalConf, OptionConfWith, OptionConfFlag
 
 from tf.behavior.gameloop import get_game_loop
 from tf.behavior.eventloop import EventLoop
-from tf.behavior.sm import StateMachine, State
+from tf.behavior.sm import StateMachine
 from tf.gfx.ui import Window
 
 from sfml_controller import SfmlController
@@ -37,7 +37,7 @@ Display options:
 
     def __init__ (self, *a, **k):
         super (GameApp, self).__init__ (*a, **k)
-        self.root_state = State
+        self.root_state = None
 
     @property
     def game (self):
@@ -64,14 +64,16 @@ Display options:
         self._video_ctl = SfmlController (self._video_cfg,
                                           self.NAME + ' ' + self.VERSION)
         self._video_ctl.setup ()
-
+        self._window = Window (self._video_ctl.window)
+        
         self._game_loop  = get_game_loop ()
         self._event_loop = EventLoop (self.NAME,
-                                      Window (self._video_ctl.window),
+                                      self._window,
                                       self._game_loop,
                                       None)
         self._state_machine = StateMachine (self.NAME, self.root_state)
-
+        self._state_machine.start (self._game_loop, self)
+        
         _log.info ("Starting game...")
         self.do_loop ()
         

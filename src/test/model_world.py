@@ -8,11 +8,10 @@
 #
 
 import unittest
-import os
-
 from base.conf import ConfNode
 from model.world import *
 
+import os
 _TEST_PATH = os.path.dirname (__file__)
 _TEST_FILENAME = os.path.join (
     _TEST_PATH,
@@ -36,7 +35,7 @@ class TestWorld (unittest.TestCase):
               'map' : _TEST_FILENAME })
         
         w = create_game (cfg)
-        self.assertEquals (len (w.players),       2)
-        self.assertEquals (w.players[0].name,     'jp')
-        self.assertEquals (w.players[0].color,    1)
-        self.assertEquals (w.players[0].position, 2)
+        self.assertEquals (len (w._players),       2)
+        self.assertEquals (w._players['jp'].name,     'jp')
+        self.assertEquals (w._players['jp'].color,    1)
+        self.assertEquals (w._players['jp'].position, 2)
