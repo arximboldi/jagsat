@@ -22,4 +22,4 @@ cleanout:
 clean: cleantmp cleanout
 
 dist: 
-	tar czvf documents.tar.gz makefile *.tex *.sty *.pdf
+	tar czvf documents.tar.gz makefile *.tex *.sty *.pdf pic
