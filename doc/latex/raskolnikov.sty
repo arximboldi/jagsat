@@ -1,0 +1,110 @@
+%
+% Código reutilizable para documentos en LaTeX
+%
+
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[english]{babel}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{theorem}
+\usepackage{alltt}
+\usepackage{fancyhdr}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{float}
+\usepackage{appendix}
+\usepackage{palatino}
+\usepackage{hyperref}
+
+\parskip = 7 pt
+
+\newfloat{listing}{!h}{lol}
+\floatname{listing}{Listado}
+\floatstyle{ruled}
+
+\lstset{
+  numbers=left, 
+  language=C, 
+  basicstyle=\ttfamily\footnotesize, 
+  extendedchars=false
+}
+
+% \renewcommand{\appendixname}{Apéndice}
+% \renewcommand{\appendixpagename}{Apéndices}
+% \renewcommand{\appendixtocname}{Apéndices}
+
+% \newcommand{\theHalgorithm}{algoritmo}
+% \renewcommand{\algorithmicif}{\textbf{si}}
+% \renewcommand{\algorithmicelse}{\textbf{si no}}
+% \renewcommand{\algorithmicthen}{\textbf{entonces}}
+% \renewcommand{\algorithmicendif}{\textbf{fin si}}
+% \renewcommand{\algorithmicwhile}{\textbf{mientras}}
+% \renewcommand{\algorithmicdo}{\textbf{hacer}}
+% \renewcommand{\algorithmicendwhile}{\textbf{fin mientras}}
+% \renewcommand{\algorithmicforall}{\textbf{para todo}}
+% \renewcommand{\algorithmicendfor}{\textbf{fin para}}
+% \renewcommand{\algorithmicrequire}{\textbf{Entrada:}}
+% \renewcommand{\algorithmicensure}{\textbf{Salida:}}
+% \renewcommand{\lstlistingname}{Listado}
+% \floatname{algorithm}{Algoritmo}
+% \floatname{listings}{Listado}
+
+
+\definecolor{red}{rgb}{0.9,0.1,0.1}
+{
+  \theorembodyfont{\color{red}}
+  \newtheorem{todo}{TO-DO note}
+}
+{
+  \theorembodyfont{\rmfamily}
+  \newtheorem{usecase}{Use case}
+}
+\def\location#1 {
+  \def\@location{#1}
+}
+
+\location{}
+
+\def\thickhrulefill {
+  \leavevmode \leaders \hrule height 2pt\hfill \kern \z@
+}
+
+\renewcommand{\maketitle} {
+  \begin{titlepage}
+    \parskip = 0pt
+    \null\vfil
+    \begin{flushleft}
+      \huge \textbf{\@title}
+    \end{flushleft}
+    \hrule height 4pt
+    \begin{flushright}
+      \large 
+      \@author \par \vskip 10pt
+    \end{flushright}
+    \begin{flushright}
+      \small
+      \@location \par \vskip 5pt
+      \footnotesize
+      \@date \par
+    \end{flushright}
+    \vskip 60\p@
+    \vfil\null
+  \end{titlepage}%
+  \setcounter{footnote}{0}
+}
+
+\def\startappendix {
+  \appendix
+  \appendixpage
+  \addappheadtotoc
+}
+
+    \makeindex
+
