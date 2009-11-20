@@ -22,6 +22,7 @@
 \usepackage{appendix}
 \usepackage{palatino}
 \usepackage{hyperref}
+\usepackage{verbatim}
 
 \parskip = 7 pt
 
@@ -62,10 +63,12 @@
   \theorembodyfont{\color{red}}
   \newtheorem{todo}{TO-DO note}
 }
-{
-  \theorembodyfont{\rmfamily}
-  \newtheorem{usecase}{Use case}
+
+\def\disabletodo {
+  \let\todo=\comment 
+  \let\endtodo=\endcomment 
 }
+
 \def\location#1 {
   \def\@location{#1}
 }
