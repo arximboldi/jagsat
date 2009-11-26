@@ -2,7 +2,7 @@
 % DESIGN DOCUMENT 
 % ===============
 % 
-% Time-stamp: <2009-11-20 14:39:06 raskolnikov>
+% Time-stamp: <2009-11-23 00:24:26 raskolnikov>
 % (c) 2009 The JAGSAT development team.
 % 
 
@@ -63,10 +63,12 @@ This section describes the overal game design.
   important inconsistencies. The Axel description of the rules and
   interface does not match very well with my state machines and the UI
   diagrams. Also, some parts of it are too schematic and hard to
-  understand that could be improved with longer descriptions and better
-  ordering of some items. Also, the list of graphics needed for the
-  project is too long, there are many things that are not needed (afaik)
-  or clear.
+  understand that could be improved with longer descriptions and
+  better ordering of some items. Also, the list of graphics needed for
+  the project is too long, there are many things that are not needed
+  (afaik) or clear. For example, we don't need unit pictures for the
+  world map, because it much more reasonable to use numbers to
+  represent the number of units.
 \end{todo}
 
 \subsection{World Domination}
@@ -194,6 +196,13 @@ This section describes the overal game design.
 \item Cannonballs do not bounce but disappear if they are shot out of
   the battlefield area.
 \end{itemize}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=13cm]{pic/rules.png}
+\caption{Mockup of the game play interface.}
+\label{fig:gameplay}
+\end{figure}
 
 \subsection{Interface}
 

@@ -20,7 +20,7 @@ class Sandbox (State):
         sfview = self.system._window.window.GetDefaultView ()
         view  = ui.View (self.system._window, sfview)
         layer = ui.Layer (view)
-
+        
         cfg = ConfNode (
             { 'player-0' :
               { 'name'     : 'jp',

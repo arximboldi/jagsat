@@ -57,7 +57,7 @@ class RegionComponent (ui.Circle, object):
         super (RegionComponent, self).__init__ (parent = parent,
                                                 radius = _REGION_RADIUS,
                                                 *a, **k)
-        
+
         self.on_click = signal.Signal ()
         self.signal_click.add (self.on_click)
         self.on_click += lambda _: _log.debug ("REGION CLICKED: " +
