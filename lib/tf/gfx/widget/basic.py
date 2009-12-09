@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 #
 # This file is copyright Tribeflame Oy, 2009.
 #
-# -*- coding: utf-8 -*-
+
 from tf.gfx import ui
 from PySFML import sf
 import math

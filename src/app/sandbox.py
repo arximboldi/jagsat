@@ -10,9 +10,18 @@
 from state import State
 import model.world
 from tf.gfx import ui
+from tf.gfx.widget import intermediate
 from model.world import create_game
 from base.conf import ConfNode
 from ui.world import WorldComponent
+from PySFML import sf
+
+ui2 = intermediate
+
+THEME = { 'active' : sf.Color.Blue,
+          'inactive' : sf.Color.Red, 
+          'border' : sf.Color.Green,
+          'thickness' : 2 }
 
 class Sandbox (State):
     
@@ -36,4 +45,6 @@ class Sandbox (State):
 
         world = create_game (cfg)
         comp = WorldComponent (layer, world)
+        but = ui2.Button (layer, ui.String (layer, unicode ('Testttt')), THEME)
+        but.activate ()
 
