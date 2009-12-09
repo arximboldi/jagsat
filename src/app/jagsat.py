@@ -11,7 +11,7 @@ from base.arg_parser import OptionWith
 from base.log import get_log
 
 from game import *
-from sandbox import Sandbox
+from states.sandbox import Sandbox
 _log = get_log (__name__)
 
 
