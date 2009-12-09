@@ -78,6 +78,9 @@ class Region (RegionSubject):
         
         self.definition = definition
 
+r = Region ()
+r.on_troops_changed = lambda val: printfn ('new troops: ', val)
+r.troops = 10
 
 PlayerSubject, PlayerListener = \
     make_observer (['on_set_player_troops'])

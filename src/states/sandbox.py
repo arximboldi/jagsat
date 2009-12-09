@@ -47,4 +47,4 @@ class Sandbox (State):
         comp = WorldComponent (layer, world)
         but = ui2.Button (layer, ui.String (layer, unicode ('Testttt')), THEME)
         but.activate ()
-
+        
