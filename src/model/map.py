@@ -13,6 +13,7 @@ from base.xml_util import AutoContentHandler
 from xml.sax import SAXException, make_parser
 from error import ModelError
 from geom import *
+import os
 
 _log = get_log (__name__)
 
@@ -26,7 +27,9 @@ def load_map (file_name):
         reader = MapContentHandler ()
         parser = make_parser ()
         parser.setContentHandler (reader)
-        parser.parse (file_name)
+        parser.parse ('file:' +
+                      (os.getcwd () + '/' if file_name [0] != '/' else '') +
+                      file_name)
     except SAXException, e:
         raise MapError ('Map parsing error: ' + str (e))
 
