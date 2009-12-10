@@ -47,10 +47,18 @@ class MapContentHandler (AutoContentHandler):
         self.link_type = None
         self.points    = None
         self.shape     = None
-
+        self.xscale    = 1
+        self.yscale    = 1
+        self.xoffset   = 0
+        self.yoffset   = 0
+        
     def _new_map (self, attrs):
         self.map = MapDef (background = attrs ['bg'])
-    
+        self.xscale  = float (attrs.get ('xscale', 1))
+        self.yscale  = float (attrs.get ('yscale', 1))
+        self.xoffset = float (attrs.get ('xoffset', 1))
+        self.yoffset = float (attrs.get ('yoffset', 1))
+        
     def _new_meta (self, attrs):
         self.map.meta = MetaDef ()
 
@@ -111,8 +119,10 @@ class MapContentHandler (AutoContentHandler):
         
     def _new_point (self, attrs):
         assert self.shape
-        self.points.append (Point (int (attrs.get ('x', '0')),
-                                   int (attrs.get ('y', '0'))))
+        self.points.append (Point (int (attrs.get ('x', '0')) *
+                                   self.xscale + self.xoffset,
+                                   int (attrs.get ('y', '0')) *
+                                   self.yscale + self.yoffset))
     
     def _new_link (self, attrs):
         assert self.link is None

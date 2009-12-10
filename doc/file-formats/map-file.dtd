@@ -3,7 +3,7 @@
    This is the DTD definition file for the map files in the Jagsat
    project for the Project Course in Âbo Akademy.
    
-   (c) Juan Pedro Bolívar Puente 2009
+   (c) The Jagsat Development Team 2009
 
 -->
 
@@ -12,10 +12,16 @@
    Root element. The attribute 'bg' is the relative path to the
    background image and is compulsory
 
+   TODO: These attributes should be better moved to meta.
+
 -->
 <!ELEMENT map (meta?,(continent|link)*)>
 <!ATTLIST map
-	  bg CDATA #REQUIRED>
+	  bg CDATA #REQUIRED
+	  xscale CDATA #IMPLIED
+	  yscale CDATA #IMPLIED
+	  xoffset CDATA #IMPLIED
+	  yoffset CDATA #IMPLIED>
 
 <!-- 
 
