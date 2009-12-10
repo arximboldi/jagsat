@@ -63,15 +63,26 @@ decided to develop a game that involves Risk as well as Tower defense.
 \subsection{Functional requirements for the game}
 
 \begin{itemize}
-\item The users take turns one by one
-\item A user can choose to attack a new region or stay in current
-\item A user can only choose to move to a new region that is on the
+\item The game must be divided in three phases: reinforcement, attack
+  and movement.
+\item The users must take turns one by one
+\item A user must choose to attack a new region or stay in current
+\item A user must only choose to move to a new region that is on the
   border to his current region
-\item A user can spend money on defence or attack depending on the
+\item The game should be able to save profiles of configuration.
+\item The game should be able to be saved from any stage.
+\item The game should show the regions where you can move.
+\item A user could spend money on defense or attack depending on the
   amount of units he controls
 \end{itemize}
 
-\subsection{Function requirements for the Tribeflame device}
+\begin{todo}[Alberto]
+  Should we include more stuff here? Remember that the functional
+  requirements has to be sort by priority in this order "must", "should",
+  "could" and "won't".
+\end{todo}
+
+\subsection{Functional requirements for the Tribeflame device}
 
 Not available, we have not yet received details from our clients
 regarding the device.
@@ -80,14 +91,33 @@ regarding the device.
   Can we fill this now?
 \end{todo}
 
+\begin{todo}[Alberto]
+  I think that there is nothing to say here, the hardware specifications
+  are non-functional requirements. I cannot find any functional 
+  requirement for the device at least.
+\end{todo}
+
 \section{Non-functional requirements}
 
+\subsection{Non-functional requirements for the game}
+
 \begin{itemize}
+\item The game must be from 2 to 6 players.
 \item The game must be developed in Python.
 \item The game has to be developed using the API provided by the client.
-\item The game should be playable after playing the tutorial.
-\item The game must work on the TribeFlame device.
-\item The game should be a multi-player game.
+\item The game should be playable after a 10 minutes tutorial.
+\item The game must work on the TribeFlame device with an update rate
+  of 50fps.
+\end{itemize}
+
+\subsection{Non-functional requirements for the Tribeflame device}
+
+\begin{itemize}
+\item 1024 x 768 pixels.
+\item Touch screen with 2-touch. 
+\item Processor 800 MHz ARM Cortex A8
+\item Graphics HW-accelerated
+\item OpenGL 2.0 ES.
 \end{itemize}
 
 \section{Development requirements}

@@ -35,6 +35,20 @@
 
 \section{Introduction}
 
+The aim of this document is multiple, on one hand is a way to establish 
+communication gates between our client and us, showing what and how
+we plan to do as a matter of contract. On the other hand is a guide to
+follow by our developers, well defined steps and rules of what our
+client wants to be done.
+ 
+In the following pages there will be found several descriptions about 
+interfaces, use cases, rules and design of the project. Due to the nature of 
+the project there will probably be some inconsistencies between this
+document and the final released product. As a game itself, its design
+relies on the playability which, in any case, can only be measured
+empirically through a process of testing and continuous elliptical
+modifications and refining.
+ 
 \begin{todo}[Juan Pedro]
   Add description about the purpose of the document and bla bla bla. I
   think that, given the inconsistencies between different parts of the
@@ -49,7 +63,13 @@
 
 \subsection{Introduction}
 
-This section describes the overal game design.
+This section describes the overall game design. Firstly an detailed view
+of the game rules, in both parts of the game. These rules describe what
+players will be able to do and not to do. Secondly an overview of the
+user interface which, in any case, is detailed and illustrated in section 7.
+Thirdly, and finally, a detailed list of the graphics and animations that
+will be needed in the final version.
+
 
 \begin{todo}[Juan Pedro]
   Improve this introduction. Also, some parts of this section might need
@@ -1169,7 +1189,7 @@ A
 &Points the player position around the device
 \\E
 &Save profile
-&Shows 1.2 menu
+&Shows 7.1.2 menu
 \\F
 &Delete profile
 &Deletes profile
@@ -1178,7 +1198,7 @@ A
 &Map selected will be remarked.
 \\H
 &Load game
-&Shows 1.3 menu
+&Shows 7.1.3 menu
 \\I
 &Play game
 &Starts game if the actual config is valid.
@@ -1200,16 +1220,16 @@ A
 %%%
 A
 &Set profile as default
-&This profile will be shown as marked in 1.1.B
+&This profile will be shown as marked in 7.1.1.B
 \\B
 &Profile name.
 &
 \\C
 &Cancel button:
-&Back to 1.1 without changes
+&Back to 7.1.1 without changes
 \\D
 &Ok button
-&Back to 1.1 with profile changes
+&Back to 7.1.1 with profile changes
 \end{tabular}
 \end{table}
 
@@ -1279,10 +1299,10 @@ A
 &Perform the action “next” if available
 \\C
 &''Objective'' button
-&Shows objective (2.2)
+&Shows objective (7.2.2)
 \\D
 &''Cards'' button
-&Shows cards (2.3)
+&Shows cards (7.2.3)
 \\E
 &''Undo'' button
 &Undo the previous action.
@@ -1328,7 +1348,7 @@ A
 &Select the cards that the player owns.
 \\B
 &''Exit'' button
-&Back to 2.1
+&Back to 7.2.1
 \end{tabular}
 \end{table}
 
@@ -1390,7 +1410,7 @@ A
 %%%
 A
 &Player menu
-&Display player menu (2)
+&Display player menu (7.2)
 \end{tabular}
 \end{table}
 
@@ -1410,10 +1430,10 @@ A
 %%%
 A
 &Next
-&Goes to 3.4
+&Goes to 7.3.4
 \\B
 &Show objective
-&Goes to 2.2
+&Goes to 7.2.2
 \end{tabular}
 \end{table}
 
@@ -1432,7 +1452,7 @@ A
 %%%
 A
 &Next button selected
-&Goes to 3.5
+&Goes to 7.3.5
 \end{tabular}
 \end{table}
 
@@ -1687,10 +1707,10 @@ A
 &Shoots cannon.
 \\C
 &Troops available
-&Goes to 6.4
+&Goes to 7.6.4
 \\D
 &Walls available
-&Goes to 6.6
+&Goes to 7.6.6
 \end{tabular}
 \end{table}
 
