@@ -63,12 +63,12 @@ modifications and refining.
 
 \subsection{Introduction}
 
-This section describes the overall game design. Firstly an detailed view
+This section describes the overall game design. Firstly a detailed view
 of the game rules, in both parts of the game. These rules describe what
 players will be able to do and not to do. Secondly an overview of the
-user interface which, in any case, is detailed and illustrated in section 7.
-Thirdly, and finally, a detailed list of the graphics and animations that
-will be needed in the final version.
+user interface which, in any case, is deeply detailed and illustrated in
+section 7. Thirdly, and finally, a detailed list of the graphics and 
+animations that will be needed in the final version.
 
 
 \begin{todo}[Juan Pedro]
@@ -76,6 +76,10 @@ will be needed in the final version.
   some refactoring. For example, the \emph{Graphics} part might be worth
   having its own section, also the \emph{User interface} could be
   integrated with the \emph{User interface} later section.
+\end{todo}
+
+\begin{todo}[Alberto]
+  Can we consider this introduction as done?
 \end{todo}
 
 \begin{todo}[Juan Pedro]
@@ -404,7 +408,7 @@ will be needed in the final version.
 \item[Precondition] Amount of players set.
 \item[Flow]\mbox{}
   \begin{enumerate}
-  \item User chooses between \emph{shor/medium/long} game.
+  \item User chooses a map from the list.
   \item Game starts.
   \end{enumerate}
 \item[Postcondition] Game starts.
@@ -945,10 +949,6 @@ actions associated to them.
   \label{fig:sm:init-game}
 \end{figure}
 
-\begin{todo}[Juan Pedro]
-  Mmm, the frame shows over the notes. Is this a problem during exporting or in the document? May it be fixes on the SVG directly?
-\end{todo}
-
 \subsection{\texttt{in-game-menu} state machine.}
 \begin{figure}[H]
   \centering
@@ -1160,9 +1160,9 @@ from/to the state machines while reading this section of the document
 to get a deeper understanding of the system.
 
 \newpage
-\subsection{Main menu}
+\subsection{Main menu}\label{mock:71}
 
-\subsubsection{Configuration}
+\subsubsection{Configuration}\label{mock:711}
 
 \begin{figure}[H]
   \centering
@@ -1189,7 +1189,7 @@ A
 &Points the player position around the device
 \\E
 &Save profile
-&Shows 7.1.2 menu
+&Shows \ref{mock:712} menu
 \\F
 &Delete profile
 &Deletes profile
@@ -1198,14 +1198,14 @@ A
 &Map selected will be remarked.
 \\H
 &Load game
-&Shows 7.1.3 menu
+&Shows \ref{mock:713} menu
 \\I
 &Play game
 &Starts game if the actual config is valid.
 \end{tabular}
 \end{table}
 
-\subsubsection{Save profile}
+\subsubsection{Save profile}\label{mock:712}
 
 \begin{figure}[H]
   \centering
@@ -1220,20 +1220,20 @@ A
 %%%
 A
 &Set profile as default
-&This profile will be shown as marked in 7.1.1.B
+&This profile will be shown as marked in \ref{mock:711}B
 \\B
 &Profile name.
 &
 \\C
 &Cancel button:
-&Back to 7.1.1 without changes
+&Back to \ref{mock:711} without changes
 \\D
 &Ok button
-&Back to 7.1.1 with profile changes
+&Back to \ref{mock:711} with profile changes
 \end{tabular}
 \end{table}
 
-\subsubsection{Load game}
+\subsubsection{Load game}\label{mock:713}
 
 \begin{figure}[H]
   \centering
@@ -1257,7 +1257,7 @@ A
 \end{tabular}
 \end{table}
 
-\subsubsection{Confirmation}
+\subsubsection{Confirmation}\label{mock:714}
 \begin{figure}[H]
   \centering
   \includegraphics[width=11cm]{pic/mocks/1-4.pdf}
@@ -1276,9 +1276,9 @@ A
 \end{tabular}
 \end{table}
 
-\subsection{In game player menu}
+\subsection{In game player menu}\label{mock:72}
 
-\subsubsection{Overview}
+\subsubsection{Overview}\label{mock:721}
 
 \begin{figure}[H]
   \centering
@@ -1296,13 +1296,13 @@ A
 &Shows the menu with options [B,E]
 \\B
 &''Next'' button
-&Perform the action “next” if available
+&Perform the action “next” if avail[able
 \\C
 &''Objective'' button
-&Shows objective (7.2.2)
+&Shows objective \ref{mock:722}
 \\D
 &''Cards'' button
-&Shows cards (7.2.3)
+&Shows cards \ref{mock:723}
 \\E
 &''Undo'' button
 &Undo the previous action.
@@ -1310,7 +1310,7 @@ A
 \end{table}
 
 
-\subsubsection{Objective}
+\subsubsection{Objective}\label{mock:722}
 
 \begin{figure}[H]
   \centering
@@ -1330,7 +1330,7 @@ A
 \end{table}
 
 \newpage
-\subsubsection{Cards}
+\subsubsection{Cards}\label{mock:723}
 
 \begin{figure}[H]
   \centering
@@ -1348,12 +1348,12 @@ A
 &Select the cards that the player owns.
 \\B
 &''Exit'' button
-&Back to 7.2.1
+&Back to \ref{mock:721}
 \end{tabular}
 \end{table}
 
 \newpage
-\subsubsection{Cards selection}
+\subsubsection{Cards selection}\label{mock:724}
 
 \begin{figure}[H]
   \centering
@@ -1373,9 +1373,9 @@ A
 \end{table}
 
 
-\subsection{Init phase}
+\subsection{Init phase}\label{mock:73}
 
-\subsubsection{Objectives deal}
+\subsubsection{Objectives deal}\label{mock:731}
 
 \begin{figure}[H]
   \centering
@@ -1395,7 +1395,7 @@ A
 \end{table}
 
 
-\subsubsection{Player positions}
+\subsubsection{Player positions}\label{mock:732}
 
 \begin{figure}[H]
   \centering
@@ -1410,12 +1410,12 @@ A
 %%%
 A
 &Player menu
-&Display player menu (7.2)
+&Display player menu \ref{mock:72}
 \end{tabular}
 \end{table}
 
 \newpage
-\subsubsection{View objective active}
+\subsubsection{View objective active}\label{mock:733}
 
 \begin{figure}[H]
   \centering
@@ -1430,14 +1430,14 @@ A
 %%%
 A
 &Next
-&Goes to 7.3.4
+&Goes to \ref{mock:734}
 \\B
 &Show objective
-&Goes to 7.2.2
+&Goes to \ref{mock:722}
 \end{tabular}
 \end{table}
 
-\subsubsection{Next button active}
+\subsubsection{Next button active}\label{mock:734}
 
 \begin{figure}[H]
   \centering
@@ -1452,13 +1452,13 @@ A
 %%%
 A
 &Next button selected
-&Goes to 7.3.5
+&Goes to \ref{mock:735}
 \end{tabular}
 \end{table}
 
 
 \newpage
-\subsubsection{Troops placement}
+\subsubsection{Troops placement}\label{mock:735}
 
 \begin{figure}[H]
   \centering
@@ -1484,7 +1484,7 @@ A
 \end{table}
 
 \newpage
-\subsubsection{Finish troop placement - Next button active}
+\subsubsection{Finish troop placement - Next button active}\label{mock:736}
 
 \begin{figure}[H]
   \centering
@@ -1507,9 +1507,9 @@ A
 \end{table}
 
 
-\subsection{In-game menu}
+\subsection{In-game menu}\label{mock:74}
 
-\subsubsection{Showing in-game menu}
+\subsubsection{Showing in-game menu}\label{mock:741}
 
 \begin{figure}[H]
   \centering
@@ -1534,9 +1534,9 @@ A
 \end{tabular}
 \end{table}
 
-\subsection{Game Round}
+\subsection{Game Round}\label{mock:75}
 
-\subsubsection{Reinforcements}
+\subsubsection{Reinforcements}\label{mock:751}
 
 \begin{figure}[H]
   \centering
@@ -1554,7 +1554,7 @@ A
 \end{tabular}
 \end{table}
 
-\subsubsection{Cards use}
+\subsubsection{Cards use}\label{mock:752}
 
 \begin{figure}[H]
   \centering
@@ -1573,7 +1573,7 @@ A
 \end{tabular}
 \end{table}
 
-\subsubsection{Attack phase}
+\subsubsection{Attack phase}\label{mock:753}
 
 \begin{figure}[H]
   \centering
@@ -1595,7 +1595,7 @@ A
 \end{table}
 
 
-\subsubsection{Attack phase - Region selected}
+\subsubsection{Attack phase - Region selected}\label{mock:754}
 
 \begin{figure}[H]
   \centering
@@ -1618,7 +1618,7 @@ A
 \end{table}
 
 
-\subsubsection{Movement phase}
+\subsubsection{Movement phase}\label{mock:755}
 
 \begin{figure}[H]
   \centering
@@ -1644,9 +1644,9 @@ A
 \end{table}
 
 
-\subsection{Battle}
+\subsection{Battle}\label{mock:76}
 
-\subsubsection{Defender reinforcements}
+\subsubsection{Defender reinforcements}\label{mock:761}
 
 \begin{figure}[H]
   \centering
@@ -1666,7 +1666,7 @@ A
 \end{table}
 
 \newpage
-\subsubsection{Defender reinforcement ends}
+\subsubsection{Defender reinforcement ends}\label{mock:762}
 
 \begin{figure}[H]
   \centering
@@ -1686,7 +1686,7 @@ A
 \end{table}
 
 \newpage
-\subsubsection{Battle starts}
+\subsubsection{Battle starts}\label{mock:763}
 
 \begin{figure}[H]
   \centering
@@ -1707,15 +1707,15 @@ A
 &Shoots cannon.
 \\C
 &Troops available
-&Goes to 7.6.4
+&Goes to \ref{mock:764}
 \\D
 &Walls available
-&Goes to 7.6.6
+&Goes to \ref{mock:766}
 \end{tabular}
 \end{table}
 
 
-\subsubsection{Soldier movement}
+\subsubsection{Soldier movement}\label{mock:764}
 
 \begin{figure}[H]
   \centering
@@ -1739,7 +1739,7 @@ A
 
 
 \newpage
-\subsubsection{Retreat activates}
+\subsubsection{Retreat activates}\label{mock:765}
 \begin{figure}[H]
   \centering
   \includegraphics[width=11cm]{pic/mocks/6-5.pdf}
@@ -1758,7 +1758,7 @@ A
 \end{table}
 
 \newpage
-\subsubsection{Wall placement}
+\subsubsection{Wall placement}\label{mock:766}
 \begin{figure}[H]
   \centering
   \includegraphics[width=11cm]{pic/mocks/6-6.pdf}
@@ -1784,11 +1784,6 @@ I see that there has been some misunderstandings between me (who draw
 the mocks) and Alberto (who modelled the behaviour) and that the
 intended behaviour of some parts of the mock-ups where not obvious. I
 will try to fix it some other day :p
-
-Also, it would be nice to rework the cross-references using \LaTeX 
-\verb|\ref{}| and \verb|\label{}| commands, so they are hiper-linked in
-the PDF and harder to break.
-
 \end{todo}
 
 \newpage
