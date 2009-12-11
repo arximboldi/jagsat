@@ -27,9 +27,11 @@ def load_map (file_name):
         reader = MapContentHandler ()
         parser = make_parser ()
         parser.setContentHandler (reader)
-        parser.parse ('file:' +
-                      (os.getcwd () + '/' if file_name [0] != '/' else '') +
-                      file_name)
+        file = 'file:' + \
+                      (os.getcwd () + '/' if file_name [0] != '/' else '') + \
+                      file_name
+	_log.debug ('Loading map: ' + file)
+	parser.parse (file)
     except SAXException, e:
         raise MapError ('Map parsing error: ' + str (e))
 
