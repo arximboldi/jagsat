@@ -13,42 +13,42 @@
 	     troops="5">
     <region name="spain">
       <circle>
-	<point x="117" y="47"/>
+	<point x="115" y="38"/>
       </circle>
     </region>
     <region name="balkan">
       <circle>
-	<point x="128" y="44"/>
+	<point x="128" y="35"/>
       </circle>
     </region>
     <region name="united kingdom">
       <circle>
-	<point x="116" y="32"/>
+	<point x="114" y="22"/>
       </circle>
     </region>
     <region name="western europe">
       <circle>
-	<point x="123" y="36"/>
+	<point x="123" y="28"/>
       </circle>
     </region>   
     <region name="eastern europe">
       <circle>
-	<point x="138" y="39"/>
+	<point x="135" y="28"/>
       </circle>
     </region>
     <region name="scandinavia">
       <circle>
-	<point x="132" y="21"/>
+	<point x="132" y="13"/>
       </circle>
     </region>
     <region name="iceland">
       <circle>
-	<point x="105" y="21"/>
+	<point x="105" y="12"/>
       </circle>
     </region>
     <region name="st. petersburg">
       <circle>
-	<point x="145" y="28"/>
+	<point x="138" y="19"/>
       </circle>
     </region>
   </continent>
@@ -59,52 +59,52 @@
 	     troops="6">
     <region name="alaska">
       <circle>
-	<point x="15" y="21"/>
+	<point x="15" y="16"/>
       </circle>
     </region>
     <region name="western canada">
       <circle>
-	<point x="35" y="21"/>
+	<point x="35" y="16"/>
       </circle>
     </region>
     <region name="eastern canada">
       <circle>
-	<point x="50" y="19"/>
+	<point x="70" y="14"/>
       </circle>
     </region>
     <region name="northern canada">
       <circle>
-	<point x="10" y="9"/>
+	<point x="50" y="4"/>
       </circle>
     </region>
     <region name="greenland">
       <circle>
-	<point x="89" y="12"/>
+	<point x="89" y="6"/>
       </circle>
     </region>
     <region name="california">
       <circle>
-	<point x="37" y="36"/>
+	<point x="37" y="28"/>
       </circle>
     </region>   
     <region name="texas">
       <circle>
-	<point x="42" y="50"/>
+	<point x="42" y="45"/>
       </circle>
     </region>
     <region name="florida">
       <circle>
-	<point x="57" y="52"/>
+	<point x="57" y="43"/>
       </circle>
     </region>
     <region name="new york">
       <circle>
-	<point x="56" y="37"/>
+	<point x="58" y="30"/>
       </circle>
     </region>
     <region name="mexico">
       <circle>
-	<point x="54" y="70"/>
+	<point x="54" y="65"/>
       </circle>
     </region>
   </continent>
@@ -115,12 +115,12 @@
 	     troops="3">
     <region name="venezuela">
       <circle>
-	<point x="136" y="93"/>
+	<point x="66" y="93"/>
       </circle>
     </region>
     <region name="colombia">
       <circle>
-	<point x="71" y="83"/>
+	<point x="70" y="83"/>
       </circle>
     </region>
     <region name="brazil">
@@ -147,32 +147,32 @@
 	     troops="4">
     <region name="algeria">
       <circle>
-	<point x="115" y="68"/>
+	<point x="113" y="64"/>
       </circle>
     </region>
     <region name="egypt">
       <circle>
-	<point x="130" y="67"/>
+	<point x="130" y="60"/>
       </circle>
     </region>
     <region name="congo">
       <circle>
-	<point x="128" y="88"/>
+	<point x="127" y="80"/>
       </circle>
     </region>
     <region name="south africa">
       <circle>
-	<point x="136" y="109"/>
+	<point x="136" y="106"/>
       </circle>
     </region>   
-    <region name="tanzania">
+   <region name="tanzania">
       <circle>
-	<point x="140" y="83"/>
+	<point x="140" y="81"/>
       </circle>
     </region>
     <region name="madagascar">
       <circle>
-	<point x="151" y="109"/>
+	<point x="150" y="107"/>
       </circle>
     </region>
   </continent>
@@ -183,57 +183,57 @@
 	     troops="7">
     <region name="ural">
       <circle>
-	<point x="164" y="27"/>
+	<point x="150" y="20"/>
       </circle>
     </region>
     <region name="siberia">
       <circle>
-	<point x="181" y="27"/>
+	<point x="168" y="18"/>
       </circle>
     </region>
     <region name="yakutsk">
       <circle>
-	<point x="197" y="19"/>
+	<point x="190" y="16"/>
       </circle>
     </region>
     <region name="chersky">
       <circle>
-	<point x="223" y="20"/>
+	<point x="223" y="12"/>
       </circle>
     </region>   
     <region name="japan">
       <circle>
-	<point x="216" y="49"/>
+	<point x="216" y="41"/>
       </circle>
     </region>
     <region name="china">
       <circle>
-	<point x="187" y="50"/>
+	<point x="187" y="45"/>
       </circle>
     </region>
     <region name="india">
       <circle>
-	<point x="175" y="64"/>
+	<point x="175" y="58"/>
       </circle>
     </region>
     <region name="iran">
       <circle>
-	<point x="163" y="51"/>
+	<point x="161" y="45"/>
       </circle>
     </region>
     <region name="saudi arabia">
       <circle>
-	<point x="149" y="63"/>
+	<point x="146" y="54"/>
       </circle>
     </region>
     <region name="thailand">
       <circle>
-	<point x="190" y="69"/>
+	<point x="188" y="62"/>
       </circle>
     </region>
     <region name="mongolia">
       <circle>
-	<point x="0" y="0"/>
+	<point x="201" y="32"/>
       </circle>
     </region>
   </continent>
@@ -244,22 +244,22 @@
 	     troops="2">
     <region name="indonesia">
       <circle>
-	<point x="198" y="88"/>
+	<point x="198" y="85"/>
       </circle>
     </region>
     <region name="new guinea">
       <circle>
-	<point x="218" y="94"/>
+	<point x="216" y="91"/>
       </circle>
     </region>
     <region name="western australia">
       <circle>
-	<point x="205" y="115"/>
+	<point x="205" y="112"/>
       </circle>
     </region>
     <region name="eastern australia">
       <circle>
-	<point x="220" y="117"/>
+	<point x="218" y="114"/>
       </circle>
     </region>   
   </continent>
@@ -407,8 +407,8 @@
     <node name="china"/>
   </link>
   <link type="circle">
-    <node name="mongolia"/>
     <node name="siberia"/>
+    <node name="mongolia"/>
     <node name="china"/>
   </link>
   <link type="circle">
