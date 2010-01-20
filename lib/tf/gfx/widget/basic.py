@@ -202,8 +202,6 @@ class _KeyboardConfig:
 #{ "key": "\"", },
 #{ "key": "#", },
 #{ "key": "$", },
-#{ "key": "€", },
-#{ "key": "¥", },
 #{ "key": "%", },
 #{ "key": "&", },
 #{ "key": "/", },
@@ -221,15 +219,12 @@ class _KeyboardConfig:
 #{ "key": "", },
 #{ "key": "", },
 # + accented chars
-# éèíìáàóòúùýüÜïëÿ
 # + Other european chars
-# ßðøæœþ
 # + others?
 
 {"key": "1", "shift": "!", "pos": (1.0, 0.0)},
 {"key": "2", "shift": "\""},
 {"key": "3", "shift": "#"},
-{"key": "4", "shift": "¤"},
 {"key": "5", "shift": "%"},
 {"key": "6", "shift": "&"},
 {"key": "7", "shift": "/"},
@@ -248,7 +243,6 @@ class _KeyboardConfig:
 {"key": "i", "shift": "I"},
 {"key": "o", "shift": "O"},
 {"key": "p", "shift": "P"},
-{"key": "å", "shift": "Å"},
 
 {"key": "a", "shift": "A", "pos": (2, 2.0)},
 {"key": "s", "shift": "S"},
@@ -259,8 +253,6 @@ class _KeyboardConfig:
 {"key": "j", "shift": "J"},
 {"key": "k", "shift": "K"},
 {"key": "l", "shift": "L"},
-{"key": "ö", "shift": "Ö"},
-{"key": "ä", "shift": "Ä"},
 {"key": "<-/", "extra": "ENTER", "pos": (13, 1)},
 
 {"key": "=^=", "extra": "SHIFTLEFT", "pos": (0.5, 3.0)},

@@ -45,6 +45,10 @@ class Sandbox (State):
 
         world = create_game (cfg)
         comp = WorldComponent (layer, world)
-        but = ui2.Button (layer, ui.String (layer, unicode ('Testttt')), THEME)
+	vbox = ui.VBox(layer)
+	vbox.set_position(500,300)
+        but = ui2.Button (vbox, ui.String (vbox, unicode ('Testttt')), THEME)
+	but2 = ui2.Button (vbox, ui.String (vbox, unicode ('It Works!')), THEME)
         but.activate ()
+	but2.activate()
         
