@@ -18,6 +18,8 @@ from PySFML import sf
 from tf import signalslot
 from base import signal
 from base.log import get_log
+import os
+
 
 _log = get_log (__name__)
 
@@ -28,7 +30,7 @@ THEME = { 'active' : sf.Color.Blue,
           'border' : sf.Color.Green,
           'thickness' : 2 }
 
-class IngameMenu (State, object):
+class ingame_menu (State, object):
     
     def do_enter (self, *a, **k):
         sfview = self.system._window.window.GetDefaultView ()
@@ -64,6 +66,14 @@ class IngameMenu (State, object):
 	self.hbox = ui.HBox(layer)
 	self.hbox.set_visible(False)
 	self.hbox.set_position(384,350)
+    
+        #self.vbox = ui.MultiLineString(layer)
+        self.vbox = ui.VBox(layer)
+        self.vbox.set_visible(False)
+        self.vbox.set_position(384,100)
+        #self.vbox.set_color()
+        #self.vbox.set_font(2)
+       
        
         self.save = ui2.Button (self.hbox, ui.String (self.hbox, unicode ('Save')), THEME)
         self.help = ui2.Button (self.hbox, ui.String (self.hbox, unicode ('Help')), THEME)
@@ -76,12 +86,12 @@ class IngameMenu (State, object):
 
 	self.save.on_click = signal.Signal ()
         self.save.signal_click.add (self.save.on_click)
-        self.save.on_click += self.show_help
+        self.save.on_click += self.savegame
         self.save.set_enable_hitting (True)
 
 	self.quit.on_click = signal.Signal ()
         self.quit.signal_click.add (self.quit.on_click)
-        self.quit.on_click += self.show_help
+        self.quit.on_click += self.quitgame
         self.quit.set_enable_hitting (True)
 	
 	#quit2 = ui.Image(hbox,"home/prjc0910-group1/trunk/src/states/quitbutton.png")
@@ -105,16 +115,21 @@ class IngameMenu (State, object):
 
 
     def show_help(self, random):
-	#random is needed to make the function work, anyone know why?
-	#show the help file, not sure what is supposed to be here will be filled in later
-
+	
+        print "supposed to save the game"
+        self.startfile()
+   
+    def startfile(self):
+        os.system("gnome-open "+ "/home/aksu/projectcourse/prjc0910-group1/src/help.txt") 
+        #Opens the helpfile via system with default editor
+        
 	print "supposed to show help file"
 
-    def savegame(self):
+    def savegame(self, random):
 
 	#save the game with the pickler, not sure how yet will be filled in later
 	print "supposed to save the game"
-    def quitgame(self):
+    def quitgame(self, random):
         #quit the game (to desktop or main menu?)
         #quitting the game, pressing this button should do the same thing as ctrl-c 
 	print "supposed to quit"
