@@ -13,7 +13,7 @@ from base.log import get_log
 from game import *
 from states.sandbox import Sandbox
 
-from menu import Main_menu
+from states.menu import Main_menu
 _log = get_log (__name__)
 
 

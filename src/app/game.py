@@ -16,7 +16,7 @@ from tf.behavior.eventloop import EventLoop
 from tf.behavior.sm import StateMachine
 from tf.gfx.ui import Window
 
-from menu import Main_menu
+from states.menu import Main_menu
 from sfml_controller import SfmlController
 
 _log = get_log (__name__)
