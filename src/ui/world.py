@@ -61,7 +61,7 @@ class RegionComponent (ui.Circle, object):
         self.on_click = signal.Signal ()
         self.signal_click.add (self.on_click)
         self.on_click += lambda _: _log.debug ("REGION CLICKED: " +
-                                               self._region.definition.name)
+                                               self.model.definition.name)
         self.set_enable_hitting (True)
         
         self.model = model
@@ -79,7 +79,7 @@ class RegionComponent (ui.Circle, object):
 
     def on_set_region_owner (self):
         self._fill_color = sf.Color (*(
-            _REGION_FREE_COLOR if self._region.owner is None
+            _REGION_FREE_COLOR if self.model.owner is None
             else self.model.owner.color))
 
     def _rebuild_sprite (self):
