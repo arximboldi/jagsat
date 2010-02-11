@@ -11,11 +11,12 @@ from PySFML import sf
 from tf.gfx import ui
 from tf.gfx.widget.intermediate import Button, Button2
 from tf.gfx.widget.intermediate import LineEdit
-from base.conf import ConfNode
+from base.conf import ConfNode, GlobalConf
 from model.world import create_game
 from base import signal
 from base.log import get_log
 from ui.world import WorldComponent
+from tf.gfx.widget.basic import Keyboard
 
 _log = get_log (__name__)
 
@@ -39,6 +40,7 @@ class MenuComponent (ui.VBox):
         
         self._profile = None     # Profile used to create the game
         self._map = 'doc/map/worldmap.xml'   # Path of the selected map
+	self._listprof = None    # List of profilessaved on the congifuration file
         #self._map = None        #Uncomment when map_selector will be done
 
         #Main Layer
@@ -48,10 +50,14 @@ class MenuComponent (ui.VBox):
         self.gameL = ui.HBox(self)
         self.actionL = ui.HBox(self)
 	self.statusL = LineEdit(self, ui.String(self, unicode('')) , sf.Color(127,127,127), sf.Color.Black, sf.Color.Black, _THICKNESS)
+	self.keyboard = Keyboard(self._layer)
+	self.keyboard.set_position(500, 620)
+	self.keyboard.set_visible(False)
 
 	#Profile Layer
-
-	self.profile_ComboBox = ComboBox(self.profileL)
+	self.default_prof()
+	self.load_listprof()
+	self.profile_ComboBox = ComboBox(self.profileL, self._listprof, self)
         self.profile_SaveButton = Button(self.profileL, ui.String(self.profileL, unicode('Save')), _THEME)
 	self.profile_DeleteButton = Button(self.profileL, ui.String(self.profileL, unicode('Delete')), _THEME)
 
@@ -101,8 +107,13 @@ class MenuComponent (ui.VBox):
 
 	self.en_button1.on_click = signal.Signal ()
         self.en_button1.signal_click.add (self.en_button1.on_click)
-        self.en_button1.on_click += self.enable_player
-        self.en_button1.set_enable_hitting (True)
+        self.en_button1.on_click += lambda _: self.enable_player(0)
+	self.en_button1.set_enable_hitting (True)
+
+	self.player_name1.on_click = signal.Signal ()
+        self.player_name1.signal_click.add (self.player_name1.on_click)
+        self.player_name1.on_click += lambda _: self.keyboard.set_visible(True)
+        self.player_name1.set_enable_hitting (True)
 
 	#Player2
 
@@ -118,8 +129,13 @@ class MenuComponent (ui.VBox):
 
 	self.en_button2.on_click = signal.Signal ()
         self.en_button2.signal_click.add (self.en_button2.on_click)
-        self.en_button2.on_click += self.enable_player
+        self.en_button2.on_click += lambda _: self.enable_player(1)
         self.en_button2.set_enable_hitting (True)
+
+	self.player_name2.on_click = signal.Signal ()
+        self.player_name2.signal_click.add (self.player_name2.on_click)
+        self.player_name2.on_click += lambda _: self.keyboard.set_visible(True)
+        self.player_name2.set_enable_hitting (True)
 	
 	#Player3
         
@@ -135,8 +151,13 @@ class MenuComponent (ui.VBox):
 
 	self.en_button3.on_click = signal.Signal ()
         self.en_button3.signal_click.add (self.en_button3.on_click)
-        self.en_button3.on_click += self.enable_player
+        self.en_button3.on_click += lambda _: self.enable_player(2)
         self.en_button3.set_enable_hitting (True)
+
+	self.player_name3.on_click = signal.Signal ()
+        self.player_name3.signal_click.add (self.player_name3.on_click)
+        self.player_name3.on_click += lambda _: self.keyboard.set_visible(True)
+        self.player_name3.set_enable_hitting (True)
         
 	#Player4
 
@@ -147,8 +168,13 @@ class MenuComponent (ui.VBox):
 
 	self.en_button4.on_click = signal.Signal ()
         self.en_button4.signal_click.add (self.en_button4.on_click)
-        self.en_button4.on_click += self.enable_player
+        self.en_button4.on_click += lambda _: self.enable_player(3)
         self.en_button4.set_enable_hitting (True)
+
+	self.player_name4.on_click = signal.Signal ()
+        self.player_name4.signal_click.add (self.player_name4.on_click)
+        self.player_name4.on_click += lambda _: self.keyboard.set_visible(True)
+        self.player_name4.set_enable_hitting (True)
         
 	#Player5
 
@@ -159,8 +185,13 @@ class MenuComponent (ui.VBox):
 
 	self.en_button5.on_click = signal.Signal ()
         self.en_button5.signal_click.add (self.en_button5.on_click)
-        self.en_button5.on_click += self.enable_player
+        self.en_button5.on_click += lambda _: self.enable_player(4)
         self.en_button5.set_enable_hitting (True)
+
+	self.player_name5.on_click = signal.Signal ()
+        self.player_name5.signal_click.add (self.player_name5.on_click)
+        self.player_name5.on_click += lambda _: self.keyboard.set_visible(True)
+        self.player_name5.set_enable_hitting (True)
         
 	#Player6
 
@@ -171,8 +202,13 @@ class MenuComponent (ui.VBox):
 
 	self.en_button6.on_click = signal.Signal ()
         self.en_button6.signal_click.add (self.en_button6.on_click)
-        self.en_button6.on_click += self.enable_player
+        self.en_button6.on_click += lambda _: self.enable_player(5)
         self.en_button6.set_enable_hitting (True)
+
+	self.player_name6.on_click = signal.Signal ()
+        self.player_name6.signal_click.add (self.player_name6.on_click)
+        self.player_name6.on_click += lambda _: self.keyboard.set_visible(True)
+        self.player_name6.set_enable_hitting (True)
 
 	
 	#Action Layer
@@ -191,10 +227,11 @@ class MenuComponent (ui.VBox):
 	#self.load_button.on_click += self.enable_aux
         self.load_button.set_enable_hitting (True)
 
+	self.load_profile('Default')
 
     #It creats a profile from the active information of the main menu
 
-    def create_profile(self,name="Default"): 
+    def create_profile(self,name="Prove"): 
         
         self._profile = ConfNode()
         dic = {}
@@ -202,7 +239,7 @@ class MenuComponent (ui.VBox):
             pinf = self.infoplayerL.get_child(i)
             if pinf._active:
                 pdic = {}
-                pdic['name'] = pinf.get_child(1).get_child(0)
+                pdic['name'] = pinf.get_child(1).get_child(0)._sprite.GetText()
                 pdic['color'] = pinf.get_child(2)._col
                 pdic['position'] = pinf.get_child(3)._position
                 pdic['enabled'] = True
@@ -210,45 +247,105 @@ class MenuComponent (ui.VBox):
                     
         dic['map'] = self._map
         
-        self._profile.fill(dic)
-                    
+        self._profile.fill(dic)   
+
+    def default_prof(self):
+        cfg = ConfNode (
+            { 'player-0' :
+              { 'name'     : 'Player1',
+                'color'    : 0,
+                'position' : 0,
+                'enabled'  : True },
+              'player-1' :
+              { 'name'     : 'Player2',
+                'color'    : 1,
+                'position' : 1,
+                'enabled'  : True },
+              'player-2' :
+              { 'name'     : 'Player3',
+                'color'    : 2,
+                'position' : 2,
+                'enabled'  : True },
+              'map' : 'doc/map/worldmap.xml' })
+
+        GlobalConf ().path('profiles').adopt(cfg, 'Default')	
+	
+
+    def load_listprof(self):
+	l = []
+	for i in GlobalConf ().path('profiles')._childs :
+	     l.append(i)
+	self._listprof = l           
             
-    def load_profile(self):
-        pass
+    def load_profile(self, name):
+        index = 0
+	for i in GlobalConf ().path('profiles').path(str(name)).childs() :
+	    aux = self.infoplayerL.get_child(index)
+
+	    for j in i.childs() :
+
+		if j._name == 'color': 
+		    aux.get_child(2).update(j.get_value()) 
+
+		elif j._name == 'position':
+		    aux.get_child(3).update(j.get_value())
+
+		elif j._name == 'name':
+		    del aux.get_child(1).children[0]
+		    ui.String(aux.get_child(1), unicode(j.get_value()))
+
+	    index = index + 1
+	#for z in range (index,6):
+	 #   self.disable_player(z)
+	
     
-    def save_profile(self, random):
+    def save_profile(self, random):   #Need to be modified in order to accept the name of the profile, also check first if the profile already exists
         
         if self.check_info():
             self.create_profile()
-	    self.update_status("It should save the profile")
+	    GlobalConf ().path ('profiles').adopt (self._profile, 'Prove')
+	    self._listprof.append('Prove')
+	    self.profile_ComboBox.load(self._listprof)
+	    
+	    self.update_status("Profile saved")
 
 	else:
 	    self.update_status("Wrong information")
 
-    def delete_profile(self, random):
-
-	self.update_status("It should eliminate the profile")
+    def delete_profile(self, random):   #Need to be modified in order to accept the name of the profile, also check first if the profile already exists and what happened when there is no profiles or create a default one which cannot be deleted
+	
+	#if name <> 'Default': 
+	GlobalConf ().path('profiles').remove('Prove')
+	self._listprof.remove('Prove')
+	self.profile_ComboBox.load(self._listprof)
+	self.update_status("Profile deleted")
 
         
-    def enable_player(self, random):
-	for i in range (0,6):  
-	    aux = self.infoplayerL.get_child(i)
-	    for j in range (0,4):
-		if aux._active:
-		    aux.get_child(j).activate()
-		else:
-		    aux.get_child(j).deactivate()
+    def enable_player(self, pl):
 
-    def enable_aux(self, random):
-	if self.playerL1._active:
-	    self.playerL1._active = False
+	aux = self.infoplayerL.get_child(pl)
+
+	if aux._active:
+	    aux._active = False
 	else:
-	    self.playerL1._active = True
-    
+	    aux._active = True
+
+	for j in range (0,4):
+	    if aux._active:
+	        aux.get_child(j).activate()
+	    else:
+	        aux.get_child(j).deactivate()
+
+    def disable_player(self,pl):
+	aux = self.infoplayerL.get_child(pl)
+    	aux._active = False
+	for j in range (0,4):
+	    aux.get_child(j).deactivate()
+
     #Verify the information on the main menu in order to create a profile without mistakes    
 
     def check_info(self):  
-
+	aux = 0
         lname = []
         lcol = []
         lpos = []
@@ -259,6 +356,7 @@ class MenuComponent (ui.VBox):
         for i in range(0,6):
             pinf = self.infoplayerL.get_child(i)
             if pinf._active:
+		aux = aux+1
                 pname = pinf.get_child(1).get_child(0)
                 pcol = pinf.get_child(2)._col
                 ppos = pinf.get_child(3)._position	
@@ -277,17 +375,16 @@ class MenuComponent (ui.VBox):
 		    return False
 		else:
 		    lcol.append(pcol)
-                
+
+	if aux < 3:
+	    return False 
+	
         return True
     
     def start_game(self, random):
         if self.check_info():
             self.create_profile()
 
-	    world = create_game (self._profile)
-	    view = self._layer.get_view()
-	    layer = ui.Layer(view)
-            comp = WorldComponent (layer, world)
 
 	    self.update_status("New game")
 
@@ -303,7 +400,6 @@ class MenuComponent (ui.VBox):
 	
 	del self.statusL.children[0]
   	ui.String(self.statusL,unicode(str))
-
 
 
 #  Extra Widgets
@@ -329,6 +425,12 @@ class ColorButton(Button):
     def next(self,random):
         self._col = (self._col+1)%self._COLOR_NUM
         self.active_color = self._COLOR[self._col]
+	if self.parent._active:
+	    self.activate()
+
+    def update(self,col):
+	self._col = col
+	self.active_color = self._COLOR[self._col]
 	if self.parent._active:
 	    self.activate()
                
@@ -360,14 +462,56 @@ class PositionButton(Button):
 	    del self.children[0]
   	    ui.String(self,unicode(self._POS[self._position]))
         
- 
+    def update(self, pos):
+	self._position = pos
 
-class ComboBox():
+	if self.parent._active:
+	    del self.children[0]
+  	    ui.String(self,unicode(self._POS[self._position]))
+
+class ComboBox(ui.HBox):
     
-    def __init__(self, parent = None):
-        pass 
-    
-    
+    def __init__(self, parent, profiles, menu):
+        
+	ui.HBox.__init__(self, parent)
+	
+	self._prof = profiles
+	self._index = 0
+	self._menu = menu
+
+	self.left = Button(self, ui.String(self, unicode('<')), _THEME)
+	self.prof_txt = Button(self, ui.String(self, unicode(self._prof[self._index])), _THEME)
+	self.right = Button(self, ui.String(self, unicode('>')), _THEME)
+
+	self.right.on_click = signal.Signal ()
+        self.right.signal_click.add (self.right.on_click)
+        self.right.on_click += self.next
+        self.right.set_enable_hitting (True)
+
+	self.left.on_click = signal.Signal ()
+        self.left.signal_click.add (self.left.on_click)
+        self.left.on_click += self.prev
+        self.left.set_enable_hitting (True)
+
+    def load(self,profiles):
+	self._prof = profiles
+	self._index = 0
+	del self.prof_txt.children[0]
+	ui.String(self.prof_txt,unicode(self._prof[self._index]))
+	self._menu.load_profile(self._prof[self._index])
+
+    def next(self,random):
+        self._index = (self._index-1)%len(self._prof)
+	del self.prof_txt.children[0]
+	ui.String(self.prof_txt,unicode(self._prof[self._index]))
+	self._menu.load_profile(self._prof[self._index])  
+ 
+    def prev(self,random):
+        self._index = (self._index+1)%len(self._prof)
+	del self.prof_txt.children[0]
+	ui.String(self.prof_txt,unicode(self._prof[self._index])) 
+	self._menu.load_profile(self._prof[self._index])
+
 class Map_selector():
     
     def __init__(self, parent = None):
