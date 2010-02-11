@@ -64,7 +64,7 @@ class RegionComponent (ui.Circle, object):
                                                self._region.definition.name)
         self.set_enable_hitting (True)
         
-        self._region = model
+        self.model = model
 
         model.on_set_region_owner  += self.on_set_region_owner
         model.on_set_region_troops += self.on_set_region_troops
@@ -80,7 +80,7 @@ class RegionComponent (ui.Circle, object):
     def on_set_region_owner (self):
         self._fill_color = sf.Color (*(
             _REGION_FREE_COLOR if self._region.owner is None
-            else self._region.owner.color))
+            else self.model.owner.color))
 
     def _rebuild_sprite (self):
         self._sprite = sf.Shape.Circle (
