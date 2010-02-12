@@ -1,14 +1,69 @@
 #
-#  Copyright (C) 2009 The JAGSAT project team.
+# Copyright (C) 2009 The JAGSAT project team.
 #
-#  This software is in development and the distribution terms have not
-#  been decided yet. Therefore, its distribution outside the JAGSAT
-#  project team or the Project Course evalautors in Abo Akademy is
-#  completly forbidden without explicit permission of their authors.
+# This software is in development and the distribution terms have not
+# been decided yet. Therefore, its distribution outside the JAGSAT
+# project team or the Project Course evalautors in Abo Akademy is
+# completly forbidden without explicit permission of their authors.
+#
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import functools
+
+near0 = 0.0001
+
+class Selfable (object):
+
+    def myself (self):
+        return self
+
+
+def linear (minv, maxv, val):
+    return minv + (maxv - minv) * val
+
+
+def nop (*a, **k):
+    pass
+
+def trace (val):
+    print val
+    return val
+
+def clamp (val, vmin, vmax):
+    if val < vmin: return vmin
+    if val > vmax: return vmax
+    return val
+
+def union (d1, d2):
+    d1.update (d2)
+    return d1
+
+def selflast (func):
+    return lambda *a, **k: func (* ([a[-1]] + list(a[:-1])), ** k)
+
+def delayed (func):
+    return lambda *a1, **k1: lambda *a2, **k2: \
+        func (* (a1 + a2), ** union (k1, k2))
+
+def delayed2 (func):
+    return lambda *a, **k: functools.partial (func, *a, **k)
 
 _multimethod_registry = {}
+
+
+class lazy (object):
+
+    def __init__ (self, func):
+        self._func    = func
+        self.__name__ = func.__name__
+        self.__doc__  = func.__doc__
+
+    def __get__ (self, obj, cls = None):
+        if obj is None:
+            return None
+        result = obj.__dict__ [self.__name__] = self._func (obj)
+        return result
 
 
 class MultiMethod (object):
@@ -24,7 +79,7 @@ class MultiMethod (object):
             raise TypeError ("no match")
         return function(*args)
 
-    def register(self, types, function):
+    def register (self, types, function):
         if types in self.typemap:
             raise TypeError ("duplicate registration")
         self.typemap[types] = function

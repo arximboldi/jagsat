@@ -11,7 +11,6 @@ from tf.behavior import soundfile
 from tf.behavior import keyboard
 from tf.behavior import actions
 
-
 class GameLoop:
     """
     The game loop is the main application object that controls everything.

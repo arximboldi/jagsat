@@ -1,14 +1,16 @@
 #
-#  Copyright (C) 2009 The JAGSAT project team.
+# Copyright (C) 2009 The JAGSAT project team.
 #
-#  This software is in development and the distribution terms have not
-#  been decided yet. Therefore, its distribution outside the JAGSAT
-#  project team or the Project Course evalautors in Abo Akademy is
-#  completly forbidden without explicit permission of their authors.
+# This software is in development and the distribution terms have not
+# been decided yet. Therefore, its distribution outside the JAGSAT
+# project team or the Project Course evalautors in Abo Akademy is
+# completly forbidden without explicit permission of their authors.
+#
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
 from log import get_log
-from signal import Signal
+from signal import Signal, signal
 from sender import Sender, Receiver
 
 """
@@ -20,10 +22,12 @@ _log = get_log (__name__)
 
 class EventManager (Sender, Receiver):
 
+    quiet = False
+    
     def __init__ (self):
         super (EventManager, self).__init__ ()
         self._events = {}
-        self.quiet = False
+        self.on_any_event = Signal ()
         
     def notify (self, name, *args, **kw):
         if not self.quiet:
@@ -33,12 +37,15 @@ class EventManager (Sender, Receiver):
                 self.send (name, *args, **kw)
 
     receive = notify
+
+    def send (self, name, *a, **k):
+        self.on_any_event.notify (name, a, k)
+        super (EventManager, self).send (name, *a, **k)
     
     def event (self, name):
         if name in self._events:
             return self._events [name]
 
-        _log.debug ('Creating event: ' + name)
         signal = Signal ()
         signal += lambda *a, **k: self.send (name, *a, **k)
         self._events [name] = signal

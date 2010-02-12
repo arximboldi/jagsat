@@ -7,28 +7,30 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
-from state import State
-import model.world
 from tf.gfx import ui
-from tf.gfx.widget import intermediate
+from tf.gfx.widget import intermediate as ui2
+
+from base.conf   import ConfNode
+from core.state  import State
+from core.input  import key
 from model.world import create_game
-from base.conf import ConfNode
-from ui.world import WorldComponent
+from ui.world    import WorldComponent
+
 from PySFML import sf
 
-ui2 = intermediate
 
-THEME = { 'active' : sf.Color.Blue,
-          'inactive' : sf.Color.Red, 
-          'border' : sf.Color.Green,
+THEME = { 'active'    : sf.Color.Blue,
+          'inactive'  : sf.Color.Red, 
+          'border'    : sf.Color.Green,
           'thickness' : 2 }
 
 class Sandbox (State):
     
-    def do_enter (self, *a, **k):
-        sfview = self.system._window.window.GetDefaultView ()
-        view  = ui.View (self.system._window, sfview)
-        layer = ui.Layer (view)
+    def do_setup (self, *a, **k):
+        system = self.manager.system
+        
+        layer = ui.Layer (system.view)
+        system.keys.get_key (key.escape).connect (self.manager.leave_state)
         
         cfg = ConfNode (
             { 'player-0' :
@@ -45,10 +47,7 @@ class Sandbox (State):
 
         world = create_game (cfg)
         comp = WorldComponent (layer, world)
-	vbox = ui.VBox(layer)
-	vbox.set_position(500,300)
-        but = ui2.Button (vbox, ui.String (vbox, unicode ('Testttt')), THEME)
-	but2 = ui2.Button (vbox, ui.String (vbox, unicode ('It Works!')), THEME)
+        but = ui2.Button (layer,
+                          ui.String (layer, unicode ('Testttt')),
+                          THEME)
         but.activate ()
-	but2.activate()
-        

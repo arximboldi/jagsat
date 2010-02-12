@@ -8,14 +8,18 @@
 #
 
 from base.arg_parser import OptionWith
+
 from base.log import get_log
+from core.app import GameApp
 
-from game import *
-from states.sandbox import Sandbox
+from states.sandbox     import Sandbox
+from states.game        import GameState
+from states.init_game   import InitGameState
+from states.ingame_menu import IngameMenuState
+from states.round       import GameRoundState
 
-from states.menu import Main_menu
+
 _log = get_log (__name__)
-
 
 class JagsatApp (GameApp):
 
@@ -24,7 +28,8 @@ class JagsatApp (GameApp):
     OPTIONS = GameApp.OPTIONS + \
 """
 Game options:
-  -m, --map <file>   Map file to load.
+  -m, --map <file>    Map file to load.
+  -s, --state <state> Initial state.
 """
 
     LICENSE = \
@@ -40,10 +45,25 @@ Game options:
 
     def __init__ (self, *a, **k):
         super (JagsatApp, self).__init__ (*a, **k)
-        self._arg_map = OptionWith (str)
-        self.root_state = Sandbox
+
+        self._arg_map   = OptionWith (str)
+        self._arg_state = OptionWith (str)
+        
+        self.root_state = 'game'
         
     def do_prepare (self, args):
-        GameApp.do_prepare (self, args)
-        args.add ('m', 'map', self._arg_map)
+        super (JagsatApp, self).do_prepare (args)
 
+        args.add ('m', 'map',   self._arg_map)
+        args.add ('s', 'state', self._arg_state)
+        
+        self.add_state ('sandbox',     Sandbox)
+        self.add_state ('game',        GameState)
+        self.add_state ('init_game',   InitGameState)
+        self.add_state ('game_round',  GameRoundState)
+        self.add_state ('ingame_menu', IngameMenuState)
+    
+    def do_execute (self, freeargs):
+        if self._arg_state.value:
+            self.root_state = self._arg_state.value                
+        super (JagsatApp, self).do_execute (freeargs)

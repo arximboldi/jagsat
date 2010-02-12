@@ -9,18 +9,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import unittest
-from base.singleton import *
+from base.error import *
 
-class TestSingleton (unittest.TestCase):
-
-    class SingletonMock:
-
-        __metaclass__ = Singleton
-
-    def test_singleton (self):
-        a = TestSingleton.SingletonMock ()
-        b = TestSingleton.SingletonMock ()
-
-        self.assertTrue (a is b)
-
+class CoreError (LoggableError):
+    pass

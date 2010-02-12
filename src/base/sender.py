@@ -1,10 +1,12 @@
 #
-#  Copyright (C) 2009 The JAGSAT project team.
+# Copyright (C) 2009 The JAGSAT project team.
 #
-#  This software is in development and the distribution terms have not
-#  been decided yet. Therefore, its distribution outside the JAGSAT
-#  project team or the Project Course evalautors in Abo Akademy is
-#  completly forbidden without explicit permission of their authors.
+# This software is in development and the distribution terms have not
+# been decided yet. Therefore, its distribution outside the JAGSAT
+# project team or the Project Course evalautors in Abo Akademy is
+# completly forbidden without explicit permission of their authors.
+#
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
 """
@@ -35,6 +37,14 @@ class Receiver (Destiny):
             raise AttributeError ('Uncaugh message: ' + message)
         return getattr (self, message) (*args, **kws)
 
+
+class AutoReceiver (Receiver):
+
+    def receive (self, message, *args, **kws):
+        if hasattr (self, message):
+            return getattr (self, message) (*args, **kws)
+            
+
 class Sender (Container):
     """
     A Sender can be used to emit different named messages to different
@@ -50,3 +60,13 @@ class Sender (Container):
         
         for f in self._destinies:
             f.receive (message, *args, **kws)
+
+
+class AutoSender (Sender):
+    """
+    Every attribute is considered a message sender.
+    """
+
+    def __getattr__ (self, name):
+        return lambda *a, **k: self.send (name, *a, **k)
+

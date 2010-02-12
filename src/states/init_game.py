@@ -7,95 +7,82 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
-from state import State
-import model.world
-from tf.gfx import ui
-from tf.gfx.widget import intermediate
-from model.world import create_game
-from base.conf import ConfNode
-from ui.world import WorldComponent
-from model.world import Region
-from PySFML import sf
 import random
 from itertools import cycle
+
 from base.log import get_log
+from quit import QuittableState
 
-ui2 = intermediate
+_log = get_log (__name__)
 
-THEME = { 'active' : sf.Color.Blue,
-          'inactive' : sf.Color.Red, 
-          'border' : sf.Color.Green,
-          'thickness' : 2 }
 
-class Init_game (State):
+class InitGameState (QuittableState):
     
-    def do_enter (self, *a, **k):
-        sfview = self.system._window.window.GetDefaultView ()
-        view  = ui.View (self.system._window, sfview)
-        layer = ui.Layer (view)
+    def do_setup (self, *a, **k):
+        game = self.parent_state
+
+        self._give_troops ()
+	self._give_objectives ()
+	self._give_regions ()
+        self._finished = set ()
         
-        cfg = ConfNode (
-            { 'player-0' :
-              { 'name'     : 'jp',
-                'color'    : 1,
-                'position' : 2,
-                'enabled'  : True },
-	      'player-1' :
-              { 'name'     : 'lamer',
-                'color'    : 2,
-                'position' : 1,
-                'enabled'  : True },
-              'player-2' :
-              { 'name'     : 'pj',
-                'color'    : 3,
-                'position' : 4,
-                'enabled'  : True },
-              'map' : 'doc/map/worldmap.xml' })
+	game.ui_world.on_click_region += self.on_place_troop
 
-        world = create_game (cfg)
-        comp = WorldComponent (layer, world)
-	self.regions = comp._regions
-	self.players = world._players
-	self.finished = False
-	self.number_of_players = len(self.players)	#count the amount of players
-	
-	self.give_objectives()
-	self.give_regions()  
+    def _give_troops (self):
+        """
+        Give troops to player. TODO: Match Risk rules.
+        """
+        world = self.parent_state.world
+        for p in world.players.itervalues ():
+            p.troops = 20
 
-	for x in comp._regions:
-	    x.on_click += lambda ev, x=x:  self.place_troops(x)
+    def _give_objectives (self):
+        """
+        Randomly give one objective to each player, should be
+        filled in with the missions that alberto is working on
+        """
 
-    def give_objectives(self): 		#randomly give one objective to each player, should be filled in with the missions that alberto is working on
-
-	for p in self.players.keys():
-	    temp = self.players[p]
-	    #temp.objective = self.objectives[random.random(0, len(self.objectives))]
-	    pass   
-	    
-    def give_regions(self): 		#randomly divides the regions between the players
-
-	random.shuffle(self.regions, random.random)
-	for r, p in zip (self.regions, cycle(self.players.itervalues())):
+        world = self.parent_state.world
+        objectives = ['obj-a', 'obj-b', 'obj-c', 'obj-d', 'obj-e', 'obj-f']
+        random.shuffle (objectives)
+        
+	for p in world.players.itervalues ():
+	    p.objective = objectives.pop ()
+    
+    def _give_regions (self):
+        """
+        Randomly divides the regions between the players
+        """
+        _log.debug ('Giving regions')
+        world = self.parent_state.world
+        regions = world.regions.values ()
+	random.shuffle (regions)
+        
+	for r, p in zip (regions, cycle (world.ordered_players ())):
 	    r.owner = p
 
-    def place_troops(self, x): 		#pressing a regions will increase the troops in the region by 1 and decrease player troops by 1
-	if(x.owner.troops > 0):	
-	    x.troops +=1		
-	    x.owner.troops -=1		
-			
-	if x.owner.troops == 0:
-	    print "owner has 0 troops, failed"
-	    x.owner.can_pass = True
-	    self.passed()
-
-    def passed (self):		#if all players have 0 troops left to put out the program will automatically jump to turn based gameplay
-	all_passed = True
-	for p in self.players.keys():
-	  
-	    temp = self.players[p]
-	    if temp.can_pass == False:
-	        all_passed = False
-	if all_passed == True:
-	    self.turns = self.players.keys()
-	    random.shuffle(self.turns)	#not sure at the moment what parameter is needed to be passed to reinforcement phase
-
+    def on_place_troop (self, region):
+        """
+        Pressing a regions will increase the troops in the region by 1
+        and decrease player troops by 1
+        """
+        region = region.model
+        _log.debug ('Placing troop on region: ' + region.definition.name)
+	if region.owner.troops > 0:	
+	    region.troops += 1
+	    region.owner.troops -= 1
+        else:
+            self._finish_player (region.owner)
+            
+    def _finish_player (self, p):
+        """
+        If all players have 0 troops left to put out the program will
+        automatically jump to turn based gameplay
+        """
+        _log.debug ('Player %s have finished the init phase.' % p.name)
+        game = self.parent_state
+        
+        if not p in self._finished:
+            self._finished.add (p)
+            if len (self._finished) == len (game.world.players):
+                self.manager.change_state ('game_round')

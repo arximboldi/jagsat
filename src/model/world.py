@@ -10,7 +10,7 @@
 from base.changer import InstChanger
 from base.observer import make_observer
 from map import load_map
-
+from operator import attrgetter
 
 def create_game (cfg):
     """
@@ -51,13 +51,21 @@ class World (object):
         self.map     = map_
         self._players = {} if players is None \
                            else dict ((p.name, p) for p in players)
-        self._regions = dict ((r.name, Region (r)) for r in map_.regions.itervalues ())
-        
-    def region (self, name):
-        return self._regions [name]
+        self._regions = dict ((r.name, Region (r))
+                              for r in map_.regions.itervalues ())
 
-    def iterregions (self):
-        return self._regions.itervalues ()
+    @property
+    def regions (self):
+        return self._regions
+
+    @property
+    def players (self):
+        return self._players
+
+    def ordered_players (self):
+        players = self._players.values ()
+        players.sort (key = attrgetter ('position'))
+        return players
 
 
 RegionSubject, RegionListener = \
@@ -69,14 +77,15 @@ RegionSubject, RegionListener = \
 class Region (RegionSubject):
     
     troops = InstChanger ('on_set_region_troops', 0)
-    used   = InstChanger ('on_set_region_used', 0)
-    owner  = InstChanger ('on_set_region_owner')
+    used   = InstChanger ('on_set_region_used',   0)
+    owner  = InstChanger ('on_set_region_owner',  None)
     
     def __init__ (self, definition = None, *a, **k):
         assert definition
         super (Region, self).__init__ (*a, **k)
         
         self.definition = definition
+
 
 PlayerSubject, PlayerListener = \
     make_observer (['on_set_player_troops'])

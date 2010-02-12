@@ -7,18 +7,13 @@
 #  completely forbidden without explicit permission of their authors.
 #
 
-
-from state import State
+from core.state import State
 from tf.gfx import ui
 from ui.menu import MenuComponent
 
-class Main_menu (State):
+class MainMenuState (State):
     
-    def do_enter (self, *a, **k):
-        sfview = self.system._window.window.GetDefaultView ()
-        view  = ui.View (self.system._window, sfview)
+    def do_setup (self, *a, **k):
         layer = ui.Layer (view)
     
         menu_comp = MenuComponent(layer)
-        
-        

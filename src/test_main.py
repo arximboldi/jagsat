@@ -29,6 +29,8 @@ from test.base_singleton import *
 from test.base_log import *
 from test.base_event import *
 from test.base_changer import *
+from test.core_task import *
+from test.core_state import *
 
 if __name__ == '__main__':
     unittest.main ()

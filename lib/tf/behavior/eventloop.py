@@ -10,7 +10,7 @@ import traceback
 from PySFML import sf
 
 from tf.behavior import keyboard
-
+from tf.signalslot import Signal, Event
 
 class EventLoop:
 
@@ -27,6 +27,7 @@ class EventLoop:
             themousestate = uihelp.MouseState(mainwindow.views)
         self.themousestate = themousestate
 
+        self.signal_event = Signal ('signal-event')
         self._add_default_keybindings()
 
     def _add_default_keybindings(self):
@@ -60,6 +61,8 @@ class EventLoop:
 
         event = sf.Event()
         while self.mainwindow.window.GetEvent(event):
+            self.signal_event.call (Event ('sfml-event', ev = event))
+            
             if event.Type == sf.Event.Closed:
                 self.thegameloop.stop()
 

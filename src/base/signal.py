@@ -1,10 +1,12 @@
 #
-#  Copyright (C) 2009 The JAGSAT project team.
+# Copyright (C) 2009 The JAGSAT project team.
 #
-#  This software is in development and the distribution terms have not
-#  been decided yet. Therefore, its distribution outside the JAGSAT
-#  project team or the Project Course evalautors in Abo Akademy is
-#  completly forbidden without explicit permission of their authors.
+# This software is in development and the distribution terms have not
+# been decided yet. Therefore, its distribution outside the JAGSAT
+# project team or the Project Course evalautors in Abo Akademy is
+# completly forbidden without explicit permission of their authors.
+#
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
 """
@@ -16,13 +18,14 @@ from sender import *
 from util import *
 from meta import *
 from proxy import *
+import weakref
 
 class Slot (Destiny):
     """
     A slot is the endpoint of a connection to a signal.
     """
     
-    def __init__ (self, func, *a, **k):
+    def __init__ (self, func = None, *a, **k):
         """
         Constructor.
 
@@ -38,6 +41,39 @@ class Slot (Destiny):
         arguments.
         """
         return self.func (*args, **kw)
+
+    def do_notify (self, *args, **kw):
+        return True, self.func (*args, **kw)
+
+
+class WeakSlot (Slot):
+
+    def __init__ (self, obj = None, method = None, *a, **k):
+        """
+        Constructor.
+
+        Parameters:
+          - func: The function to be invoked by this slot.
+        """
+        super (WeakSlot, self).__init__ (*a, **k)
+        self.obj    = weakref.ref (obj)
+        self.method = method
+        
+    def __call__ (self, *args, **kw):
+        """
+        Invokes the function associated to this slot with the given
+        arguments.
+        """
+        return self.method (self.obj (), *args, **kw)
+
+    def do_notify (self, *args, **kw):
+        """
+        Invokes the function associated to this slot with the given
+        arguments.
+        """
+        if self.obj ():
+            return True, self.method (self.obj (), *args, **kw)
+        return False, None
 
 
 class Signal (Container):
@@ -70,17 +106,24 @@ class Signal (Container):
             super (Signal, self).disconnect (slot)
         else:
             super (Signal, self).disconnect_if (lambda x: x.func == slot)
-        
-    def notify (self, *args, **kw):
+
+    def _notify_one (self, slot, *a, **k):
+        remain, ret = slot.do_notify (*a, **k)
+        if not remain:
+            super (Signal, self).disconnect (slot)
+        return remain, ret
+    
+    def notify (self, *a, **k):
         """
         Invokes with the arguments passed to this function to all the
         slots that are connected to this signal.
         """
-        
-        for slot in self._destinies:
-            slot (*args, **kw)
+        destinies = list (self._destinies)
+        f = self._notify_one
+        for x in destinies:
+            f (x, *a, **k)
     
-    def fold (self, folder, start = None):
+    def fold (self, folder, start = None, *a, **k):
         """
         Invokes all the connected signal accumulating the result with
         the given 'folder', that will be called on every new
@@ -101,20 +144,36 @@ class Signal (Container):
         acummulator instance as 'start'.
         """
         
-        def executor (ac, func):
-            return folder (ac, func ())
-            
+        destinies = list (self._destinies)
+        f = self._notify_one
+
+        ix = 0
         if start is None:
-            start = self._destinies[0] ()
-            return reduce (executor, self._destinies [1:], start)
-        else:    
-            return reduce (executor, self._destinies, start)
+            remain = False
+            while not remain and ix < len (destinies):
+                remain, start = f (destinies [ix], *a, **k)
+                ix += 1
+        
+        ac = start
+        while ix < len (destinies):
+            remain, acnew = f (destinies [ix], *a, **k)
+            if remain:
+                ac = folder (ac, acnew)
+            ix += 1
+        return ac
     
     def __iadd__ (self, slot):
         """
         Same as 'connect'.
         """
         self.connect (slot)
+        return self
+
+    def __isub__ (self, slot):
+        """
+        Same as 'disconnect'.
+        """
+        self.disconnect (slot)
         return self
         
     def __call__ (self, *args, **kw):
@@ -256,6 +315,7 @@ def slot (obj, func):
         obj.register_trackable (s)
     return s
 
+weak_slot = instance_decorator (WeakSlot)
 
 @instance_decorator
 def signal (obj, func):

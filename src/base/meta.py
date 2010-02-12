@@ -1,21 +1,30 @@
 #
-#  Copyright (C) 2009 The JAGSAT project team.
+# Copyright (C) 2009 The JAGSAT project team.
 #
-#  This software is in development and the distribution terms have not
-#  been decided yet. Therefore, its distribution outside the JAGSAT
-#  project team or the Project Course evalautors in Abo Akademy is
-#  completly forbidden without explicit permission of their authors.
+# This software is in development and the distribution terms have not
+# been decided yet. Therefore, its distribution outside the JAGSAT
+# project team or the Project Course evalautors in Abo Akademy is
+# completly forbidden without explicit permission of their authors.
+#
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from util import memoize
+from util import memoize, nop
+
+class Mockup (object):
+
+    def __getattribute__ (self, name):
+        return lambda *a, **k: None
 
 
 @memoize
-def mixin (one, two):
+def mixin (one, two, *args):
     class Mixin (one, two):
         def __init__ (self, *args, **kws):
             super (Mixin, self).__init__ (*args, **kws)
 
+    if args:
+        return mixin (Mixin, *args)
     return Mixin
 
 
@@ -47,7 +56,7 @@ def monkeypatch_extend (target, name = None):
 
 def instance_decorator (decorator):
     class Decorator (object):
-        def __init__ (self, func, *args, **kws):
+        def __init__ (self, func = nop, *args, **kws):
             self.__name__ = func.__name__
             self.__doc__ = func.__doc__
             self._func = func
