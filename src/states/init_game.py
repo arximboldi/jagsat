@@ -59,8 +59,9 @@ class InitGameState (QuittableState):
 	random.shuffle (regions)
         
 	for r, p in zip (regions, cycle (world.ordered_players ())):
-	    r.owner = p
-
+	    r.owner  = p
+            r.troops = 1
+    
     def on_place_troop (self, region):
         """
         Pressing a regions will increase the troops in the region by 1
