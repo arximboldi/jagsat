@@ -9,6 +9,7 @@
 
 from base.signal import weak_slot
 from base.conf   import ConfNode
+from base.util   import lazyprop
 from core.state  import State
 from core.input  import key
 from model.world import create_game
@@ -17,6 +18,17 @@ from ui.world    import WorldComponent
 from quit import QuittableState
 
 from tf.gfx import ui
+
+
+class GameSubstate (QuittableState):
+
+    @lazyprop
+    def game (self):
+        result = self.manager.current
+        while result and not isinstance (result, GameState):
+            result = result.parent_state
+        return result
+
 
 class GameState (QuittableState):
 

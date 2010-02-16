@@ -52,7 +52,7 @@ def delayed2 (func):
 _multimethod_registry = {}
 
 
-class lazy (object):
+class lazyprop (object):
 
     def __init__ (self, func):
         self._func    = func

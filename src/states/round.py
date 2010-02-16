@@ -8,7 +8,7 @@
 #
 
 from base.log import get_log
-from quit import QuittableState
+from game import GameSubstate
 
 from PySFML import sf
 from tf.gfx import ui
@@ -16,11 +16,11 @@ from tf.gfx import ui
 _log = get_log (__name__)
 
 
-class GameRoundState (QuittableState):
+class GameRoundState (GameSubstate):
 
     def do_setup (self, *a, **k):
         super (GameRoundState, self).do_setup (*a, **k)
-        game = self.parent_state
+        game = self.game
 
         txt = ui.String (game.ui_layer,
                          u"This feature has not been implemented yet.")

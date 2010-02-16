@@ -11,29 +11,26 @@ import random
 from itertools import cycle
 
 from base.log import get_log
-from quit import QuittableState
+from game import GameSubstate
 
 _log = get_log (__name__)
 
 
-class InitGameState (QuittableState):
+class InitGameState (GameSubstate):
     
     def do_setup (self, *a, **k):
-        game = self.parent_state
-
         self._give_troops ()
 	self._give_objectives ()
 	self._give_regions ()
         self._finished = set ()
         
-	game.ui_world.on_click_region += self.on_place_troop
+	self.game.ui_world.on_click_region += self.on_place_troop
 
     def _give_troops (self):
         """
         Give troops to player. TODO: Match Risk rules.
         """
-        world = self.parent_state.world
-        for p in world.players.itervalues ():
+        for p in self.game.world.players.itervalues ():
             p.troops = 20
 
     def _give_objectives (self):
@@ -42,11 +39,10 @@ class InitGameState (QuittableState):
         filled in with the missions that alberto is working on
         """
 
-        world = self.parent_state.world
         objectives = ['obj-a', 'obj-b', 'obj-c', 'obj-d', 'obj-e', 'obj-f']
         random.shuffle (objectives)
         
-	for p in world.players.itervalues ():
+	for p in self.game.world.players.itervalues ():
 	    p.objective = objectives.pop ()
     
     def _give_regions (self):
@@ -54,7 +50,7 @@ class InitGameState (QuittableState):
         Randomly divides the regions between the players
         """
         _log.debug ('Giving regions')
-        world = self.parent_state.world
+        world = self.game.world
         regions = world.regions.values ()
 	random.shuffle (regions)
         
@@ -81,9 +77,8 @@ class InitGameState (QuittableState):
         automatically jump to turn based gameplay
         """
         _log.debug ('Player %s have finished the init phase.' % p.name)
-        game = self.parent_state
         
         if not p in self._finished:
             self._finished.add (p)
-            if len (self._finished) == len (game.world.players):
+            if len (self._finished) == len (self.game.world.players):
                 self.manager.change_state ('game_round')
