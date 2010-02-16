@@ -14,6 +14,6 @@ from ui.menu import MenuComponent
 class MainMenuState (State):
     
     def do_setup (self, *a, **k):
-        layer = ui.Layer (view)
-    
+        layer = ui.Layer (self.manager.system.view)
         menu_comp = MenuComponent(layer)
+	menu_comp.on_start_game += lambda p: self.manager.change_state('game',profile = p)

@@ -17,6 +17,7 @@ from states.game        import GameState
 from states.init_game   import InitGameState
 from states.ingame_menu import IngameMenuState
 from states.round       import GameRoundState
+from states.menu        import MainMenuState
 
 
 _log = get_log (__name__)
@@ -62,6 +63,7 @@ Game options:
         self.add_state ('init_game',   InitGameState)
         self.add_state ('game_round',  GameRoundState)
         self.add_state ('ingame_menu', IngameMenuState)
+	self.add_state ('main_menu',   MainMenuState)
     
     def do_execute (self, freeargs):
         if self._arg_state.value:

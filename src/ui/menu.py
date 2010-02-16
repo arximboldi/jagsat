@@ -39,6 +39,9 @@ class MenuComponent (ui.VBox):
         
         ui.VBox.__init__(self, parent)
 
+	self.on_start_game = Signal ()
+	self.on_quit_program = Signal ()
+
 	self.set_position(50,50)
         
         self._profile = None     # Profile used to create the game
@@ -78,7 +81,7 @@ class MenuComponent (ui.VBox):
  	#Game Layer
         
         self.infoplayerL = ui.VBox(self.gameL)
-        self.mapL = Map_selector(self.gameL)
+        self.mapL = MapSelector(self.gameL)
 
 	#Info Player Layer
 
@@ -219,9 +222,7 @@ class MenuComponent (ui.VBox):
         self.start_button = Button(self.actionL, ui.String(self.actionL,unicode('Start')), _THEME)
         self.load_button = Button(self.actionL, ui.String(self.actionL, unicode('Load')), _THEME)
 
-	self.start_button.on_click = signal.Signal ()
-        self.start_button.signal_click.add (self.start_button.on_click)
-        self.start_button.on_click += self.start_game
+	self.start_button.signal_click.add (self.start_game)
         self.start_button.set_enable_hitting (True)
 
 	self.load_button.on_click = signal.Signal ()
@@ -392,8 +393,7 @@ class MenuComponent (ui.VBox):
     def start_game(self, random):
         if self.check_info():
             self.create_profile()
-
-
+	    self.on_start_game (self._profile)
 	    self.update_status("New game")
 
         else:
@@ -528,7 +528,7 @@ class ComboBox(ui.HBox):
 	ui.String(self.prof_txt,unicode(self._prof[self._index])) 
 	self._menu.load_profile(self._prof[self._index])
 
-class Map_selector():
+class MapSelector():
     
     def __init__(self, parent = None):
         pass
