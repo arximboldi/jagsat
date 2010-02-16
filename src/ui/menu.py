@@ -16,11 +16,14 @@ from model.world import create_game
 from base import signal
 from base.log import get_log
 from ui.world import WorldComponent
+
 from tf.gfx.widget.basic import Keyboard
+from tf.signalslot import Signal
+from tf.gfx import uiactions
 
 _log = get_log (__name__)
 
-_TITLE = unicode ('Title of the Game')
+_TITLE = unicode ('HONOR OF GREED')
 _ACTIVE_COLOR = sf.Color.Red
 _INACTIVE_COLOR = sf.Color(127,127,127)
 _DISABLED_PLAYER = sf.Color(190,190,190)
@@ -63,12 +66,12 @@ class MenuComponent (ui.VBox):
 
 	self.profile_SaveButton.on_click = signal.Signal ()
         self.profile_SaveButton.signal_click.add (self.profile_SaveButton.on_click)
-        self.profile_SaveButton.on_click += self.save_profile
+        self.profile_SaveButton.on_click += lambda _: self.save_profile()
         self.profile_SaveButton.set_enable_hitting (True)
 
         self.profile_DeleteButton.on_click = signal.Signal ()
         self.profile_DeleteButton.signal_click.add (self.profile_DeleteButton.on_click)
-        self.profile_DeleteButton.on_click += self.delete_profile
+        self.profile_DeleteButton.on_click += lambda _: self.delete_profile()
         self.profile_DeleteButton.set_enable_hitting (True)
         
 
@@ -112,7 +115,7 @@ class MenuComponent (ui.VBox):
 
 	self.player_name1.on_click = signal.Signal ()
         self.player_name1.signal_click.add (self.player_name1.on_click)
-        self.player_name1.on_click += lambda _: self.keyboard.set_visible(True)
+        self.player_name1.on_click += lambda _: self.enable_keyboard(0)
         self.player_name1.set_enable_hitting (True)
 
 	#Player2
@@ -134,7 +137,7 @@ class MenuComponent (ui.VBox):
 
 	self.player_name2.on_click = signal.Signal ()
         self.player_name2.signal_click.add (self.player_name2.on_click)
-        self.player_name2.on_click += lambda _: self.keyboard.set_visible(True)
+        self.player_name2.on_click += lambda _: self.enable_keyboard(1)
         self.player_name2.set_enable_hitting (True)
 	
 	#Player3
@@ -156,7 +159,7 @@ class MenuComponent (ui.VBox):
 
 	self.player_name3.on_click = signal.Signal ()
         self.player_name3.signal_click.add (self.player_name3.on_click)
-        self.player_name3.on_click += lambda _: self.keyboard.set_visible(True)
+        self.player_name3.on_click += lambda _: self.enable_keyboard(2)
         self.player_name3.set_enable_hitting (True)
         
 	#Player4
@@ -173,7 +176,7 @@ class MenuComponent (ui.VBox):
 
 	self.player_name4.on_click = signal.Signal ()
         self.player_name4.signal_click.add (self.player_name4.on_click)
-        self.player_name4.on_click += lambda _: self.keyboard.set_visible(True)
+        self.player_name4.on_click += lambda _: self.enable_keyboard(3)
         self.player_name4.set_enable_hitting (True)
         
 	#Player5
@@ -190,7 +193,7 @@ class MenuComponent (ui.VBox):
 
 	self.player_name5.on_click = signal.Signal ()
         self.player_name5.signal_click.add (self.player_name5.on_click)
-        self.player_name5.on_click += lambda _: self.keyboard.set_visible(True)
+        self.player_name5.on_click += lambda _: self.enable_keyboard(4)
         self.player_name5.set_enable_hitting (True)
         
 	#Player6
@@ -207,7 +210,7 @@ class MenuComponent (ui.VBox):
 
 	self.player_name6.on_click = signal.Signal ()
         self.player_name6.signal_click.add (self.player_name6.on_click)
-        self.player_name6.on_click += lambda _: self.keyboard.set_visible(True)
+        self.player_name6.on_click += lambda _: self.enable_keyboard(5)
         self.player_name6.set_enable_hitting (True)
 
 	
@@ -224,7 +227,6 @@ class MenuComponent (ui.VBox):
 	self.load_button.on_click = signal.Signal ()
         self.load_button.signal_click.add (self.load_button.on_click)
         self.load_button.on_click += self.load_game
-	#self.load_button.on_click += self.enable_aux
         self.load_button.set_enable_hitting (True)
 
 	self.load_profile('Default')
@@ -278,9 +280,17 @@ class MenuComponent (ui.VBox):
 	self._listprof = l           
             
     def load_profile(self, name):
+	
+	for i in range(0,6):
+	    self.disable_player(i)	
+	
         index = 0
+	
 	for i in GlobalConf ().path('profiles').path(str(name)).childs() :
 	    aux = self.infoplayerL.get_child(index)
+	    
+	    if i._name <> 'map':
+		self.enable_player(index)
 
 	    for j in i.childs() :
 
@@ -295,16 +305,14 @@ class MenuComponent (ui.VBox):
 		    ui.String(aux.get_child(1), unicode(j.get_value()))
 
 	    index = index + 1
-	#for z in range (index,6):
-	 #   self.disable_player(z)
 	
     
-    def save_profile(self, random):   #Need to be modified in order to accept the name of the profile, also check first if the profile already exists
+    def save_profile(self, name = 'Prove'): 
         
-        if self.check_info():
+        if self.check_info() and name <> 'Default':
             self.create_profile()
-	    GlobalConf ().path ('profiles').adopt (self._profile, 'Prove')
-	    self._listprof.append('Prove')
+	    GlobalConf ().path ('profiles').adopt (self._profile, name)
+	    self._listprof.append(name)
 	    self.profile_ComboBox.load(self._listprof)
 	    
 	    self.update_status("Profile saved")
@@ -312,13 +320,13 @@ class MenuComponent (ui.VBox):
 	else:
 	    self.update_status("Wrong information")
 
-    def delete_profile(self, random):   #Need to be modified in order to accept the name of the profile, also check first if the profile already exists and what happened when there is no profiles or create a default one which cannot be deleted
+    def delete_profile(self, name = 'Prove'):   
 	
-	#if name <> 'Default': 
-	GlobalConf ().path('profiles').remove('Prove')
-	self._listprof.remove('Prove')
-	self.profile_ComboBox.load(self._listprof)
-	self.update_status("Profile deleted")
+	if name <> 'Default': 
+	    GlobalConf ().path('profiles').remove(name)
+	    self._listprof.remove(name)
+	    self.profile_ComboBox.load(self._listprof)
+	    self.update_status("Profile deleted")
 
         
     def enable_player(self, pl):
@@ -394,13 +402,21 @@ class MenuComponent (ui.VBox):
 
     def load_game(self, random):
 
-	self.update_status("It should open a new window in order to load the game")
+	self.update_status("Not implemented yet")
 
     def update_status(self, str):
 	
 	del self.statusL.children[0]
   	ui.String(self.statusL,unicode(str))
 
+    def enable_keyboard(self,pl):
+
+	if self.keyboard.get_visible():
+	    self.keyboard.set_position(500, 620)
+	else:
+	    self.keyboard.set_visible(True)
+
+	
 
 #  Extra Widgets
 
