@@ -36,8 +36,13 @@ class WorldComponent (ui.Image, object):
             *a, **k)
 
         self.on_click_region = signal.Signal ()
+        self.on_pick_regions = signal.Signal ()
         
-        self._world  = world
+        self._picked = None
+        self._pick_cond_fst = None
+        self._pick_cond_snd = None
+        
+        self.model  = world
         self._regions = []
         
         for r in world.regions.itervalues ():
@@ -47,14 +52,49 @@ class WorldComponent (ui.Image, object):
             comp.on_click += self.on_click_region
             self._regions.append (comp)
 
+    def enable_picking (self,
+                        cond_fst = lambda *a, **k: True,
+                        cond_snd = lambda *a, **k: True):
+        if self._pick_cond_fst is None:
+            self.on_click_region += self._on_pick_one_region
+            self._pick_cond_fst = cond_fst
+            self._pick_cond_snd = cond_snd
+            
+    def disable_picking (self):
+        if self._pick_cond_fst is not None:
+            self.on_click_region -= self._on_pick_one_region
+            self._pick_cond_fst = None
+            self._pick_cond_snd = None
+
+    @signal.weak_slot
+    def _on_pick_one_region (self, region):
+        if not self._picked:
+            if self._pick_cond_fst (region):
+                self._picked = region
+                region.select ()
+                for r in filter (self._pick_cond_snd, self._regions):
+                    r.highlight ()
+                    
+        elif self._picked != region:
+            if self._pick_cond_snd (region):
+                self.on_pick_regions (self._picked, region)
+                self._picked = None
+            
     @property
     def regions (self):
         return self._regions
     
-    def toggle_used (self):
+    def enable_used (self):
         for r in self._regions:
-            r.toggle_used ()
-    
+            if r.model.owner == self.model.current_player:
+                r.enable_used ()
+            else:
+                r.disable_used ()
+
+    def disable_used (self):
+        for r in self._regions:
+            r.disable_used ()
+
 
 class RegionComponent (RegionListener, ui.Circle, object):
 
@@ -70,8 +110,8 @@ class RegionComponent (RegionListener, ui.Circle, object):
 
         self.on_click = signal.Signal ()
         self.signal_click.add (lambda ev: self.on_click (self))
-        self.on_click += lambda _: _log.debug ("Region clicked: " +
-                                               self.model.definition.name)
+        self.on_click += lambda ev: _log.debug ("Region clicked: " +
+                                                self.model.definition.name)
         self.set_enable_hitting (True)
         
         self.model = model

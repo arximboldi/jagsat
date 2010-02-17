@@ -26,23 +26,28 @@ class Button(ui.RoundedRectangle):
         ui.RoundedRectangle.__init__(self,
                                      parent,
                                      0, 0,
-                                     str._get_width() + 30,
-                                     str._get_height() + 15,
+                                     0, 0,
                                      15,
                                      inactive_color,
                                      border_color,
                                      thickness)
-        self.set_margin(5)
+        self.set_margin (8)
         self.set_enable_hitting(True)
-        self._expand_as_necessary_x = True
-        self._expand_as_necessary_y = True
+        self.set_expand (True, True)
         self.active_color = active_color
         self.inactive_color = inactive_color
 
-        # XXX only for strings?
-        str.SetPosition(15, 7)
-        self.add_child(str)
+        self.add_child (str)
+        # TODO: After more than one our just trying to fix this
+        # library... Lets just agree on that this sucks and all the
+        # widget code have to be rewriten. The layout code is
+        # unnecesarily complicated and full of bugs here and there.
+        str.set_position (16, 4)
 
+        # str.set_center_rel (0.5,
+        # 0.5) str.set_position (0.5, 0.5)
+        self.need_recalculate = True
+                
     def activate(self):
         self.ic = self.active_color
         for i in range(self._sprite.GetNbPoints()):

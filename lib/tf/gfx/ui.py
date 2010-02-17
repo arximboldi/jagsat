@@ -794,12 +794,10 @@ class Component(sf.Drawable, Space, HitShape):
             + self.padding_top + self.padding_bottom
 
     def _get_unscaled_width(self):
-        raise NotImplemented("_get_unscaled_width not implemented for " + \
-                                 str(self))
+        raise NotImplemented
 
     def _get_unscaled_height(self):
-        raise NotImplemented("_get_unscaled_width not implemented for " + \
-                                 str(self))
+        raise NotImplemented
 
     def resize(self, nx, ny):
         sx = nx / float(self._get_unscaled_width())
@@ -863,6 +861,8 @@ class Component(sf.Drawable, Space, HitShape):
         Set the position coordinates of the sprite, relative to the
         size of the ***window***.  Thus, the values given are usually
         between 0.0 and 1.0.
+
+        NOTE: WTF?! TO THE SIZE OF THE WINDOW OR THE PARENT? THIS SUCKS!
         """
         if position_py is None:
             position_px, position_py = position_px
@@ -888,10 +888,11 @@ class Component(sf.Drawable, Space, HitShape):
 
         Largely unused currently.
         """
-        pass
+        for x in self.children: x.activate ()
 
     def deactivate(self):
-        pass
+        for x in self.children: x.deactivate ()
+
 
 
 class Image(Component):
@@ -965,18 +966,24 @@ class OrganizedContainer(Component):
 
 class VBox(OrganizedContainer):
 
-    def __init__(self, parent = None):
+    def __init__(self, parent = None, center = False):
         OrganizedContainer.__init__(self, parent)
-
+        self.center_childs = center
+        
     def _do_recalculate(self, window):
         OrganizedContainer._do_recalculate(self, window)
 
-        x = self.margin_left + self.padding_left
-        y = self.margin_top + self.padding_top
+        x, y = 0, 0
+        # x, y = self.GetPosition ()
+        # x = x / 2 + self.margin_left + self.padding_left
+        # y = y / 2 + self.margin_top + self.padding_top
 
+        width = self._get_width ()
         for child in self.children:
             #if not child._visible:
             #    continue
+            if self.center_childs:
+                x = (width - child._get_width ()) / 2
             child.SetPosition(x + child.padding_left,
                               y + child.padding_top)
             y += self.padding_top + self.padding_bottom
@@ -1302,7 +1309,7 @@ class String(Component):
         return self._sprite.GetRect().GetWidth()
 
     def _get_unscaled_height(self):
-        return self._sprite.GetRect().GetHeight()
+        return self._sprite.GetSize()
 
 
 class i18nString(String):
@@ -1535,8 +1542,10 @@ class RoundedRectangle(Component):
         if self._expand_as_necessary_x \
                 or self._expand_as_necessary_y:
             bb = get_bounding_box_for_children(self.children)
+            
             w = self._width
             h = self._height
+            print self.margin_left, self.margin_right
             # BUG paddings ?
             if self._expand_as_necessary_x:
                 w = bb[2]

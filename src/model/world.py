@@ -48,7 +48,9 @@ class World (object):
         assert map_
         super (World, self).__init__ (*a, **k)
 
-        self.map     = map_
+        self.map            = map_
+        self.current_player = None
+        
         self._players = {} if players is None \
                            else dict ((p.name, p) for p in players)
         self._regions = dict ((r.name, Region (r))

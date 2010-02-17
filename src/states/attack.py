@@ -8,7 +8,7 @@
 #
 
 from base.log import get_log
-from round import GameRoundState
+from game import GameSubstate
 
 from PySFML import sf
 from tf.gfx import ui
@@ -16,10 +16,10 @@ from tf.gfx import ui
 _log = get_log (__name__)
 
 
-class AttackState (GameRoundState):
+class AttackState (GameSubstate):
 
     def do_setup (self, *a, **k):
-        super (GameRoundState, self).do_setup (*a, **k)
+        super (AttackState, self).do_setup (*a, **k)
         game = self.game
 
 	

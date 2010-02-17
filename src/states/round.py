@@ -12,6 +12,7 @@ from game import GameSubstate
 
 from PySFML import sf
 from tf.gfx import ui
+from itertools import cycle
 
 _log = get_log (__name__)
 
@@ -20,16 +21,16 @@ class GameRoundState (GameSubstate):
 
     def do_setup (self, *a, **k):
         super (GameRoundState, self).do_setup (*a, **k)
-        game = self.game
+        world = self.game.world
 
-	
-        txt = ui.String (game.ui_layer,
-                         u"This feature has not been implemented yet.")
-        txt.set_size (50)
-        txt.set_center_rel (0.5, 0.5)
-        txt.set_position_rel (0.5, 0.45)
-        txt.set_color (sf.Color (0, 0, 0))
-        txt._sprite.SetStyle (sf.String.Bold)
-	
+	world.current_player = None
+        self._player_iter = cycle (world.ordered_players ())
+	self._next_round ()
+
+    def _next_round (self):
+        self.game.world.current_player = self._player_iter.next ()
 	self.manager.enter_state ('reinforcements')
 
+    def do_unsink (self, *a, **k):
+        super (GameRoundState, self).do_unsink (*a, **k)
+        self._next_round ()

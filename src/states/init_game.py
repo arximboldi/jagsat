@@ -31,7 +31,7 @@ class InitGameState (GameSubstate):
         Give troops to player. TODO: Match Risk rules.
         """
         for p in self.game.world.players.itervalues ():
-            p.troops = 20
+            p.troops = 5
 
     def _give_objectives (self):
         """

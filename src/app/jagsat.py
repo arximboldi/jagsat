@@ -67,7 +67,7 @@ Game options:
         self.add_state ('ingame_menu',      IngameMenuState)
 	self.add_state ('main_menu',        MainMenuState)
 	self.add_state ('reinforcements',   ReinforcementState)
-	self.add_state ('attack_state',	    AttackState)
+	self.add_state ('attack',	    AttackState)
 
     
     def do_execute (self, freeargs):
