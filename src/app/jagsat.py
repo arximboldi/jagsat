@@ -12,12 +12,14 @@ from base.arg_parser import OptionWith
 from base.log import get_log
 from core.app import GameApp
 
-from states.sandbox     import Sandbox
-from states.game        import GameState
-from states.init_game   import InitGameState
-from states.ingame_menu import IngameMenuState
-from states.round       import GameRoundState
-from states.menu        import MainMenuState
+from states.sandbox        import Sandbox
+from states.game           import GameState
+from states.init_game      import InitGameState
+from states.ingame_menu    import IngameMenuState
+from states.round          import GameRoundState
+from states.menu           import MainMenuState
+from states.reinforcements import ReinforcementState
+from states.attack	   import AttackState
 
 
 _log = get_log (__name__)
@@ -58,12 +60,15 @@ Game options:
         args.add ('m', 'map',   self._arg_map)
         args.add ('s', 'state', self._arg_state)
         
-        self.add_state ('sandbox',     Sandbox)
-        self.add_state ('game',        GameState)
-        self.add_state ('init_game',   InitGameState)
-        self.add_state ('game_round',  GameRoundState)
-        self.add_state ('ingame_menu', IngameMenuState)
-	self.add_state ('main_menu',   MainMenuState)
+        self.add_state ('sandbox',          Sandbox)
+        self.add_state ('game',             GameState)
+        self.add_state ('init_game',        InitGameState)
+        self.add_state ('game_round',       GameRoundState)
+        self.add_state ('ingame_menu',      IngameMenuState)
+	self.add_state ('main_menu',        MainMenuState)
+	self.add_state ('reinforcements',   ReinforcementState)
+	self.add_state ('attack_state',	    AttackState)
+
     
     def do_execute (self, freeargs):
         if self._arg_state.value:

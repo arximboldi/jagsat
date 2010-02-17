@@ -8,7 +8,7 @@
 #
 
 from base.log import get_log
-from game import GameSubstate
+from round import GameRoundState
 
 from PySFML import sf
 from tf.gfx import ui
@@ -16,7 +16,7 @@ from tf.gfx import ui
 _log = get_log (__name__)
 
 
-class GameRoundState (GameSubstate):
+class AttackState (GameRoundState):
 
     def do_setup (self, *a, **k):
         super (GameRoundState, self).do_setup (*a, **k)
@@ -24,12 +24,9 @@ class GameRoundState (GameSubstate):
 
 	
         txt = ui.String (game.ui_layer,
-                         u"This feature has not been implemented yet.")
+                         u"Attack phase has not been implemented yet.")
         txt.set_size (50)
         txt.set_center_rel (0.5, 0.5)
         txt.set_position_rel (0.5, 0.45)
         txt.set_color (sf.Color (0, 0, 0))
         txt._sprite.SetStyle (sf.String.Bold)
-	
-	self.manager.enter_state ('reinforcements')
-
