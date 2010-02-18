@@ -1545,7 +1545,7 @@ class RoundedRectangle(Component):
             
             w = self._width
             h = self._height
-            print self.margin_left, self.margin_right
+            
             # BUG paddings ?
             if self._expand_as_necessary_x:
                 w = bb[2]

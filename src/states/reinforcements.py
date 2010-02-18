@@ -8,6 +8,7 @@
 #
 
 import random
+from base.signal import weak_slot
 from base.log import get_log
 from game import GameSubstate
 
@@ -24,6 +25,10 @@ class ReinforcementState (GameSubstate):
                                            self._count_region_troops ()
         
 	game.ui_world.on_click_region += self.on_place_troop
+
+    def do_release (self):
+        pass # Fill with signal deallocation, but first try to check
+             # why the weak_slot is not doing the job.
         
     def _count_region_troops (self):
 	""" This method counts the reinforcements that the player
@@ -53,7 +58,8 @@ class ReinforcementState (GameSubstate):
         # We should manage them with help from the PlayerComponent, no
         # worries by now.
 	pass
-    
+
+    @weak_slot
     def on_place_troop (self, region):
         """
         Pressing a regions will increase the troops in the region by 1

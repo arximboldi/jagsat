@@ -9,6 +9,7 @@
 
 import random
 from itertools import cycle
+from base.signal import weak_slot
 
 from base.log import get_log
 from game import GameSubstate
@@ -57,7 +58,8 @@ class InitGameState (GameSubstate):
 	for r, p in zip (regions, cycle (world.ordered_players ())):
 	    r.owner  = p
             r.troops = 1
-    
+
+    @weak_slot
     def on_place_troop (self, region):
         """
         Pressing a regions will increase the troops in the region by 1
@@ -68,7 +70,8 @@ class InitGameState (GameSubstate):
 	if region.owner.troops > 0:	
 	    region.troops += 1
 	    region.owner.troops -= 1
-        else:
+
+        if region.owner.troops <= 0:
             self._finish_player (region.owner)
             
     def _finish_player (self, p):

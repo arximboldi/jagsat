@@ -9,6 +9,7 @@
 
 from PySFML import sf
 from tf.gfx import ui
+from functools import partial
 
 from base.util import printfn
 from base import signal
@@ -20,6 +21,7 @@ _log = get_log (__name__)
 
 _REGION_RADIUS     = 17
 _REGION_FREE_COLOR = sf.Color (128, 128, 128)
+
 
 class WorldComponent (ui.Image, object):
 
@@ -35,6 +37,7 @@ class WorldComponent (ui.Image, object):
             fname  = world.map.background,
             *a, **k)
 
+        self.allow_repick = True
         self.on_click_region = signal.Signal ()
         self.on_pick_regions = signal.Signal ()
         
@@ -68,18 +71,30 @@ class WorldComponent (ui.Image, object):
 
     @signal.weak_slot
     def _on_pick_one_region (self, region):
+        _log.debug ("Trying to pick region: " + str (region.model))
         if not self._picked:
             if self._pick_cond_fst (region):
-                self._picked = region
-                region.select ()
-                for r in filter (self._pick_cond_snd, self._regions):
-                    r.highlight ()
-                    
+                self._pick_region (region)
         elif self._picked != region:
-            if self._pick_cond_snd (region):
+            if self._pick_cond_snd (self._picked, region):
                 self.on_pick_regions (self._picked, region)
-                self._picked = None
-            
+                self._pick_region (None)
+            elif self.allow_repick and self._pick_cond_fst (region):
+                self._pick_region (region)
+                
+    def _pick_region (self, region):
+        if self._picked:
+            self._picked.unhighlight ()
+            for r in filter (partial (self._pick_cond_snd, self._picked),
+                             self._regions):
+                r.unhighlight ()
+        self._picked = region
+        if region:
+            region.select ()
+            for r in filter (partial (self._pick_cond_snd, self._picked),
+                             self._regions):
+                r.highlight ()
+    
     @property
     def regions (self):
         return self._regions
@@ -117,6 +132,7 @@ class RegionComponent (RegionListener, ui.Circle, object):
         self.model = model
         model.connect (self)
 
+        self._outline_width = 2.0
         self._outline_color = sf.Color (0, 0, 0)
         self._fill_color    = _REGION_FREE_COLOR
         self._rebuild_sprite ()
@@ -135,6 +151,21 @@ class RegionComponent (RegionListener, ui.Circle, object):
         self._txt_used.set_position_rel (0.5, 0.45)
         self._txt_used.set_color (sf.Color (255, 255, 255))
         self._txt_used.set_visible (False)
+
+    def highlight (self):
+        self._outline_color = sf.Color (255, 255, 128)
+        self._outline_width = 4.0
+        self._rebuild_sprite ()
+        
+    def select (self):
+        self._outline_color = sf.Color (255, 255, 255)
+        self._outline_width = 4.0
+        self._rebuild_sprite ()
+        
+    def unhighlight (self):
+        self._outline_color = sf.Color (0, 0, 0)
+        self._outline_width = 2.0
+        self._rebuild_sprite ()
         
     def disable_used (self):
         self.set_show_used (False)
@@ -166,6 +197,6 @@ class RegionComponent (RegionListener, ui.Circle, object):
             _REGION_RADIUS,
             _REGION_RADIUS,
             self._fill_color,
-            2.0,
+            self._outline_width,
             self._outline_color)
     

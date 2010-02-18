@@ -7,6 +7,7 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
+from base.signal import weak_slot
 from base.log import get_log
 from game import GameSubstate
 
@@ -22,11 +23,15 @@ class AttackState (GameSubstate):
         super (AttackState, self).do_setup (*a, **k)
         game = self.game
 
-	
-        txt = ui.String (game.ui_layer,
-                         u"Attack phase has not been implemented yet.")
-        txt.set_size (50)
-        txt.set_center_rel (0.5, 0.5)
-        txt.set_position_rel (0.5, 0.45)
-        txt.set_color (sf.Color (0, 0, 0))
-        txt._sprite.SetStyle (sf.String.Bold)
+        game.ui_world.enable_picking (
+            lambda r:
+            r.model.owner == game.world.current_player and
+            r.model.troops - r.model.used > 1,
+            lambda p, r:
+            r.model.owner != game.world.current_player and
+            r.model.definition in p.model.definition.neighbours)
+        game.ui_world.on_pick_regions += self.on_attack
+        
+    @weak_slot
+    def on_attack (self, src, dst):
+        _log.debug ('Attacking from %s to %s.' % (str (src.model), str (dst.model)))
