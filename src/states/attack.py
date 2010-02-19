@@ -38,7 +38,6 @@ class AttackState (GameSubstate):
         _log.debug ('Attacking from %s to %s.' % (str (src.model), str (dst.model)))
 	
 	self.risk_attack(src, dst)
-	
     
 
     def risk_attack (self, src, dst):
@@ -101,6 +100,9 @@ class AttackState (GameSubstate):
 	    except Exception:
 	        break
 
-	self.risk_attack(src, dst)
+	#self.risk_attack(src, dst)
+	self.manager.change_state ('move')	# Hop to MovementState
 
+
+	
 
