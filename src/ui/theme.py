@@ -13,8 +13,18 @@ BUTTON_THEME = {
     'active'    : sf.Color (0, 0, 0),
     'inactive'  : sf.Color (128, 128, 128), 
     'border'    : sf.Color (0x97, 0xBF, 0x60),
-    'thickness' : 5
+    'thickness' : 5,
+    'margin'    : 8
     }
+
+SMALL_BUTTON_THEME = {
+    'active'    : sf.Color (0, 0, 0, 200),
+    'inactive'  : sf.Color (128, 128, 128), 
+    'border'    : sf.Color (0, 0, 0),
+    'thickness' : 3,
+    'margin'    : 2
+    }
+
 
 FRAME_THEME = BUTTON_THEME
 

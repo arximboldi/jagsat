@@ -56,6 +56,11 @@ class World (object):
         self._regions = dict ((r.name, Region (r))
                               for r in map_.regions.itervalues ())
 
+    def clean_used (self):
+        for r in self._regions.itervalues ():
+            r.troops += r.used
+            r.used = 0
+    
     @property
     def regions (self):
         return self._regions
@@ -88,6 +93,11 @@ class Region (RegionSubject):
         
         self.definition = definition
 
+    def has_troops (self):
+        return (self.troops > 0 and self.used > 0) or self.troops > 1 
+    
+class position:
+    n, ne, se, s, sw, nw = range (6)
 
 PlayerSubject, PlayerListener = \
     make_observer (['on_set_player_troops'])
@@ -99,7 +109,7 @@ class Player (PlayerSubject):
     def __init__ (self,
                   name = 'Unnamed',
                   color = None,
-                  position = None,
+                  position = position.n,
                   objective = None,
                   *a, **k):
         super (Player, self).__init__ (*a, **k)

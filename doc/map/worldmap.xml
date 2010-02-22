@@ -384,12 +384,12 @@
   <!-- continent asia links -->
 
   <link type="clique">
-
     <node name="yakutsk"/>
     <node name="chersky"/>
     <node name="mongolia"/>
     <node name="japan"/>
   </link>
+  
   <link type="line">
     <node name="japan"/>
     <node name="china"/>
@@ -406,16 +406,19 @@
     <node name="iran"/>
     <node name="china"/>
   </link>
+  
   <link type="circle">
     <node name="siberia"/>
     <node name="mongolia"/>
     <node name="china"/>
   </link>
+  
   <link type="circle">
     <node name="india"/>
     <node name="iran"/>
     <node name="saudi arabia"/>
   </link>
+  
   <link type="circle">
     <node name="india"/>
     <node name="thailand"/>

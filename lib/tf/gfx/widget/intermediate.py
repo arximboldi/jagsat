@@ -22,6 +22,7 @@ class Button(ui.RoundedRectangle):
         inactive_color = theme["inactive"]
         border_color = theme["border"]
         thickness = theme["thickness"]
+        margin = theme['margin']
 
         ui.RoundedRectangle.__init__(self,
                                      parent,
@@ -31,7 +32,7 @@ class Button(ui.RoundedRectangle):
                                      inactive_color,
                                      border_color,
                                      thickness)
-        self.set_margin (8)
+        self.set_margin (margin)
         self.set_enable_hitting(True)
         self.set_expand (True, True)
         self.active_color = active_color
@@ -42,7 +43,7 @@ class Button(ui.RoundedRectangle):
         # library... Lets just agree on that this sucks and all the
         # widget code have to be rewriten. The layout code is
         # unnecesarily complicated and full of bugs here and there.
-        str.set_position (16, 4)
+        str.set_position (margin*2, margin*2)
 
         # str.set_center_rel (0.5,
         # 0.5) str.set_position (0.5, 0.5)

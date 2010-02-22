@@ -21,6 +21,8 @@ Component = ui.Component
 VBox = ui.VBox
 HBox = ui.HBox
 
+SmallButton = lambda *a, **k: Button (theme = theme.SMALL_BUTTON_THEME, *a, **k)
+
 class Button (ui3.Button, object):
 
     def __init__ (self,

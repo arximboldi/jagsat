@@ -41,7 +41,7 @@ class WorldComponent (ui.Image, object):
         self.on_click_region = signal.Signal ()
         self.on_pick_regions = signal.Signal ()
         
-        self._picked = None
+        self.picked = None
         self._pick_cond_fst = None
         self._pick_cond_snd = None
         
@@ -72,26 +72,26 @@ class WorldComponent (ui.Image, object):
     @signal.weak_slot
     def _on_pick_one_region (self, region):
         _log.debug ("Trying to pick region: " + str (region.model))
-        if not self._picked:
+        if not self.picked:
             if self._pick_cond_fst (region):
                 self._pick_region (region)
-        elif self._picked != region:
-            if self._pick_cond_snd (self._picked, region):
-                self.on_pick_regions (self._picked, region)
+        elif self.picked != region:
+            if self._pick_cond_snd (self.picked, region):
+                self.on_pick_regions (self.picked, region)
                 self._pick_region (None)
             elif self.allow_repick and self._pick_cond_fst (region):
                 self._pick_region (region)
                 
     def _pick_region (self, region):
-        if self._picked:
-            self._picked.unhighlight ()
-            for r in filter (partial (self._pick_cond_snd, self._picked),
+        if self.picked:
+            self.picked.unhighlight ()
+            for r in filter (partial (self._pick_cond_snd, self.picked),
                              self._regions):
                 r.unhighlight ()
-        self._picked = region
+        self.picked = region
         if region:
             region.select ()
-            for r in filter (partial (self._pick_cond_snd, self._picked),
+            for r in filter (partial (self._pick_cond_snd, self.picked),
                              self._regions):
                 r.highlight ()
     
@@ -182,7 +182,7 @@ class RegionComponent (RegionListener, ui.Circle, object):
         self._txt_used.set_string (unicode (troops) + '/' +
                                    unicode (region.used))
 
-    def on_set_region_used (self, region, troops):
+    def on_set_region_used (self, region, used):
         self._txt_used.set_string (unicode (region.troops) + '/' +
                                    unicode (used))
 

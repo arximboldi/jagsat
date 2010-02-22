@@ -13,12 +13,13 @@ from base.util   import lazyprop
 from core.state  import State
 from core.input  import key
 from model.world import create_game
+
 from ui.world    import WorldComponent
+from ui.player   import PlayerComponent
 
 from quit import QuittableState
 
 from tf.gfx import ui
-
 
 class GameSubstate (QuittableState):
 
@@ -45,7 +46,7 @@ class GameState (QuittableState):
             { 'player-0' :
               { 'name'     : 'jp',
                 'color'    : (255, 0, 0),
-                'position' : 2,
+                'position' : 3,
                 'enabled'  : True },
               'player-2' :
               { 'name'     : 'pj',
@@ -58,10 +59,15 @@ class GameState (QuittableState):
 
     def _setup_ui (self):
         system = self.manager.system
-        
-        self.ui_layer = ui.Layer (system.view)
-        self.ui_world = WorldComponent (self.ui_layer, self.world)
 
+        self.map_layer = ui.Layer (system.view)
+        self.ui_layer = ui.Layer (system.view)
+
+        
+        self.ui_world  = WorldComponent (self.map_layer, self.world)
+        self.ui_player = dict ((p, PlayerComponent (self.ui_layer, p))
+                               for p in self.world.players.itervalues ())
+        
     def _setup_logic (self):
         system = self.manager.system
         

@@ -23,34 +23,43 @@ class MovementState (GameSubstate):
     def do_setup (self, *a, **k):
         super (MovementState, self).do_setup (*a, **k)
         game = self.game
-	
-	game.ui_world.disable_picking()		# Disable picking first, otherwise attackphase picking is on
+
+	game.ui_world.enable_used ()
         game.ui_world.enable_picking (
             lambda r:
             r.model.owner == game.world.current_player and
-            r.model.troops - r.model.used > 1,
+            r.model.has_troops (),
             lambda p, r:
             r.model.owner == game.world.current_player and
             r.model.definition in p.model.definition.neighbours)
+
         game.ui_world.on_pick_regions += self.on_move
-        
+        game.ui_world.on_click_region += self.on_click_region
+
+    def do_release (self):
+        super (MovementState, self).do_release ()
+        self.game.world.clean_used ()
+        self.game.ui_world.disable_used ()
+        self.game.ui_world.disable_picking ()
+    
     @weak_slot
     def on_move (self, src, dst):
-        _log.debug ('Moving from %s to %s.' % (str (src.model), str (dst.model)))
-	
+        _log.debug ('Moving from %s to %s.' %
+                    (str (src.model), str (dst.model)))
 	self.risk_move(src, dst)
-	
 
-    def risk_move (self, src, dst):			#TO DO: Set constraints for movement, hop to next player.
-	
-	if src.model.owner == dst.model.owner:
-		if src == dst:
-			pass
-		else:		
-			dst.model.troops += 1
-			src.model.troops -= 1
-	else:
-		pass
+    @weak_slot
+    def on_click_region (self, region):
+        game = self.game
+        if region == self.game.ui_world.picked:
+            if region.model.has_troops ():
+                region.model.troops -= 1
+                game.world.current_player.troops += 1
+
+    def risk_move (self, src, dst):
+        player = self.game.world.current_player
+        dst.model.used += player.troops
+        player.troops = 0
 
 
 

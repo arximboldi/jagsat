@@ -24,32 +24,44 @@ class AttackState (GameSubstate):
         super (AttackState, self).do_setup (*a, **k)
         game = self.game
 
+        game.ui_world.enable_used ()
         game.ui_world.enable_picking (
             lambda r:
             r.model.owner == game.world.current_player and
-            r.model.troops - r.model.used > 1,
+            r.model.has_troops (),
             lambda p, r:
             r.model.owner != game.world.current_player and
             r.model.definition in p.model.definition.neighbours)
         game.ui_world.on_pick_regions += self.on_attack
+
+    def do_release (self):
+        self.game.ui_world.disable_used ()
+	self.game.ui_world.disable_picking ()
+        super (AttackState, self).do_release ()
         
     @weak_slot
     def on_attack (self, src, dst):
-        _log.debug ('Attacking from %s to %s.' % (str (src.model), str (dst.model)))
-	
-	self.risk_attack(src, dst)
+        _log.debug ('Attacking from %s to %s.' %
+                    (str (src.model), str (dst.model)))
+	self.risk_attack (src, dst)
     
 
     def risk_attack (self, src, dst):
-
 	"""
-	Basic risk attack system. Attacker gets to throw up to 3 dices, defender throws up to 2 dices.
-	If the highest dice of the defender is same or greater than the attackers highest then the attacker
-	loses one troop, same goes for second dice if defender has two. If the attackers highest dice is 
-	higher than the defenders highest the defender loses a troop etc. This is done by adding elements to
-	a list depending on how many troops there are in the region and then comparing the list elements 
-	between attacker and defender.
-	"""	
+	Basic risk attack system. Attacker gets to throw up to 3
+	dices, defender throws up to 2 dices.  If the highest dice of
+	the defender is same or greater than the attackers highest
+	then the attacker loses one troop, same goes for second dice
+	if defender has two. If the attackers highest dice is higher
+	than the defenders highest the defender loses a troop
+	etc. This is done by adding elements to a list depending on
+	how many troops there are in the region and then comparing the
+	list elements between attacker and defender.
+
+        TODO:
+          - We need a UI to choose the attacker and defender dices.
+          - The logic is not right anyway and the code is a bit WTF ;)
+	"""
 
 	defender_dice_list =[]
 	attacker_dice_list =[]
@@ -76,7 +88,7 @@ class AttackState (GameSubstate):
 	    attacker_dice_list.append(random.randint(1,6))
 	elif src.model.troops == 1:
 	    return
-
+        
 	defender_dice_list.sort()
 	defender_dice_list.reverse()
 	attacker_dice_list.sort()
@@ -99,10 +111,5 @@ class AttackState (GameSubstate):
 		        break
 	    except Exception:
 	        break
-
-	#self.risk_attack(src, dst)
+        
 	self.manager.change_state ('move')	# Hop to MovementState
-
-
-	
-

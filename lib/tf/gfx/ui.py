@@ -1499,6 +1499,11 @@ class RoundedRectangle(Component):
         self.SetPosition(x, y)
         self._recreate(w, h, radius, ic, oc, ot)
 
+    def set_size (self, w, h):
+        self._width  = w
+        self._height = h
+        self._need_to_recalculate = True
+        
     def _recreate(self, w, h, radius, ic, oc, ot):
         points = 10
         self._width = w

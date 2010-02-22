@@ -165,7 +165,8 @@ class MapContentHandler (AutoContentHandler):
         if (len (self.link) > 1):
             for i, x in enumerate (self.link):
                 for y in self.link [i:]:
-                    x.link (y)
+                    if x != y:
+                        x.link (y)
                     
 
 class MetaDef (object):
