@@ -1296,13 +1296,13 @@ class String(Component):
         return self._sprite.SetSize(size)
 
     def set_string(self, string):
-        assert isinstance(string, unicode)
+        #assert isinstance(string, unicode)
         self._sprite.SetText(string)
         self._recalculate_parent_chain()
 
     def get_string(self):
         s = self._sprite.GetText()
-        assert isinstance(s, unicode)
+        #assert isinstance(s, unicode)
         return s
 
     def _get_unscaled_width(self):

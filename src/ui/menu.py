@@ -29,8 +29,8 @@ _INACTIVE_COLOR = sf.Color(127,127,127)
 _DISABLED_PLAYER = sf.Color(190,190,190)
 _BORDER_COLOR = sf.Color.Black
 _THICKNESS = 2
-_THEME = {'active':_ACTIVE_COLOR,'inactive':_INACTIVE_COLOR,'border':_BORDER_COLOR,'thickness':_THICKNESS}
-_THEME2 = {'active':_ACTIVE_COLOR,'inactive':_DISABLED_PLAYER,'border':_BORDER_COLOR,'thickness':_THICKNESS}
+_THEME = {'active':_ACTIVE_COLOR,'inactive':_INACTIVE_COLOR,'border':_BORDER_COLOR,'thickness':_THICKNESS, 'margin': 8}
+_THEME2 = {'active':_ACTIVE_COLOR,'inactive':_DISABLED_PLAYER,'border':_BORDER_COLOR,'thickness':_THICKNESS, 'margin':8}
 
 
 class MenuComponent (ui.VBox):
@@ -39,8 +39,8 @@ class MenuComponent (ui.VBox):
         
         ui.VBox.__init__(self, parent)
 
-	self.on_start_game = Signal ()
-	self.on_quit_program = Signal ()
+	self.on_start_game = signal.Signal ()
+	self.on_quit_program = signal.Signal ()
 
 	self.set_position(50,50)
         
@@ -74,7 +74,7 @@ class MenuComponent (ui.VBox):
 
         self.profile_DeleteButton.on_click = signal.Signal ()
         self.profile_DeleteButton.signal_click.add (self.profile_DeleteButton.on_click)
-        self.profile_DeleteButton.on_click += lambda _: self.delete_profile()
+        self.profile_DeleteButton.on_click += self.delete_profile
         self.profile_DeleteButton.set_enable_hitting (True)
         
 
@@ -221,9 +221,13 @@ class MenuComponent (ui.VBox):
         
         self.start_button = Button(self.actionL, ui.String(self.actionL,unicode('Start')), _THEME)
         self.load_button = Button(self.actionL, ui.String(self.actionL, unicode('Load')), _THEME)
+	self.quit_button = Button(self.actionL, ui.String(self.actionL,unicode('Quit')), _THEME)	
 
 	self.start_button.signal_click.add (self.start_game)
         self.start_button.set_enable_hitting (True)
+
+	self.quit_button.signal_click.add (self.quit_game)
+        self.quit_button.set_enable_hitting (True)
 
 	self.load_button.on_click = signal.Signal ()
         self.load_button.signal_click.add (self.load_button.on_click)
@@ -288,9 +292,9 @@ class MenuComponent (ui.VBox):
         index = 0
 	
 	for i in GlobalConf ().path('profiles').path(str(name)).childs() :
-	    aux = self.infoplayerL.get_child(index)
-	    
-	    if i._name <> 'map':
+
+	    if i._name <> 'map':	    
+		aux = self.infoplayerL.get_child(index)	    
 		self.enable_player(index)
 
 	    for j in i.childs() :
@@ -310,7 +314,7 @@ class MenuComponent (ui.VBox):
     
     def save_profile(self, name = 'Prove'): 
         
-        if self.check_info() and name <> 'Default':
+        if self.check_info() and not(self._listprof.__contains__(name)):
             self.create_profile()
 	    GlobalConf ().path ('profiles').adopt (self._profile, name)
 	    self._listprof.append(name)
@@ -321,13 +325,15 @@ class MenuComponent (ui.VBox):
 	else:
 	    self.update_status("Wrong information")
 
-    def delete_profile(self, name = 'Prove'):   
-	
+    def delete_profile(self,random):   
+	name = self.profile_ComboBox.get_text().get_string()
 	if name <> 'Default': 
 	    GlobalConf ().path('profiles').remove(name)
 	    self._listprof.remove(name)
 	    self.profile_ComboBox.load(self._listprof)
 	    self.update_status("Profile deleted")
+	else:
+	    self.update_status("Impossible to delete default profile")
 
         
     def enable_player(self, pl):
@@ -399,6 +405,8 @@ class MenuComponent (ui.VBox):
         else:
 	    self.update_status("Wrong information")
 
+    def quit_game(self,random):
+	self.on_quit_program()	
 
     def load_game(self, random):
 
@@ -410,11 +418,11 @@ class MenuComponent (ui.VBox):
   	ui.String(self.statusL,unicode(str))
 
     def enable_keyboard(self,pl):
-
-	if self.keyboard.get_visible():
-	    self.keyboard.set_position(500, 620)
-	else:
-	    self.keyboard.set_visible(True)
+	pass
+	#if self.keyboard.get_visible():
+	    #self.keyboard.set_position(500, 620)
+	#else:
+	    #self.keyboard.set_visible(True)
 
 	
 
@@ -527,6 +535,9 @@ class ComboBox(ui.HBox):
 	del self.prof_txt.children[0]
 	ui.String(self.prof_txt,unicode(self._prof[self._index])) 
 	self._menu.load_profile(self._prof[self._index])
+
+    def get_text(self):
+	return self.prof_txt.children[0]
 
 class MapSelector():
     
