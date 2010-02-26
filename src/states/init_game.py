@@ -7,12 +7,16 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
+from PySFML import sf
+
 import random
 from itertools import cycle
 from base.signal import weak_slot
 
 from base.log import get_log
 from game import GameSubstate
+from ui import widget
+from core import task
 
 _log = get_log (__name__)
 
@@ -20,20 +24,22 @@ _log = get_log (__name__)
 class InitGameState (GameSubstate):
     
     def do_setup (self, *a, **k):
+        self._give_regions ()
         self._give_troops ()
 	self._give_objectives ()
-	self._give_regions ()
         self._finished = set ()
         
 	self.game.ui_world.on_click_region += self.on_place_troop
-
+        
     def _give_troops (self):
         """
-        Give troops to player. TODO: Match Risk rules.
+        Give troops to player.
         """
-        for p in self.game.world.players.itervalues ():
-            p.troops = 15
-
+        world = self.game.world
+        standard_troops = 50 - len (world.players) * 5 
+        for p in world.players.itervalues ():
+            p.troops = standard_troops - len (world.regions_of (p))
+    
     def _give_objectives (self):
         """
         Randomly give one objective to each player, should be

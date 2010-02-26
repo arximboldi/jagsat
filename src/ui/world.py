@@ -84,6 +84,7 @@ class WorldComponent (ui.Image, object):
                 
     def _pick_region (self, region):
         if self.picked:
+            return # Disabling changing the source. Use 'undo ' instead.
             self.picked.unhighlight ()
             for r in filter (partial (self._pick_cond_snd, self.picked),
                              self._regions):
@@ -98,7 +99,7 @@ class WorldComponent (ui.Image, object):
     @property
     def regions (self):
         return self._regions
-    
+
     def enable_used (self):
         for r in self._regions:
             if r.model.owner == self.model.current_player:

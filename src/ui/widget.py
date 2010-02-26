@@ -23,6 +23,8 @@ HBox = ui.HBox
 
 SmallButton = lambda *a, **k: Button (theme = theme.SMALL_BUTTON_THEME, *a, **k)
 
+Text = ui.String
+
 class Button (ui3.Button, object):
 
     def __init__ (self,
@@ -47,3 +49,4 @@ class Button (ui3.Button, object):
 
         self.on_click = signal.Signal ()
         self.signal_click.add (self.on_click)
+

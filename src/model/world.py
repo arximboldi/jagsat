@@ -65,6 +65,9 @@ class World (object):
     def regions (self):
         return self._regions
 
+    def regions_of (self, player):
+        return filter (lambda r: r.owner == player, self._regions.itervalues ())
+
     @property
     def players (self):
         return self._players
