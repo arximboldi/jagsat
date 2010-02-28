@@ -12,50 +12,59 @@ from tf.gfx import ui
 from tf.gfx.widget.intermediate import Button, Button2
 from tf.gfx.widget.intermediate import LineEdit
 from base.conf import ConfNode, GlobalConf
-from model.world import create_game
 from base import signal
 from base.log import get_log
-from ui.world import WorldComponent
-
 from tf.gfx.widget.basic import Keyboard
-from tf.signalslot import Signal
-from tf.gfx import uiactions
+
+import theme
+import widget
 
 _log = get_log (__name__)
 
-_TITLE = unicode ('HONOR OF GREED')
-_ACTIVE_COLOR = sf.Color.Red
-_INACTIVE_COLOR = sf.Color(127,127,127)
-_DISABLED_PLAYER = sf.Color(190,190,190)
-_BORDER_COLOR = sf.Color.Black
-_THICKNESS = 2
-_THEME = {'active':_ACTIVE_COLOR,'inactive':_INACTIVE_COLOR,'border':_BORDER_COLOR,'thickness':_THICKNESS, 'margin': 8}
-_THEME2 = {'active':_ACTIVE_COLOR,'inactive':_DISABLED_PLAYER,'border':_BORDER_COLOR,'thickness':_THICKNESS, 'margin':8}
+_TITLE = unicode ('Bloody Empire')
+_TITLE_COLOR = sf.Color(127,127,127,400)
 
-
-class MenuComponent (ui.VBox):
+class MenuComponent (ui.Image):
     
     def __init__ (self, parent = None):
         
-        ui.VBox.__init__(self, parent)
+        ui.Image.__init__(self, parent, 'data/image/texture01.jpg')
+	self.on_click = signal.Signal ()
 
 	self.on_start_game = signal.Signal ()
 	self.on_quit_program = signal.Signal ()
 
-	self.set_position(50,50)
-        
-        self._profile = None     # Profile used to create the game
+	self._profile = None     # Profile used to create the game
         self._map = 'doc/map/worldmap.xml'   # Path of the selected map
 	self._listprof = None    # List of profilessaved on the congifuration file
-        #self._map = None        #Uncomment when map_selector will be done
+       
 
-        #Main Layer
+	#Main Container
+	self.vbox = ui.VBox(self)
+	self.vbox.set_position(50,50)
+	self.vbox.padding_bottom = 8
 
-        self.titleL = LineEdit(self, ui.String(self, _TITLE) , _ACTIVE_COLOR, _INACTIVE_COLOR, _BORDER_COLOR, _THICKNESS)
-        self.profileL = ui.HBox(self)
-        self.gameL = ui.HBox(self)
-        self.actionL = ui.HBox(self)
-	self.statusL = LineEdit(self, ui.String(self, unicode('')) , sf.Color(127,127,127), sf.Color.Black, sf.Color.Black, _THICKNESS)
+        #Title
+	#self._title = ui.String (self, _TITLE)
+        #self._title.set_size (40)
+        #self._title.set_center_rel (0.5, 0.5)
+        #self._title.set_position_rel (0.2, 0.05)
+        #self._title.set_color (sf.Color.Black)
+        #self._title._sprite.SetStyle (sf.String.Bold)
+	#self.titleL = LineEdit(self.vbox, self._title , _ACTIVE_COLOR, _TITLE_COLOR, _BORDER_COLOR, _THICKNESS)
+	#self.titleL.set_position_rel (0.2, 0.05)
+
+	#Main Layer
+
+        self.profileL = ui.HBox(self.vbox)
+	self.profileL.padding_right = 50
+	self.profileL.padding_top = 8
+        self.gameL = ui.HBox(self.vbox)
+	self.gameL.padding_top = 8
+        self.actionL = ui.HBox(self.vbox)
+	self.actionL.padding_right = 12
+	self.actionL.padding_top = 20
+	self.status = ui.String(self.vbox, unicode(''))
 	self.keyboard = Keyboard(self._layer)
 	self.keyboard.set_position(500, 620)
 	self.keyboard.set_visible(False)
@@ -64,8 +73,10 @@ class MenuComponent (ui.VBox):
 	self.default_prof()
 	self.load_listprof()
 	self.profile_ComboBox = ComboBox(self.profileL, self._listprof, self)
-        self.profile_SaveButton = Button(self.profileL, ui.String(self.profileL, unicode('Save')), _THEME)
-	self.profile_DeleteButton = Button(self.profileL, ui.String(self.profileL, unicode('Delete')), _THEME)
+	self.profile_HBox = ui.HBox(self.profileL)
+	self.profile_HBox.padding_right = 10
+        self.profile_SaveButton = widget.Button(self.profile_HBox, None,'data/icon/save-small.png',True, theme.MENU_THEME)
+	self.profile_DeleteButton = widget.Button(self.profile_HBox, None,'data/icon/delete.png',True, theme.MENU_THEME)
 
 	self.profile_SaveButton.on_click = signal.Signal ()
         self.profile_SaveButton.signal_click.add (self.profile_SaveButton.on_click)
@@ -81,6 +92,7 @@ class MenuComponent (ui.VBox):
  	#Game Layer
         
         self.infoplayerL = ui.VBox(self.gameL)
+	self.infoplayerL.padding_bottom = 8
         self.mapL = MapSelector(self.gameL)
 
 	#Info Player Layer
@@ -92,6 +104,13 @@ class MenuComponent (ui.VBox):
 	self.playerL5 = ui.HBox(self.infoplayerL)
 	self.playerL6 = ui.HBox(self.infoplayerL)
 
+	self.playerL1.padding_right = 10
+	self.playerL2.padding_right = 10
+	self.playerL3.padding_right = 10
+	self.playerL4.padding_right = 10
+	self.playerL5.padding_right = 10
+	self.playerL6.padding_right = 10
+
 	self.playerL1._active = True
 	self.playerL2._active = True
 	self.playerL3._active = True
@@ -101,9 +120,9 @@ class MenuComponent (ui.VBox):
 
 	#Player1
         
-        self.en_button1 = Button(self.playerL1, ui.String(self.playerL1, unicode('')), _THEME2)
-        self.player_name1 = LineEdit(self.playerL1, ui.String(self.playerL1, unicode('Player1')), _ACTIVE_COLOR, _DISABLED_PLAYER, _BORDER_COLOR, _THICKNESS)
-        self.player_color1 = ColorButton(self.playerL1, ui.String(self.playerL1, unicode('')), _THEME2, 0)
+        self.en_button1 = EnableButton(self.playerL1, theme.MENU_THEME)
+	self.player_name1 = PlayerName(self.playerL1, 'Player1', theme.PLAYER_THEME)
+        self.player_color1 = ColorButton(self.playerL1, theme.MENU_THEME, 0)
         self.player_pos1 = PositionButton(self.playerL1, 0)
 
 	self.en_button1.activate()
@@ -123,9 +142,9 @@ class MenuComponent (ui.VBox):
 
 	#Player2
 
-	self.en_button2 = Button(self.playerL2, ui.String(self.playerL2, unicode('')), _THEME2)
-        self.player_name2 = LineEdit(self.playerL2, ui.String(self.playerL2, unicode('Player2')), _ACTIVE_COLOR, _DISABLED_PLAYER, _BORDER_COLOR, _THICKNESS)
-        self.player_color2 = ColorButton(self.playerL2, ui.String(self.playerL2, unicode('')), _THEME2, 1)
+	self.en_button2 = EnableButton(self.playerL2, theme.MENU_THEME)
+        self.player_name2 = PlayerName(self.playerL2, 'Player2', theme.PLAYER_THEME)
+        self.player_color2 = ColorButton(self.playerL2, theme.MENU_THEME, 1)
         self.player_pos2 = PositionButton(self.playerL2, 1)
 
 	self.en_button2.activate()
@@ -145,9 +164,9 @@ class MenuComponent (ui.VBox):
 	
 	#Player3
         
-        self.en_button3 = Button(self.playerL3, ui.String(self.playerL3, unicode('')), _THEME2)
-        self.player_name3 = LineEdit(self.playerL3, ui.String(self.playerL3, unicode('Player3')), _ACTIVE_COLOR, _DISABLED_PLAYER, _BORDER_COLOR, _THICKNESS)
-        self.player_color3 = ColorButton(self.playerL3, ui.String(self.playerL3, unicode('')), _THEME2, 2)
+        self.en_button3 = EnableButton(self.playerL3, theme.MENU_THEME)
+        self.player_name3 = PlayerName(self.playerL3, 'Player3', theme.PLAYER_THEME)
+        self.player_color3 = ColorButton(self.playerL3, theme.MENU_THEME, 2)
         self.player_pos3 = PositionButton(self.playerL3, 2)
 
 	self.en_button3.activate()
@@ -167,9 +186,9 @@ class MenuComponent (ui.VBox):
         
 	#Player4
 
-        self.en_button4 = Button(self.playerL4, ui.String(self.playerL4, unicode('')), _THEME2)
-        self.player_name4 = LineEdit(self.playerL4, ui.String(self.playerL4, unicode('Player4')), _ACTIVE_COLOR, _DISABLED_PLAYER, _BORDER_COLOR, _THICKNESS)
-        self.player_color4 = ColorButton(self.playerL4, ui.String(self.playerL4, unicode('')), _THEME2, 3)
+        self.en_button4 = EnableButton(self.playerL4, theme.MENU_THEME)
+        self.player_name4 = PlayerName(self.playerL4, 'Player4', theme.PLAYER_THEME)
+        self.player_color4 = ColorButton(self.playerL4, theme.MENU_THEME, 3)
         self.player_pos4 = PositionButton(self.playerL4, 3)
 
 	self.en_button4.on_click = signal.Signal ()
@@ -184,9 +203,9 @@ class MenuComponent (ui.VBox):
         
 	#Player5
 
-        self.en_button5 = Button(self.playerL5, ui.String(self.playerL5, unicode('')), _THEME2)
-        self.player_name5 = LineEdit(self.playerL5, ui.String(self.playerL5, unicode('Player5')), _ACTIVE_COLOR, _DISABLED_PLAYER, _BORDER_COLOR, _THICKNESS)
-        self.player_color5 = ColorButton(self.playerL5, ui.String(self.playerL5, unicode('')), _THEME2, 4)
+        self.en_button5 = EnableButton(self.playerL5, theme.MENU_THEME)
+        self.player_name5 = PlayerName(self.playerL5, 'Player5', theme.PLAYER_THEME)
+        self.player_color5 = ColorButton(self.playerL5, theme.MENU_THEME, 4)
         self.player_pos5 = PositionButton(self.playerL5,4)
 
 	self.en_button5.on_click = signal.Signal ()
@@ -201,9 +220,9 @@ class MenuComponent (ui.VBox):
         
 	#Player6
 
-        self.en_button6 = Button(self.playerL6, ui.String(self.playerL6, unicode('')), _THEME2)
-        self.player_name6 = LineEdit(self.playerL6, ui.String(self.playerL6, unicode('Player6')), _ACTIVE_COLOR, _DISABLED_PLAYER, _BORDER_COLOR, _THICKNESS)
-        self.player_color6 = ColorButton(self.playerL6, ui.String(self.playerL6, unicode('')), _THEME2, 5)
+        self.en_button6 = EnableButton(self.playerL6, theme.MENU_THEME)
+        self.player_name6 = PlayerName(self.playerL6, 'Player6', theme.PLAYER_THEME)
+        self.player_color6 = ColorButton(self.playerL6, theme.MENU_THEME, 5)
         self.player_pos6 = PositionButton(self.playerL6, 5)
 
 	self.en_button6.on_click = signal.Signal ()
@@ -219,9 +238,9 @@ class MenuComponent (ui.VBox):
 	
 	#Action Layer
         
-        self.start_button = Button(self.actionL, ui.String(self.actionL,unicode('Start')), _THEME)
-        self.load_button = Button(self.actionL, ui.String(self.actionL, unicode('Load')), _THEME)
-	self.quit_button = Button(self.actionL, ui.String(self.actionL,unicode('Quit')), _THEME)	
+        self.start_button = widget.Button(self.actionL, None, 'data/icon/world-small.png', True, theme.MENU_THEME)
+        #self.load_button = Button(self.actionL, ui.String(self.actionL, unicode('Load')), theme.MENU_THEME)
+	self.quit_button = widget.Button(self.actionL, None, 'data/icon/quit-small.png', True, theme.MENU_THEME)	
 
 	self.start_button.signal_click.add (self.start_game)
         self.start_button.set_enable_hitting (True)
@@ -229,10 +248,10 @@ class MenuComponent (ui.VBox):
 	self.quit_button.signal_click.add (self.quit_game)
         self.quit_button.set_enable_hitting (True)
 
-	self.load_button.on_click = signal.Signal ()
-        self.load_button.signal_click.add (self.load_button.on_click)
-        self.load_button.on_click += self.load_game
-        self.load_button.set_enable_hitting (True)
+	#self.load_button.on_click = signal.Signal ()
+        #self.load_button.signal_click.add (self.load_button.on_click)
+        #self.load_button.on_click += self.load_game
+        #self.load_button.set_enable_hitting (True)
 
 	self.load_profile('Default')
 
@@ -256,6 +275,7 @@ class MenuComponent (ui.VBox):
         
         self._profile.fill(dic)   
 
+    # Default profile of the standard risk game
     def default_prof(self):
         cfg = ConfNode (
             { 'player-0' :
@@ -277,13 +297,14 @@ class MenuComponent (ui.VBox):
 
         GlobalConf ().path('profiles').adopt(cfg, 'Default')	
 	
-
+    #Read all profiles saved in the configuration files
     def load_listprof(self):
 	l = []
 	for i in GlobalConf ().path('profiles')._childs :
 	     l.append(i)
-	self._listprof = l           
-            
+	self._listprof = l
+           
+    #Load the information saved in the profile on the screen         
     def load_profile(self, name):
 	
 	for i in range(0,6):
@@ -311,7 +332,7 @@ class MenuComponent (ui.VBox):
 
 	    index = index + 1
 	
-    
+    #Save the current profile in the configuration file
     def save_profile(self, name = 'Prove'): 
         
         if self.check_info() and not(self._listprof.__contains__(name)):
@@ -325,6 +346,7 @@ class MenuComponent (ui.VBox):
 	else:
 	    self.update_status("Wrong information")
 
+    #Delete the current profile from the configuration file
     def delete_profile(self,random):   
 	name = self.profile_ComboBox.get_text().get_string()
 	if name <> 'Default': 
@@ -335,7 +357,7 @@ class MenuComponent (ui.VBox):
 	else:
 	    self.update_status("Impossible to delete default profile")
 
-        
+    #Enable all info and actions related with the player pl    
     def enable_player(self, pl):
 
 	aux = self.infoplayerL.get_child(pl)
@@ -396,6 +418,7 @@ class MenuComponent (ui.VBox):
 	
         return True
     
+    #Start game with the current profile
     def start_game(self, random):
         if self.check_info():
             self.create_profile()
@@ -404,7 +427,7 @@ class MenuComponent (ui.VBox):
 
         else:
 	    self.update_status("Wrong information")
-
+ 
     def quit_game(self,random):
 	self.on_quit_program()	
 
@@ -412,12 +435,13 @@ class MenuComponent (ui.VBox):
 
 	self.update_status("Not implemented yet")
 
-    def update_status(self, str):
-	
-	del self.statusL.children[0]
-  	ui.String(self.statusL,unicode(str))
+    #Show messages on screen
+    def update_status(self, str):	
+	self.status.set_string(unicode(str))
+
 
     def enable_keyboard(self,pl):
+	#TODO: Enable keyboard in order to modify players names and saved profiles 
 	pass
 	#if self.keyboard.get_visible():
 	    #self.keyboard.set_position(500, 620)
@@ -428,18 +452,40 @@ class MenuComponent (ui.VBox):
 
 #  Extra Widgets
 
-class ColorButton(Button):
+class PlayerName(LineEdit):
+    def __init__(self, parent, str, theme):
+	LineEdit.__init__(self, parent, ui.String(parent, unicode(str)), theme['active'], theme['inactive'], theme['border'], theme['thickness'])
+
+class EnableButton(ui.Circle):
+
+    def __init__(self, parent, theme, radius = 8):
+	self.active_color = theme['active']
+	self.inactive_color = theme['inactive']
+	self.border_color = theme['border']
+	self._radius = radius
+	ui.Circle.__init__(self, parent, self._radius, self.active_color, 1, self.border_color)
+
+    def  activate(self):
+	self._sprite = sf.Shape.Circle(self._radius,self._radius, self._radius, self.active_color, 1, self.border_color)
+    def deactivate(self):
+	self._sprite = sf.Shape.Circle(self._radius,self._radius, self._radius, self.inactive_color, 1, self.border_color)
+
+
+class ColorButton(ui.Circle):
     _COLOR_NUM = 6
     _COLOR = {0: sf.Color.White, 1: sf.Color.Blue, 2: sf.Color.Red, 3: sf.Color.Yellow, 4: sf.Color.Green, 5: sf.Color.Magenta}
 
     
-    def __init__(self, parent, str, theme, index):
+    def __init__(self, parent, theme, index, radius = 15):
         
-        Button.__init__(self, parent, str, theme)
+        ui.Circle.__init__(self, parent, radius, sf.Color(127,127,127), 2, sf.Color.Black)
         self._col = index
+	self._radius = radius
         self.active_color = self._COLOR[index]
+	self.inactive_color = sf.Color(127,127,127)
+
 	if self.parent._active:
-		self.activate()
+		self._sprite = sf.Shape.Circle(self._radius, self._radius, self._radius, self.active_color, 2, sf.Color.Black)
         
         self.on_click = signal.Signal ()
         self.signal_click.add (self.on_click)
@@ -447,25 +493,29 @@ class ColorButton(Button):
         self.set_enable_hitting (True)
         
     def next(self,random):
-        self._col = (self._col+1)%self._COLOR_NUM
-        self.active_color = self._COLOR[self._col]
 	if self.parent._active:
-	    self.activate()
+	    self._col = (self._col+1)%self._COLOR_NUM
+            self.active_color = self._COLOR[self._col]
+	    self._sprite = sf.Shape.Circle(self._radius, self._radius,self._radius, self.active_color, 2, sf.Color.Black)
 
     def update(self,col):
 	self._col = col
 	self.active_color = self._COLOR[self._col]
 	if self.parent._active:
-	    self.activate()
-               
-    
+	    self._sprite = sf.Shape.Circle(self._radius,self._radius, self._radius, self.active_color, 2, sf.Color.Black)
+
+    def  activate(self):
+	self._sprite = sf.Shape.Circle(self._radius,self._radius, self._radius, self.active_color, 2, sf.Color.Black)
+    def deactivate(self):
+	self._sprite = sf.Shape.Circle(self._radius,self._radius, self._radius, self.inactive_color, 2, sf.Color.Black)
+
 class PositionButton(Button):
     _POS_NUM = 8
     _POS = {0: "  N ", 1: ' NE', 2:'  E ', 3: ' SE', 4:'  S ', 5:' SW', 6:'  W ', 7:' NW'}
      
     def __init__(self,parent,index):
 
-        Button.__init__(self, parent, ui.String(parent, unicode('')), _THEME2)
+        Button.__init__(self, parent, ui.String(parent, unicode('')), theme.PLAYER_THEME)
         self._position = index
 	del self.children[0]
 
@@ -502,10 +552,11 @@ class ComboBox(ui.HBox):
 	self._prof = profiles
 	self._index = 0
 	self._menu = menu
-
-	self.left = Button(self, ui.String(self, unicode('<')), _THEME)
-	self.prof_txt = Button(self, ui.String(self, unicode(self._prof[self._index])), _THEME)
-	self.right = Button(self, ui.String(self, unicode('>')), _THEME)
+	self._text = ui.String(self, unicode(self._prof[self._index]))
+	self.padding_right = 12
+	self.left = widget.Button(self, None,'data/icon/go-previous-small.png', True, theme.MENU_THEME)
+	self.prof_txt = Button(self, self._text, theme.MENU_THEME)
+	self.right = widget.Button(self, None,'data/icon/go-next-small.png', True, theme.MENU_THEME)
 
 	self.right.on_click = signal.Signal ()
         self.right.signal_click.add (self.right.on_click)
@@ -520,27 +571,24 @@ class ComboBox(ui.HBox):
     def load(self,profiles):
 	self._prof = profiles
 	self._index = 0
-	del self.prof_txt.children[0]
-	ui.String(self.prof_txt,unicode(self._prof[self._index]))
+	self._text.set_string(unicode(self._prof[self._index]))
 	self._menu.load_profile(self._prof[self._index])
 
     def next(self,random):
         self._index = (self._index-1)%len(self._prof)
-	del self.prof_txt.children[0]
-	ui.String(self.prof_txt,unicode(self._prof[self._index]))
+	self._text.set_string(unicode(self._prof[self._index]))
 	self._menu.load_profile(self._prof[self._index])  
  
     def prev(self,random):
         self._index = (self._index+1)%len(self._prof)
-	del self.prof_txt.children[0]
-	ui.String(self.prof_txt,unicode(self._prof[self._index])) 
+	self._text.set_string(unicode(self._prof[self._index]))
 	self._menu.load_profile(self._prof[self._index])
 
     def get_text(self):
-	return self.prof_txt.children[0]
+	return self._text
 
 class MapSelector():
-    
+    #TODO: Widget used to select the map we want to play. Implement only if more maps will be available
     def __init__(self, parent = None):
         pass
 

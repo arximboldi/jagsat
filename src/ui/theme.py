@@ -28,3 +28,18 @@ SMALL_BUTTON_THEME = {
 
 FRAME_THEME = BUTTON_THEME
 
+MENU_THEME = {
+    'active'    : sf.Color (0, 0, 0, 400),
+    'inactive'  : sf.Color (0, 0, 0, 400), 
+    'border'    : sf.Color (0, 0, 0),
+    'thickness' : 4,
+    'margin'    : 6
+}
+
+PLAYER_THEME = {
+    'active'    : sf.Color (255, 180, 40, 200),
+    'inactive'  : sf.Color (127, 127, 127, 200), 
+    'border'    : sf.Color (0, 0, 0,200),
+    'thickness' : 2,
+    'margin'    : 6
+}
