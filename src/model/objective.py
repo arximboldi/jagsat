@@ -8,7 +8,7 @@
 #
 
 from base.log import get_log
-from model.world import create_game
+from world import create_game
 from base.conf   import ConfNode
 
 _log = get_log (__name__)
@@ -73,7 +73,7 @@ class Objective (object):
         """
         - Objective 1: to conquer 57% of map regions with at least one 
         single troop per region
-        - Objective: to conquer 43% of map regions with at least 2 troops
+        - Objective 2: to conquer 43% of map regions with at least 2 troops
         in each region
         """
         self._objectives.append (ObjectiveDef ({'region' : self.n*57/100}, 1))
@@ -117,12 +117,13 @@ class Objective (object):
                             self._objectives.append (ObjectiveDef (\
                                                     {'continent' : l})) 
 
+
 class ObjectiveDef (object):
     """
     There are three type of objectives {continent, country, player}:
-        - continent -> goal is a list of continents to conquer
-        - region -> goal is a number of regions
-        - player -> player is the name of the player
+        - continent     -> goal is a list of continents to conquer
+        - region        -> goal is a number of regions
+        - player        -> player is the name of the player
     The extra parameter refers to special issues in some objectives
     """
     def __init__ (self,
@@ -148,19 +149,6 @@ class ObjectiveDef (object):
         if self.is_player ():
             self.add_default_objective ()
 
-    def add_default_objective (self):
-        """
-        When a player has to kill himself or a death player, he will
-        have to acomplish the default objective which is to conquer
-        57% of the total regions.
-        """
-        # Add to objective dictionary the number of regions
-        self.objective['region'] = self.info.pop(0)
-
-        # Stores in info the number of troops per region to acomplish
-        # 'region' objective
-        self.info = self.info [0]
-            
     def is_player (self):
         if self.type == 'player':
             return True
@@ -182,42 +170,114 @@ class ObjectiveDef (object):
     def has_extra (self):
         return self.extra
 
+    def add_default_objective (self):
+        """
+        When a player has to kill himself or a death player, he will
+        have to acomplish the default objective which is to conquer
+        57% of the total regions.
+        """
+        # Add to objective dictionary the number of regions
+        self.objective['region'] = self.info.pop(0)
+
+        # Stores in info the number of troops per region to acomplish
+        # 'region' objective
+        self.info = self.info [0]
+
     def check_objective (self, game):
+        if self.is_player ():
+            success = self.check_objective_player (game)
         if self.is_region ():
             success = self.check_objective_region (game)
         if self.is_continent ():
             success = self.check_objective_continent (game)
 
-    def check_objective_region (self, game):
+        return success
+
+    def check_if_alive (self, game):
+        # Check if the player-to-kill is alive
+        if self.is_player ():
+            world = game.world
+            alive = False
+            for r in world.regions.itervalues ():
+                if r.owner.position == self.goal.position:
+                    alive = True
+            # If the player-to-kill is dead removes that mission
+            if not alive:
+                self.objective.pop['player']
+                self.type = self.objective.keys()[0]
+                self.goal = self.objective.values()[0]
+
+    def check_objective_player (self, game):
         world = game.world
-        # Count number of regions player have
-        num_regions = len (filter(lambda r: r.owner == world.current_player,
-                                  world.regions.values ()))
+        success = True
+        for r in world.regions.itervalues ():
+            # If our player-to-kill has a region we didn't succeded
+            if r.owner.position == self.goal.position:
+                success = False
+        return success
+
+
+    def check_objective_region (self, game):
+        success = False
+        world = game.world
+
         # Get list of regions player owns
         regions = filter (lambda r: r.owner == world.current_player,\
-                          world.regions.values ())
+                        world.regions.values ())
 
         # Check we have all the regions needed 
-        if num_regions >= self.goal:
-            success = True
-            # Check if every region has enought troops
+        if len (regions) >= self.goal:
+            i = 0
+            # Count how many regions don't have enough troops
             for r in regions:
-                if r.troops < self.info: success = False 
+                if r.troops < self.info: 
+                    i += 1
+            # Check if the mission is acomplish
+            if len(regions) - i >= self.goal:
+                success = True 
 
         return success
 
     def check_objective_continent (self, game):
-        """
-        TODO Check objective reusing:
-        world = self.game.world
-        continents = self.game.world.map.continents
-        player_regions = [ r.definition for r in world.regions.values ()
-                           if r.owner == world.current_player ]
+        wold = game.world
+        success = True
 
-        return sum (c.troops
-                    for c in continents.itervalues ()
-                    if len (c.regions) ==
-                    len (filter (lambda r: r.continent == c, player_regions)))
-        """
-        pass
-                    
+        # Get list of regions player owns
+        regions = filter (lambda r: r.owner == world.current_player,\
+                        world.regions.values ())
+
+        # Foreach continent I have to conquer
+        for c in self.goal:
+            # Check if the player has all the regions in that continent
+            if len(c.regions) != len (filter (lambda r: r.continent == c,\
+                                                regions)):
+                success = False
+
+        return success
+    
+    def str_objective (self):
+        if self.is_player ():
+            objective_str = "Eliminate player "
+            objective_str += self.goal.name
+            objective_str += ". If that player is dead, conquer "
+            objective_str += str (self.objective['region'])
+            objective_str += " regions with at least "
+            objective_str += str (self.info)
+            objective_str += " troops on each"
+
+        if self.is_region ():
+            objective_str = "Conquer "
+            objective_str += str(self.objective['region'])
+            objective_str += " regions with at least "
+            objective_str += str(self.info)
+            objective_str += " troops on each"
+
+        if self.is_continent ():
+            objective_str = "Conquer "+self.goal[0].name
+            for i in range (1,len(self.goal)):
+                if i < len(self.goal)-1:
+                    objective_str += ", "+self.goal[i].name
+                else:
+                    objective_str += " and "+self.goal[i].name
+
+        return objective_str
