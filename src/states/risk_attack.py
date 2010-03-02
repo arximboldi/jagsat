@@ -16,46 +16,48 @@ from PySFML import sf
 from tf.gfx import ui
 import ui.widget
 import ui.theme
+from base import signal
 
 _log = get_log (__name__)
 
 
-class AttackState (GameSubstate):
+class RiskAttackState (GameSubstate):
 
     def do_setup (self, *a, **k):
-        super (AttackState, self).do_setup (*a, **k)
+        super (RiskAttackState, self).do_setup (*a, **k)
         game = self.game
-	
-        game.ui_world.enable_used ()
-        game.ui_world.enable_picking (
-            lambda r:
-            r.model.owner == game.world.current_player and
-            r.model.has_troops (),
-            lambda p, r:
-            r.model.owner != game.world.current_player and
-            r.model.definition in p.model.definition.neighbours)
-        game.ui_world.on_pick_regions += self.on_attack
-	game.ui_player[game.world.current_player].on_player_pass += lambda ev: self.on_pass (self)
-	
+	self.dst = game.ui_attack.dst
+	self.src = game.ui_attack.src
+
+	game.ui_attack.on_retreat += lambda ev: self.on_retreat (self)
+	self.risk_attack(self.src, self.dst)
 
 
     def do_release (self):
         self.game.ui_world.disable_used ()
 	self.game.ui_world.disable_picking ()
-        super (AttackState, self).do_release ()
-
+        super (RiskAttackState, self).do_release ()
         
     @weak_slot
     def on_attack (self, src, dst):
         _log.debug ('Attacking from %s to %s.' %
                     (str (src.model), str (dst.model)))
+	self.game.ui_attack.dice_enable()
 	#self.risk_attack (src, dst)
-	
-	self.game.ui_attack.dst = dst
-	self.game.ui_attack.src = src
-	
-        self.manager.enter_state ('risk_attack')
+    
 
- 
-    def on_pass(self, random):
-        self.manager.change_state ('move')	# Hop to MovementState
+    def risk_attack (self, src, dst):
+	
+	self.game.ui_attack.dice_enable()
+
+	defender_dice_list =[]
+	attacker_dice_list =[]
+
+    def on_retreat(self, random):
+        self.manager.leave_state ('risk_attack')	# Exit risk_attack state
+
+    def on_troops_increase(self):
+	pass
+
+    def on_troops_decrease(self):
+	pass

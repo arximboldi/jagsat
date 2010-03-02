@@ -16,6 +16,7 @@ from model.world import create_game
 
 from ui.world    import WorldComponent
 from ui.player   import PlayerComponent
+from ui.attack   import AttackComponent
 
 from quit import QuittableState
 
@@ -67,6 +68,8 @@ class GameState (QuittableState):
         self.ui_world  = WorldComponent (self.map_layer, self.world)
         self.ui_player = dict ((p, PlayerComponent (self.ui_layer, p))
                                for p in self.world.players.itervalues ())
+
+        self.ui_attack = AttackComponent (self.ui_layer, self.world)
         
     def _setup_logic (self):
         system = self.manager.system
