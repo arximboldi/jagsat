@@ -21,6 +21,7 @@ from states.menu           import MainMenuState
 from states.reinforcements import ReinforcementState
 from states.attack	   import AttackState
 from states.move	   import MovementState
+from states.risk_attack    import RiskAttackState
 
 _log = get_log (__name__)
 
@@ -69,6 +70,7 @@ Game options:
 	self.add_state ('reinforcements',   ReinforcementState)
 	self.add_state ('attack',	    AttackState)
 	self.add_state ('move',		    MovementState)
+	self.add_state ('risk_attack',      RiskAttackState)
     
     def do_execute (self, freeargs):
         if self._arg_state.value:
