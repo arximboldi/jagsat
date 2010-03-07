@@ -48,13 +48,15 @@ class RiskAttackState (GameSubstate):
 
     def risk_attack (self, src, dst):
 	
+	"""
+	When pressing a highlighted country for attack the attack menu will be enabled.
+	"""	
 	self.game.ui_attack.dice_enable()
 
-	defender_dice_list =[]
-	attacker_dice_list =[]
 
     def on_retreat(self, random):
-        self.manager.leave_state ('risk_attack')	# Exit risk_attack state
+	self.game.ui_attack.dice_disable()
+        self.manager.leave_state ()	# Exit risk_attack state
 
     def on_troops_increase(self):
 	pass
