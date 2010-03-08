@@ -15,18 +15,18 @@ _log = get_log (__name__)
 
 # This ConfNode is here just for testing issues
 # TODO: delete this cfg = ...
-cfg = ConfNode (
-            { 'player-0' :
-              { 'name'     : 'jp',
-                'color'    : (255, 0, 0),
-                'position' : 2,
-                'enabled'  : True },
-              'player-2' :
-              { 'name'     : 'pj',
-                'color'    : (0, 255, 0),
-                'position' : 4,
-                'enabled'  : True },
-              'map' : '../doc/map/worldmap.xml' })
+#cfg = ConfNode (
+            #{ 'player-0' :
+              #{ 'name'     : 'jp',
+                #'color'    : (255, 0, 0),
+                #'position' : 2,
+                #'enabled'  : True },
+              #'player-2' :
+              #{ 'name'     : 'pj',
+                #'color'    : (0, 255, 0),
+                #'position' : 4,
+                #'enabled'  : True },
+              #'map' : '../doc/map/worldmap.xml' })
 
 def create_objectives (cfg):
     """
@@ -183,33 +183,35 @@ class ObjectiveDef (object):
         # 'region' objective
         self.info = self.info [0]
 
-    def check_objective (self, game):
+    def check_objective (self, gworld):
         if self.is_player ():
-            success = self.check_objective_player (game)
+            success = self.check_objective_player (gworld)
         if self.is_region ():
-            success = self.check_objective_region (game)
+            success = self.check_objective_region (gworld)
         if self.is_continent ():
-            success = self.check_objective_continent (game)
+            success = self.check_objective_continent (gworld)
 
         return success
 
-    def check_if_alive (self, game):
+    def check_if_alive (self, gworld):
         # Check if the player-to-kill is alive
         if self.is_player ():
-            world = game.world
+            world = gworld
             alive = False
             for r in world.regions.itervalues ():
                 if r.owner.position == self.goal.position:
                     alive = True
             # If the player-to-kill is dead removes that mission
-            if not alive:
-                self.objective.pop['player']
+            if not alive or\
+               world.current_player.position == self.goal.position:
+                self.objective.pop('player')
                 self.type = self.objective.keys()[0]
                 self.goal = self.objective.values()[0]
 
-    def check_objective_player (self, game):
-        world = game.world
+    def check_objective_player (self, gworld):
+        world = gworld
         success = True
+
         for r in world.regions.itervalues ():
             # If our player-to-kill has a region we didn't succeded
             if r.owner.position == self.goal.position:
@@ -217,9 +219,9 @@ class ObjectiveDef (object):
         return success
 
 
-    def check_objective_region (self, game):
+    def check_objective_region (self, gworld):
         success = False
-        world = game.world
+        world = gworld
 
         # Get list of regions player owns
         regions = filter (lambda r: r.owner == world.current_player,\
@@ -230,7 +232,7 @@ class ObjectiveDef (object):
             i = 0
             # Count how many regions don't have enough troops
             for r in regions:
-                if r.troops < self.info: 
+                if r.troops < self.info:
                     i += 1
             # Check if the mission is acomplish
             if len(regions) - i >= self.goal:
@@ -238,8 +240,8 @@ class ObjectiveDef (object):
 
         return success
 
-    def check_objective_continent (self, game):
-        wold = game.world
+    def check_objective_continent (self, gworld):
+        world = gworld
         success = True
 
         # Get list of regions player owns
@@ -249,8 +251,8 @@ class ObjectiveDef (object):
         # Foreach continent I have to conquer
         for c in self.goal:
             # Check if the player has all the regions in that continent
-            if len(c.regions) != len (filter (lambda r: r.continent == c,\
-                                                regions)):
+            if len(c.regions) != len(filter(lambda r:r.definition.continent.name == c.name,\
+                                        regions)):
                 success = False
 
         return success
