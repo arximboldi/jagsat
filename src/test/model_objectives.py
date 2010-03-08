@@ -27,7 +27,7 @@ cfg = ConfNode (
                 'color'    : (0, 255, 0),
                 'position' : 4,
                 'enabled'  : True },
-              'map' : '../doc/map/worldmap.xml' })
+              'map' : 'doc/map/worldmap.xml' })
 
 class TestObjectives (unittest.TestCase):
 
@@ -38,12 +38,12 @@ class TestObjectives (unittest.TestCase):
         self.world = create_game (cfg)
         
     def test_show_mission (self):
-        print "\nTesting show mission"
+        pass # print "\nTesting show mission"
         for o in self.obj:
-            print o.str_objective()
+            pass # print o.str_objective()
 
     def test_give_mission (self):
-        print "\nTesting give mission"
+        pass # print "\nTesting give mission"
         obj = self.obj
         random.shuffle (obj)
 
@@ -51,10 +51,10 @@ class TestObjectives (unittest.TestCase):
             p.objective = obj.pop()
 
         for p in self.world.players.itervalues():
-            print p.objective.str_objective()
+            pass # print p.objective.str_objective()
 
     def test_check_mission_cont (self):
-        print "\nTesting check mission continent"
+        pass # print "\nTesting check mission continent"
         world = self.world
         obj = self.obj
         cont_obj = filter (lambda o: o.type == 'continent',obj)
@@ -66,9 +66,9 @@ class TestObjectives (unittest.TestCase):
 
         #Show continents to conquer
         for p in world.players.itervalues():
-            print p.name+" has to conquer: " 
+            pass # print p.name+" has to conquer: " 
             for c in p.objective.goal:
-                print "\t"+c.name
+                pass # print "\t"+c.name
 
         #Asign all regions
         for r, p in zip (world.regions.values(), cycle (world.ordered_players ())):
@@ -80,20 +80,20 @@ class TestObjectives (unittest.TestCase):
             for c in p.objective.goal:
                 for r in world.regions.itervalues():
                     if c.name == r.definition.continent.name:
-                        #print "Continente "+c.name
-                        #print "\tAsigna a: "+p.name+" region: "+r.definition.name
+                        #pass # print "Continente "+c.name
+                        #pass # print "\tAsigna a: "+p.name+" region: "+r.definition.name
                         r.owner = p
                         r.troops = 1
         
         for p in world.players.itervalues():
             world.current_player = p
             if p.objective.check_objective (world):
-                print p.name+" mission acomplished"
+                pass # print p.name+" mission acomplished"
             else:
-                print p.name+" mission failed"
+                pass # print p.name+" mission failed"
 
     def test_check_objective_region (self):
-        print "\nTesting check mission region"
+        pass # print "\nTesting check mission region"
         world = self.world
         obj = self.obj
         reg_obj = filter (lambda o: o.type == 'region',obj)
@@ -107,12 +107,12 @@ class TestObjectives (unittest.TestCase):
         
         for p in world.players.itervalues():
             world.current_player = p
-            print p.name+" has to conquer "+str(p.objective.goal)+\
-                        " with "+str(p.objective.info)+" troops each"
+            pass # print p.name+" has to conquer "+str(p.objective.goal)+\
+            #" with "+str(p.objective.info)+" troops each"
             if p.objective.check_objective (world):
-                print p.name+" mission acomplished"
+                pass # print p.name+" mission acomplished"
             else:
-                print p.name+" mission failed"
+                pass # print p.name+" mission failed"
 
         for r in world.regions.values():
             r.owner  = world.players['jp']
@@ -120,15 +120,15 @@ class TestObjectives (unittest.TestCase):
 
         for p in world.players.itervalues():
             world.current_player = p
-            print p.name+" has to conquer "+str(p.objective.goal)+\
-                        " with "+str(p.objective.info)+" troops each"
+            pass # print p.name+" has to conquer "+str(p.objective.goal)+\
+            #            " with "+str(p.objective.info)+" troops each"
             if p.objective.check_objective (world):
-                print p.name+" mission acomplished"
+                pass # print p.name+" mission acomplished"
             else:
-                print p.name+" mission failed"
+                pass # print p.name+" mission failed"
 
     def test_check_objective_player (self):
-        print "\nTesting check mission player"
+        pass # print "\nTesting check mission player"
         world = self.world
         obj = self.obj
         pla_obj = filter (lambda o: o.type == 'player',obj)
@@ -142,7 +142,7 @@ class TestObjectives (unittest.TestCase):
             world.current_player = p
             p.objective = pla_obj.pop()
             p.objective.check_if_alive(world)
-            print "Player: "+p.name+" has to "+p.objective.str_objective()
+            pass # print "Player: "+p.name+" has to "+p.objective.str_objective()
 
         for r in world.regions.values():
             r.owner  = world.players['pj']
@@ -151,6 +151,6 @@ class TestObjectives (unittest.TestCase):
         for p in world.players.itervalues():
             world.current_player = p
             if p.objective.check_objective (world):
-                print p.name+" mission acomplished"
+                pass # print p.name+" mission acomplished"
             else:
-                print p.name+" mission failed"
+                pass # print p.name+" mission failed"
