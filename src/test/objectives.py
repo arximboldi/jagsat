@@ -34,7 +34,7 @@ class TestObjectives (unittest.TestCase):
 
     def setUp (self):
         self.obj = create_objectives (cfg)
-        self.obj = self.obj.objectives
+        #self.obj = self.obj.objectives
         
         self.world = create_game (cfg)
         

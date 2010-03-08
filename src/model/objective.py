@@ -37,7 +37,7 @@ def create_objectives (cfg):
       - map: Contains the path to the map file.
     """
     world = create_game (cfg)
-    return Objective (world)
+    return Objective (world).objectives
     
 class Objective (object):
     
