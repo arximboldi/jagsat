@@ -7,7 +7,6 @@
 #  completly forbidden without explicit permission of their authors.
 #
 import sys
-sys.path.append('/home/albertovillegaserce/prjc0910-group1/trunk/src')
 
 from model.objective import *
 from model.world import create_game
@@ -155,7 +154,3 @@ class TestObjectives (unittest.TestCase):
                 print p.name+" mission acomplished"
             else:
                 print p.name+" mission failed"
-
-
-suite = unittest.TestLoader().loadTestsFromTestCase(TestObjectives)
-unittest.TextTestRunner(verbosity=2).run(suite)
