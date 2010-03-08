@@ -47,9 +47,9 @@ class RiskAttackState (GameSubstate):
     
 
     def risk_attack (self, src, dst):
-	
 	"""
-	When pressing a highlighted country for attack the attack menu will be enabled.
+	When pressing a highlighted country for attack the attack menu
+	will be enabled.
 	"""	
 	self.game.ui_attack.dice_enable()
 

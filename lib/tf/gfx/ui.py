@@ -386,7 +386,7 @@ class Component(sf.Drawable, Space, HitShape):
     get_rotation = sf.Drawable.GetRotation
     get_scale = sf.Drawable.GetScale
     set_scale = sf.Drawable.SetScale
-    SetColor = None
+    # SetColor = None
     # BUG add more
 
     def set_color(self, c):
@@ -1461,6 +1461,12 @@ class Rectangle(Component):
         self._sprite = sf.Shape.Rectangle(x1, y1, x2, y2, ic, ot, oc)
         self._width = w
         self._height = h
+        self._ot = ot
+        
+    def set_color (self, c):
+        x1, y1 = self.get_position ()
+        x2, y2 = x1 + self._width, y1 + self._height
+        self._sprite = sf.Shape.Rectangle(x1, y1, x2, y2, c, self._ot, c)
 
     def _get_unscaled_width(self):
         return self._width

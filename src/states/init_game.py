@@ -30,6 +30,10 @@ class InitGameState (GameSubstate):
         self._finished = set ()
         
 	self.game.ui_world.on_click_region += self.on_place_troop
+        self.manager.enter_state (
+            'message', message =
+            "Welcome to the game, emperors.\n"
+            "Check your missions and add the troops.\n")
         
     def _give_troops (self):
         """

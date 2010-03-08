@@ -286,7 +286,7 @@ class FadeTask (Task):
         self.func      = func
         self.curr      = 0.
         self.loop      = loop
-        self.duration = duration
+        self.duration  = duration
 
         if init: 
             func (0.0)
@@ -298,9 +298,9 @@ class FadeTask (Task):
 
         if self.curr >= self.duration:
             if self.loop:
-                self.curr -= self.duration
+                self.curr -= 1.0
             else:
-                self.curr = self.duration
+                self.curr = 1.0
                 self.kill ()
                 self.func (self.curr)
 

@@ -21,7 +21,14 @@ Component = ui.Component
 VBox = ui.VBox
 HBox = ui.HBox
 
-SmallButton = lambda *a, **k: Button (theme = theme.SMALL_BUTTON_THEME, *a, **k)
+Frame = lambda parent, theme = theme.FRAME_THEME: \
+    ui.RoundedRectangle (parent, 0, 0, 0, 0, 15,
+                         theme ['inactive'],
+                         theme ['border'],
+                         theme ['thickness'])
+
+SmallButton = lambda *a, **k: \
+    Button (theme = theme.SMALL_BUTTON_THEME, *a, **k)
 
 Text = ui.String
 

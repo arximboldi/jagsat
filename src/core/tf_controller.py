@@ -11,7 +11,6 @@ from PySFML import sf
 
 from tf.behavior.gameloop import get_game_loop
 from tf.behavior.eventloop import EventLoop
-from tf.behavior.sm import StateMachine
 from tf.gfx.ui import Window, View
 
 from base.conf import GlobalConf
@@ -81,7 +80,7 @@ class TfController (Tracker):
         return self._tasks
     
     @property
-    def window (self):
+    def sfml_window (self):
         return self._window
     
     @property

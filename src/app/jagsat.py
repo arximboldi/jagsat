@@ -14,6 +14,7 @@ from core.app import GameApp
 
 from states.sandbox        import Sandbox
 from states.game           import GameState
+from states.game           import GameMessageState
 from states.init_game      import InitGameState
 from states.ingame_menu    import IngameMenuState
 from states.round          import GameRoundState
@@ -71,6 +72,7 @@ Game options:
 	self.add_state ('attack',	    AttackState)
 	self.add_state ('move',		    MovementState)
 	self.add_state ('risk_attack',      RiskAttackState)
+        self.add_state ('message',          GameMessageState)
     
     def do_execute (self, freeargs):
         if self._arg_state.value:

@@ -20,11 +20,13 @@ class ReinforcementState (GameSubstate):
         super (ReinforcementState, self).do_setup (*a, **k)
 
         game = self.game
-        
 	game.world.current_player.troops = self._count_continent_troops () + \
-                                           self._count_region_troops ()
-        
+                                           self._count_region_troops ()        
 	game.ui_world.on_click_region += self.on_place_troop
+
+        self.manager.enter_state ('message', message =
+            "New turn for player: %s.\n%s" % (game.world.current_player.name,
+            "Place your reinforcements on the map."))
 
     def do_release (self):
         pass # Fill with signal deallocation, but first try to check

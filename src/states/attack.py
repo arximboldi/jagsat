@@ -35,16 +35,17 @@ class AttackState (GameSubstate):
             r.model.owner != game.world.current_player and
             r.model.definition in p.model.definition.neighbours)
         game.ui_world.on_pick_regions += self.on_attack
-	game.ui_player[game.world.current_player].on_player_pass += lambda ev: self.on_pass (self)
-	
+	game.ui_player[game.world.current_player].on_player_pass += \
+            lambda ev: self.on_pass (self)
 
+        self.manager.enter_state ('message', message =
+            "You are ready to attack your enemies.")
 
     def do_release (self):
         self.game.ui_world.disable_used ()
 	self.game.ui_world.disable_picking ()
         super (AttackState, self).do_release ()
 
-        
     @weak_slot
     def on_attack (self, src, dst):
         _log.debug ('Attacking from %s to %s.' %
@@ -55,7 +56,6 @@ class AttackState (GameSubstate):
 	self.game.ui_attack.src = src
 	
         self.manager.enter_state ('risk_attack')
-
  
     def on_pass(self, random):
         self.manager.change_state ('move')	# Hop to MovementState

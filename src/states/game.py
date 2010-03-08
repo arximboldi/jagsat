@@ -7,11 +7,14 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
+from PySFML import sf
+
 from base.signal import weak_slot
 from base.conf   import ConfNode
 from base.util   import lazyprop
-from core.state  import State
 from core.input  import key
+from core.state  import State
+from core        import task
 from model.world import create_game
 
 from ui.world    import WorldComponent
@@ -21,6 +24,7 @@ from ui.attack   import AttackComponent
 from quit import QuittableState
 
 from tf.gfx import ui
+
 
 class GameSubstate (QuittableState):
 
@@ -83,3 +87,39 @@ class GameState (QuittableState):
             self.manager.leave_state ()
         else:
             self.manager.enter_state ('ingame_menu')
+
+
+class GameMessageState (GameSubstate):
+
+    def do_setup (self, message = '', *a, **k):
+        super (GameMessageState, self).do_setup (*a, **k)
+        win = self.manager.system.sfml_window
+        self.ui_bg = ui.Rectangle (
+            self.game.ui_layer, 0, 0, win.GetWidth (), win.GetHeight (),
+            sf.Color.Black, sf.Color.Black, 1.)
+        self.ui_text = ui.MultiLineString (self.ui_bg, unicode (message))
+        self.ui_text.set_center_rel (.5, .5)
+        self.ui_text.set_position_rel (.5, .5)
+        self.ui_text.set_size (50)
+
+        self.tasks.add (task.sequence (
+            self.make_fade_task (task.fade),
+            task.run (lambda :
+                      self.ui_bg.set_enable_hitting (True) or
+                      self.ui_bg.signal_click.add (self.on_click_bg))))
+        
+    def on_click_bg (self, ev):
+        self.tasks.add (task.sequence (
+            self.make_fade_task (task.invfade),
+            task.run (self.ui_bg.remove_myself),
+            task.run (self.manager.leave_state)))
+
+    def make_fade_task (self, fade_task):
+        return task.parallel (
+            fade_task (lambda x:
+                       self.ui_bg.set_color (sf.Color (0, 0, 0, x*210)),
+                       init = True, duration = .75),
+            fade_task (lambda x:
+                           self.ui_text.set_color (
+                               sf.Color (255, 255, 255, x*255)),
+                       init = True, duration = .75))

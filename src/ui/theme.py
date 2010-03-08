@@ -25,8 +25,8 @@ SMALL_BUTTON_THEME = {
     'margin'    : 2
     }
 
-
-FRAME_THEME = BUTTON_THEME
+FRAME_THEME = dict (BUTTON_THEME)
+FRAME_THEME ['thickness'] = 0
 
 MENU_THEME = {
     'active'    : sf.Color (0, 0, 0, 400),

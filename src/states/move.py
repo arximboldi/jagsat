@@ -18,6 +18,7 @@ from tf.gfx import ui
 
 _log = get_log (__name__)
 
+
 class MovementState (GameSubstate):
     
     def do_setup (self, *a, **k):
@@ -35,6 +36,9 @@ class MovementState (GameSubstate):
 
         game.ui_world.on_pick_regions += self.on_move
         game.ui_world.on_click_region += self.on_click_region
+
+        self.manager.enter_state ('message', message =
+                                  'Move your troops among your countries.')
 
     def do_release (self):
         super (MovementState, self).do_release ()

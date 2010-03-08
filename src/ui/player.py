@@ -11,6 +11,8 @@ from base.log import get_log
 from base import signal
 
 from tf.gfx import ui
+from tf.gfx.uiactions import *
+
 import widget
 import theme
 
@@ -75,7 +77,7 @@ class PlayerComponent (widget.VBox, object):
         _log.debug ('Toggle menu for player: ' + str (self.player))
         self.menu_enabled = not self.menu_enabled
         self._box_main.set_visible (self.menu_enabled)
-
+    
     @signal.weak_slot
     def on_set_player_troops (self, player, troops):
         if troops > 0:
