@@ -13,42 +13,42 @@
 	     troops="5">
     <region name="spain">
       <circle>
-	<point x="115" y="38"/>
+	<point x="109" y="35"/>
       </circle>
     </region>
     <region name="balkan">
       <circle>
-	<point x="128" y="35"/>
+	<point x="125" y="35"/>
       </circle>
     </region>
     <region name="united kingdom">
       <circle>
-	<point x="114" y="22"/>
+	<point x="109" y="19"/>
       </circle>
     </region>
     <region name="western europe">
       <circle>
-	<point x="123" y="28"/>
+	<point x="118" y="25"/>
       </circle>
     </region>   
     <region name="eastern europe">
       <circle>
-	<point x="135" y="28"/>
+	<point x="134" y="27"/>
       </circle>
     </region>
     <region name="scandinavia">
       <circle>
-	<point x="132" y="13"/>
+	<point x="124" y="10"/>
       </circle>
     </region>
     <region name="iceland">
       <circle>
-	<point x="105" y="12"/>
+	<point x="98" y="10"/>
       </circle>
     </region>
     <region name="st. petersburg">
       <circle>
-	<point x="138" y="19"/>
+	<point x="134" y="14"/>
       </circle>
     </region>
   </continent>
@@ -59,17 +59,17 @@
 	     troops="6">
     <region name="alaska">
       <circle>
-	<point x="15" y="16"/>
+	<point x="8" y="11"/>
       </circle>
     </region>
     <region name="western canada">
       <circle>
-	<point x="35" y="16"/>
+	<point x="27" y="10"/>
       </circle>
     </region>
     <region name="eastern canada">
       <circle>
-	<point x="70" y="14"/>
+	<point x="63" y="14"/>
       </circle>
     </region>
     <region name="northern canada">
@@ -79,32 +79,32 @@
     </region>
     <region name="greenland">
       <circle>
-	<point x="89" y="6"/>
+	<point x="82" y="3"/>
       </circle>
     </region>
     <region name="california">
       <circle>
-	<point x="37" y="28"/>
+	<point x="32" y="25"/>
       </circle>
     </region>   
     <region name="texas">
       <circle>
-	<point x="42" y="45"/>
+	<point x="37" y="43"/>
       </circle>
     </region>
     <region name="florida">
       <circle>
-	<point x="57" y="43"/>
+	<point x="52" y="43"/>
       </circle>
     </region>
     <region name="new york">
       <circle>
-	<point x="58" y="30"/>
+	<point x="52" y="26"/>
       </circle>
     </region>
     <region name="mexico">
       <circle>
-	<point x="54" y="65"/>
+	<point x="50" y="62"/>
       </circle>
     </region>
   </continent>
@@ -115,27 +115,27 @@
 	     troops="3">
     <region name="venezuela">
       <circle>
-	<point x="66" y="93"/>
+	<point x="61" y="93"/>
       </circle>
     </region>
     <region name="colombia">
       <circle>
-	<point x="70" y="83"/>
+	<point x="67" y="80"/>
       </circle>
     </region>
     <region name="brazil">
       <circle>
-	<point x="82" y="103"/>
+	<point x="77" y="100"/>
       </circle>
     </region>
     <region name="peru">
       <circle>
-	<point x="71" y="106"/>
+	<point x="66" y="106"/>
       </circle>
     </region>   
     <region name="argentina">
       <circle>
-	<point x="70" y="129"/>
+	<point x="65" y="129"/>
       </circle>
     </region>
   </continent>
@@ -147,32 +147,32 @@
 	     troops="4">
     <region name="algeria">
       <circle>
-	<point x="113" y="64"/>
+	<point x="108" y="62"/>
       </circle>
     </region>
     <region name="egypt">
       <circle>
-	<point x="130" y="60"/>
+	<point x="127" y="58"/>
       </circle>
     </region>
     <region name="congo">
       <circle>
-	<point x="127" y="80"/>
+	<point x="123" y="80"/>
       </circle>
     </region>
     <region name="south africa">
       <circle>
-	<point x="136" y="106"/>
+	<point x="131" y="106"/>
       </circle>
     </region>   
    <region name="tanzania">
       <circle>
-	<point x="140" y="81"/>
+	<point x="137" y="77"/>
       </circle>
     </region>
     <region name="madagascar">
       <circle>
-	<point x="150" y="107"/>
+	<point x="150" y="105"/>
       </circle>
     </region>
   </continent>
@@ -183,42 +183,42 @@
 	     troops="7">
     <region name="ural">
       <circle>
-	<point x="150" y="20"/>
+	<point x="149" y="18"/>
       </circle>
     </region>
     <region name="siberia">
       <circle>
-	<point x="168" y="18"/>
+	<point x="166" y="18"/>
       </circle>
     </region>
     <region name="yakutsk">
       <circle>
-	<point x="190" y="16"/>
+	<point x="187" y="16"/>
       </circle>
     </region>
     <region name="chersky">
       <circle>
-	<point x="223" y="12"/>
+	<point x="221" y="12"/>
       </circle>
     </region>   
     <region name="japan">
       <circle>
-	<point x="216" y="41"/>
+	<point x="216" y="38"/>
       </circle>
     </region>
     <region name="china">
       <circle>
-	<point x="187" y="45"/>
+	<point x="184" y="43"/>
       </circle>
     </region>
     <region name="india">
       <circle>
-	<point x="175" y="58"/>
+	<point x="172" y="58"/>
       </circle>
     </region>
     <region name="iran">
       <circle>
-	<point x="161" y="45"/>
+	<point x="158" y="45"/>
       </circle>
     </region>
     <region name="saudi arabia">
@@ -249,17 +249,17 @@
     </region>
     <region name="new guinea">
       <circle>
-	<point x="216" y="91"/>
+	<point x="216" y="89"/>
       </circle>
     </region>
     <region name="western australia">
       <circle>
-	<point x="205" y="112"/>
+	<point x="202" y="111"/>
       </circle>
     </region>
     <region name="eastern australia">
       <circle>
-	<point x="218" y="114"/>
+	<point x="215" y="114"/>
       </circle>
     </region>   
   </continent>
@@ -280,9 +280,10 @@
     <node name="colombia"/>
     <node name="brazil"/>
   </link>
+
   <link type="line">
-    <node name="venezuela"/>
-    <node name="brazil"/>
+    <node name="colombia"/>
+    <node name="peru"/>
   </link>
 
   <link type="circle">
@@ -292,21 +293,23 @@
   </link>
 
   <!-- continent africa links -->
-
   <link type="line">
+    <node name="congo"/>
     <node name="algeria"/>
     <node name="egypt"/>
-    <node name="tanzania"/>
   </link>
+
   <link type="circle">
-    <node name="algeria"/>
+    <node name="egypt"/>
     <node name="congo"/>
     <node name="tanzania"/>
   </link>
+
   <link type="line">
     <node name="south africa"/>
     <node name="congo"/>
   </link>
+
   <link type="circle">
     <node name="south africa"/>
     <node name="madagascar"/>
@@ -315,66 +318,85 @@
 
   <!-- continent north america links -->
 
-  <link type="line">
+  <link type="circle">
     <node name="florida"/>
     <node name="mexico"/>
     <node name="texas"/>
   </link>
-  <link type="line">
-    <node name="northern canada"/>
-    <node name="greenland"/>
-    <node name="eastern canada"/>
-  </link>
-  <link type="line">
-    <node name="eastern canada"/>
+
+  <link type="circle">
+    <node name="florida"/>
     <node name="new york"/>
+    <node name="eastern canada"/>
   </link>
+
+  <link type="circle">
+    <node name="new york"/>
+    <node name="california"/>
+    <node name="texas"/>
+  </link>
+
+  <link type="line">
+    <node name="florida"/>
+    <node name="texas"/>
+  </link>
+
+  <link type="line">
+    <node name="western canada"/>
+    <node name="northern canada"/>
+  </link>
+
   <link type="circle">
     <node name="western canada"/>
     <node name="california"/>
     <node name="alaska"/>
   </link>
-  <link type="circle">
-    <node name="eastern canada"/>
-    <node name="northern canada"/>
-    <node name="western canada"/>
-  </link>
-  <link type="circle">
-    <node name="eastern canada"/>
+
+  <link type="line">
     <node name="california"/>
-    <node name="texas"/>
+    <node name="northern canada"/>
   </link>
-  <link type="circle">
+
+  <link type="line">
     <node name="new york"/>
-    <node name="florida"/>
-    <node name="texas"/>
+    <node name="northern canada"/>
+  </link>
+
+  <link type="circle">
+    <node name="northern canada"/>
+    <node name="greenland"/>
+    <node name="eastern canada"/>
   </link>
 
   <!-- continent europe links -->
-
-  <link type="line">
-    <node name="eastern europe"/>
-    <node name="st. petersburg"/>
-  </link>
-  <link type="line">
-    <node name="spain"/>
-    <node name="balkan"/>
-  </link>
-  <link type="circle">
-    <node name="western europe"/>
-    <node name="spain"/>
-    <node name="united kingdom"/>
-  </link>
   <link type="circle">
     <node name="iceland"/>
     <node name="scandinavia"/>
     <node name="united kingdom"/>
   </link>
+
   <link type="circle">
     <node name="western europe"/>
     <node name="scandinavia"/>
     <node name="st. petersburg"/>
   </link>
+
+  <link type="circle">
+    <node name="western europe"/>
+    <node name="spain"/>
+    <node name="united kingdom"/>
+  </link>
+
+  <link type="line">
+    <node name="eastern europe"/>
+    <node name="st. petersburg"/>
+  </link>
+
+  <link type="line">
+    <node name="spain"/>
+    <node name="balkan"/>
+  </link>
+
   <link type="circle">
     <node name="western europe"/>
     <node name="eastern europe"/>
@@ -383,13 +405,16 @@
 
   <!-- continent asia links -->
 
-  <link type="clique">
-    <node name="yakutsk"/>
+  <link type="circle">
     <node name="chersky"/>
     <node name="mongolia"/>
     <node name="japan"/>
   </link>
-  
+  <link type="line">
+    <node name="mongolia"/>
+    <node name="yakutsk"/>
+    <node name="chersky"/>
+  </link>
   <link type="line">
     <node name="japan"/>
     <node name="china"/>
@@ -398,7 +423,16 @@
   <link type="line">
     <node name="ural"/>
     <node name="siberia"/>
+  </link>
+
+  <link type="line">
+    <node name="iran"/>
+    <node name="siberia"/>
+  </link>
+
+  <link type="line">
     <node name="yakutsk"/>
+    <node name="siberia"/>
   </link>
 
   <link type="circle">
@@ -431,43 +465,49 @@
     <node name="thailand"/>
     <node name="indonesia"/>
   </link>
+
   <link type="line">
     <node name="chersky"/>
     <node name="alaska"/>
   </link>
+
   <link type="line">
     <node name="brazil"/>
     <node name="algeria"/>
   </link>
+
   <link type="line">
     <node name="greenland"/>
     <node name="iceland"/>
   </link>
+
   <link type="line">
     <node name="colombia"/>
     <node name="mexico"/>
     <node name="venezuela"/>
   </link>
+
   <link type="line">
     <node name="spain"/>
     <node name="algeria"/>
     <node name="balkan"/>
   </link>
+
   <link type="line">
     <node name="egypt"/>
     <node name="balkan"/>
     <node name="saudi arabia"/>
   </link>
+
   <link type="line">
     <node name="iran"/>
     <node name="eastern europe"/>
     <node name="saudi arabia"/>
   </link>
+
   <link type="line">
     <node name="ural"/>
     <node name="st. petersburg"/>
-    <node name="iran"/>
   </link>
   
-
 </map>
