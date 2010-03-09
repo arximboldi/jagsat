@@ -109,6 +109,7 @@ class GameMessageState (GameSubstate):
                       self.ui_bg.signal_click.add (self.on_click_bg))))
         
     def on_click_bg (self, ev):
+        self.ui_bg.set_enable_hitting (False)
         self.tasks.add (task.sequence (
             self.make_fade_task (task.invfade),
             task.run (self.ui_bg.remove_myself),
