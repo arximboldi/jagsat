@@ -7,8 +7,9 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
-from base.arg_parser import OptionWith
+from functools import partial
 
+from base.arg_parser import OptionWith
 from base.log import get_log
 from core.app import GameApp
 
@@ -73,6 +74,9 @@ Game options:
 	self.add_state ('move',		    MovementState)
 	self.add_state ('risk_attack',      RiskAttackState)
         self.add_state ('message',          GameMessageState)
+        
+        self.add_state ('test_attack', partial (GameState, test_phase='attack'))
+        self.add_state ('test_move',   partial (GameState, test_phase='move'))
     
     def do_execute (self, freeargs):
         if self._arg_state.value:

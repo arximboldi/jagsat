@@ -29,7 +29,7 @@ class GameRoundState (GameSubstate):
 
     def _next_turn (self):
         self.game.world.current_player = self._player_iter.next ()
-        self.manager.enter_state ('reinforcements')
+        self.manager.enter_state (self.game.test_phase or 'reinforcements')
 
     def do_unsink (self, *a, **k):
         super (GameRoundState, self).do_unsink (*a, **k)

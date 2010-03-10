@@ -11,6 +11,7 @@ from PySFML import sf
 
 BUTTON_THEME = {
     'active'    : sf.Color (0, 0, 0),
+    'inactive_border' : sf.Color (100, 100, 100),
     'inactive'  : sf.Color (128, 128, 128), 
     'border'    : sf.Color (0x97, 0xBF, 0x60),
     'thickness' : 5,
@@ -19,9 +20,10 @@ BUTTON_THEME = {
 
 SMALL_BUTTON_THEME = {
     'active'    : sf.Color (0, 0, 0, 200),
-    'inactive'  : sf.Color (128, 128, 128), 
-    'border'    : sf.Color (0, 0, 0),
-    'thickness' : 3,
+    'inactive'  : sf.Color (0, 0, 0, 100),
+    'border'    : sf.Color (150, 150, 70, 255),
+    'inactive_border' : sf.Color (0, 0, 0, 0),
+    'thickness' : 2,
     'margin'    : 2
     }
 

@@ -14,6 +14,7 @@ from tf.gfx import uiactions
 from tf.gfx import uihelp
 from tf.globalization.language import _, all_languages, LanguageChangeNotifier
 
+button_radious = 15
 
 class Button(ui.RoundedRectangle):
 
@@ -21,6 +22,7 @@ class Button(ui.RoundedRectangle):
         active_color = theme["active"]
         inactive_color = theme["inactive"]
         border_color = theme["border"]
+        inactive_border_color = theme["inactive_border"]
         thickness = theme["thickness"]
         margin = theme['margin']
 
@@ -28,15 +30,18 @@ class Button(ui.RoundedRectangle):
                                      parent,
                                      0, 0,
                                      0, 0,
-                                     15,
+                                     button_radious,
                                      inactive_color,
                                      border_color,
                                      thickness)
         self.set_margin (margin)
         self.set_enable_hitting(True)
         self.set_expand (True, True)
+        
         self.active_color = active_color
+        self.border_color = border_color
         self.inactive_color = inactive_color
+        self.inactive_border_color = inactive_border_color
 
         self.add_child (str)
         # TODO: After more than one our just trying to fix this
@@ -51,11 +56,15 @@ class Button(ui.RoundedRectangle):
                 
     def activate(self):
         self.ic = self.active_color
+        self.oc = self.border_color
+        
         for i in range(self._sprite.GetNbPoints()):
             self._sprite.SetPointColor(i, self.ic)
 
     def deactivate(self):
         self.ic = self.inactive_color
+        self.oc = self.inactive_border_color
+        
         for i in range(self._sprite.GetNbPoints()):
             self._sprite.SetPointColor(i, self.ic)
 

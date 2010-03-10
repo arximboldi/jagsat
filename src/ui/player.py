@@ -21,8 +21,13 @@ from PySFML import sf
 _log = get_log (__name__)
 
 rotation = [ 180, 135, 45, 0, 315, 225 ]
-position = [ (.5, .01), (.97, .03), (.97, .97),
-             (0.5, .99), (.03, .97), (.03, .03) ]
+position = [ (.5, .01), (.95, .05), (.95, .95),
+             (0.5, .99), (.05, .95), (.05, .05) ]
+
+def move_to_player_position (comp, player):
+    comp.set_center_rel (0.5, 1.0)
+    comp.set_position_rel (* position [player.position])
+    comp.set_rotation (rotation [player.position])    
 
 class PlayerComponent (widget.VBox, object):
 
@@ -31,13 +36,10 @@ class PlayerComponent (widget.VBox, object):
         
         self.player = player
         self.menu_enabled = False
-                
+        move_to_player_position (self, player)
+        
         self.on_player_pass = signal.Signal ()
 
-        self.set_center_rel (0.5, 1.0)
-        self.set_position_rel (* position [player.position])
-        self.set_rotation (rotation [player.position])
-        
         self._but_theme = dict (theme.SMALL_BUTTON_THEME)
         pr, pg, pb = player.color
         self._but_theme.update (
@@ -67,8 +69,8 @@ class PlayerComponent (widget.VBox, object):
         self._txt_troops._sprite.SetStyle (sf.String.Bold)
         player.on_set_player_troops += self.on_set_player_troops
         
-        self.padding_bottom = 3
-        self._box_main.padding_bottom = 3
+        self.padding_bottom = 0
+        self._box_main.padding_bottom = 6
         self._box_main.set_visible (self.menu_enabled)
         self.activate ()
 

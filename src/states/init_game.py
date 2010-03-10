@@ -30,10 +30,22 @@ class InitGameState (GameSubstate):
         self._finished = set ()
         
 	self.game.ui_world.on_click_region += self.on_place_troop
-        self.manager.enter_state (
-            'message', message =
-            "Welcome to the game, emperors.\n"
-            "Check your missions and add the troops.\n")
+
+        if self.game.test_phase is None:
+            self.manager.enter_state (
+                'message', message =
+                "Welcome to the game, emperors.\n"
+                "Check your missions and add the troops.\n")
+        else:
+            self._change_to_test ()
+
+    def _change_to_test (self):
+        world = self.game.world
+        for p in world.players.itervalues ():
+            p.troops = 0
+        for r in world.regions.itervalues ():
+            r.troops += random.randint (0, 10)
+        self.manager.change_state ('game_round')
         
     def _give_troops (self):
         """

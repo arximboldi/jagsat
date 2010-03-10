@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map SYSTEM "file:../file-formats/map-file.dtd">
 
-<map bg="doc/map/map1024x768.png" xscale="4" yscale="2.8" xoffset="0" yoffset="150">
+<map bg="doc/map/map1024x768edited.png" 
+     xscale="4" yscale="2.8" xoffset="0" yoffset="150">
   <meta>
-    <author>Thomas Forss</author>
-    <description>Made the continent reinforcements 2,3,4,5,6,7 (can easliy be changed) </description>
+    <author>The JAGSAT Development team.</author>
+    <description>Original risk map.</description>
   </meta>
 
   <!-- continent europe -->

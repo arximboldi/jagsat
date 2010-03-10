@@ -50,12 +50,10 @@ class AttackState (GameSubstate):
     def on_attack (self, src, dst):
         _log.debug ('Attacking from %s to %s.' %
                     (str (src.model), str (dst.model)))
-	#self.risk_attack (src, dst)
-	
-	self.game.ui_attack.dst = dst
-	self.game.ui_attack.src = src
-	
-        self.manager.enter_state ('risk_attack')
+        self.manager.enter_state ('risk_attack',
+                                  attacker = src.model,
+                                  defender = dst.model)
  
-    def on_pass(self, random):
-        self.manager.change_state ('move')	# Hop to MovementState
+    def on_pass (self, random):
+        self.manager.change_state ('move')
+        

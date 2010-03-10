@@ -37,7 +37,8 @@ class TfController (Tracker):
         self._conf = GlobalConf ().child ('video') if conf is None else conf
         self._window_title = window_title
         self._is_setup = False
-
+        self._music = None
+        
         self.on_sfml_event = Signal () # TODO: abstract sfml here
         
         self._setup_conf_defaults ()
@@ -53,6 +54,13 @@ class TfController (Tracker):
             self.disconnect_all ()
             self._window.Close ()
             self._is_setup = False
+
+    def play_music (self, file):
+        if self._music:
+            self._music.Stop ()
+        self._music = sf.Music ()
+        self._music.OpenFromFile (file)
+        self._music.Play ()
         
     def loop (self):        
         self._timer.reset ()
@@ -63,6 +71,10 @@ class TfController (Tracker):
             return self._tasks.update (timer)
         return False
 
+    @property
+    def audio (self):
+        return self._game_loop.get_audiomanager ()
+    
     @property
     def keys (self):
         return self._keyboard

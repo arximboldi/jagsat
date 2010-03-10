@@ -322,9 +322,9 @@ class DiceD6RollAction(uiactions.Action):
 
     def step_action(self):
         # BUG real time
-        self.time += 1
+        self.time += .00001
 
-        k = 0.06
+        k = 0.0006
         oldscale = self.component.GetScale()[0]
 
         scale = 1.0 + abs(math.sin(self.time * k) * self.zforce)
@@ -346,6 +346,7 @@ class DiceD6RollAction(uiactions.Action):
                     if self.zforce < 0.1:
                         self.component.set_dice_value(\
                             calc_which_face_is_up(self.component) + 1)
+                        print "FINNISH!"
                         return True
 
         r = math.radians(self.move_direction)

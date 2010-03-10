@@ -7,6 +7,7 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
+import random
 from PySFML import sf
 
 from base.signal import weak_slot
@@ -20,8 +21,9 @@ from model.world import create_game
 from ui.world    import WorldComponent
 from ui.player   import PlayerComponent
 from ui.attack   import AttackComponent
+from ui          import widget
 
-from quit import QuittableState
+from util import QuittableState
 
 from tf.gfx import ui
 
@@ -36,31 +38,39 @@ class GameSubstate (QuittableState):
         return result
 
 
+def make_test_game ():
+    cfg = ConfNode (
+        { 'player-0' :
+          { 'name'     : 'jp',
+            'color'    : (255, 0, 0),
+            'position' : 3,
+            'enabled'  : True },
+          'player-2' :
+          { 'name'     : 'pj',
+            'color'    : (0, 255, 0),
+            'position' : 4,
+            'enabled'  : True },
+          'map' : 'doc/map/worldmap.xml' })
+    return create_game (cfg)
+
+
 class GameState (QuittableState):
 
+    def __init__ (self, test_phase = None, *a, **k):
+        super (GameState, self).__init__ (*a, **k)
+        self.test_phase = test_phase
+        
     def do_setup (self, *a, **k):
         super (GameState, self).do_setup (*a, **k)
         self._setup_state ()
         self._setup_ui ()
         self._setup_logic ()
         self.manager.enter_state ('init_game')
-
+        self.manager.system.play_music (random.choice (background_music))
+        
     def _setup_state (self):
-        # TODO: Get the configuration as a parameter
-        cfg = ConfNode (
-            { 'player-0' :
-              { 'name'     : 'jp',
-                'color'    : (255, 0, 0),
-                'position' : 3,
-                'enabled'  : True },
-              'player-2' :
-              { 'name'     : 'pj',
-                'color'    : (0, 255, 0),
-                'position' : 4,
-                'enabled'  : True },
-              'map' : 'doc/map/worldmap.xml' })
-
-        self.world = create_game (cfg)
+        # TODO: Get world as a parameter
+        self.world = make_test_game ()
 
     def _setup_ui (self):
         system = self.manager.system
@@ -68,12 +78,12 @@ class GameState (QuittableState):
         self.map_layer = ui.Layer (system.view)
         self.ui_layer = ui.Layer (system.view)
 
-        
         self.ui_world  = WorldComponent (self.map_layer, self.world)
         self.ui_player = dict ((p, PlayerComponent (self.ui_layer, p))
                                for p in self.world.players.itervalues ())
 
-        self.ui_attack = AttackComponent (self.ui_layer, self.world)
+        self.ui_bg = widget.Background (self.ui_layer)
+        self._ui_bg_disabled = []
         
     def _setup_logic (self):
         system = self.manager.system
@@ -88,39 +98,46 @@ class GameState (QuittableState):
         else:
             self.manager.enter_state ('ingame_menu')
 
+    def enable_map (self):
+        self._ui_bg_disabled.pop ()
+        if not self._ui_bg_disabled:
+            self.ui_bg.set_enable_hitting (False)
+            return self.tasks.add (self.ui_bg.fade_out ())
+        return self.tasks.add (lambda t: None)
+
+    def disable_map (self):
+        self._ui_bg_disabled.append (True)
+        if len (self._ui_bg_disabled) == 1:
+            self.ui_bg.set_enable_hitting (True)
+            return self.tasks.add (self.ui_bg.fade_in ())
+        return self.tasks.add (lambda t: None)
+    
 
 class GameMessageState (GameSubstate):
 
     def do_setup (self, message = '', *a, **k):
         super (GameMessageState, self).do_setup (*a, **k)
-        win = self.manager.system.sfml_window
-        self.ui_bg = ui.Rectangle (
-            self.game.ui_layer, 0, 0, win.GetWidth (), win.GetHeight (),
-            sf.Color.Black, sf.Color.Black, 1.)
-        self.ui_text = ui.MultiLineString (self.ui_bg, unicode (message))
+        
+        self.ui_text = ui.MultiLineString (self.game.ui_layer,
+                                           unicode (message))
         self.ui_text.set_center_rel (.5, .5)
         self.ui_text.set_position_rel (.5, .5)
         self.ui_text.set_size (50)
 
+        self.game.disable_map ()
         self.tasks.add (task.sequence (
             self.make_fade_task (task.fade),
-            task.run (lambda :
-                      self.ui_bg.set_enable_hitting (True) or
-                      self.ui_bg.signal_click.add (self.on_click_bg))))
-        
-    def on_click_bg (self, ev):
-        self.ui_bg.set_enable_hitting (False)
+            task.run (lambda: self.game.ui_bg.on_click.connect (
+                self.on_click_bg))))
+    
+    @weak_slot
+    def on_click_bg (self):
+        self.game.enable_map ()
         self.tasks.add (task.sequence (
             self.make_fade_task (task.invfade),
-            task.run (self.ui_bg.remove_myself),
             task.run (self.manager.leave_state)))
 
     def make_fade_task (self, fade_task):
-        return task.parallel (
-            fade_task (lambda x:
-                       self.ui_bg.set_color (sf.Color (0, 0, 0, x*210)),
-                       init = True, duration = .75),
-            fade_task (lambda x:
-                           self.ui_text.set_color (
-                               sf.Color (255, 255, 255, x*255)),
-                       init = True, duration = .75))
+        return fade_task (lambda x:
+                          self.ui_text.set_color (sf.Color (255,255,255,x*255)),
+                          init = True, duration = .75)
