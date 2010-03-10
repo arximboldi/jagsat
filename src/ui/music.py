@@ -7,24 +7,80 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
-from core import task
+from base.log import get_log
+from core     import task
 
 import theme
 import random
 
+from PySFML import sf
+
+_log = get_log (__name__)
+
+class state:
+    idle, playing = range (0, 2)
+
 class MusicPlayer (task.Task):
 
-    def __init__ (self, audio = None, playlist = None, *a, **k):
-        self.audio = audio
+    def __init__ (self,
+                  audio    = None,
+                  playlist = theme.background_music,
+                  shuffle  = True,
+                  loop     = True,
+                  *a, **k):
+        super (MusicPlayer, self).__init__ (*a, **k)
+
+        self.audio    = audio
         self.playlist = playlist or theme.background_music
-        self._song_queue = list (theme.background_music)
-        random.shuffle (self._song_queue)
+        self.shuffle  = shuffle
+        self.loop     = loop
 
+        self._queue   = []
+        self._iter    = None
+        self._current = None
+        self._music   = None
+        self._state   = state.idle
+
+    @property
+    def current (self):
+        return self._current
+
+    @property
+    def state (self):
+        return self._state
+    
     def play (self):
-        pass
+        if self._state == state.playing:
+            self.stop ()
 
+        self._queue = list (self.playlist)
+        if self.shuffle:
+            random.shuffle (self._queue)
+
+        self._iter = iter (self._queue) 
+        self.jump_next ()
+
+    def jump_next (self):
+        try:
+            self._current = self._iter.next ()
+            self._play_file (self._current)
+        except StopIteration:
+            if self.loop and self.playlist:
+                self.play ()
+
+    def play_file (self, file):
+        if self._music:
+            self._music.Stop ()
+            
+        _log.debug ('Playing file: ' + file)
+        self._music = sf.Music ()
+        self._music.OpenFromFile (file)
+        self._music.Play ()
+        self._state = state.playing
+        
     def stop (self):
-        pass
-
+        self._music.Stop ()
+        self._
+    
     def do_update (self):
         pass

@@ -148,7 +148,9 @@ class AttackComponent (ui.FreeformContainer, object):
             self.defender_troops_decrease
         self._defense_troops_increase.on_click += \
             self.defender_troops_increase
-    
+
+        self._box_defender.deactivate ()
+        
     @signal.weak_slot
     def attacker_troops_increase(self, _):
         num_dices = self._attacker_dices.num_dices
