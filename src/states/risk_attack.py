@@ -32,7 +32,10 @@ class RiskAttackState (GameSubstate, ui.widget.VBox):
         game = self.game
 
         game.disable_map ()
-        self.ui_attack = AttackComponent (game.ui_layer, attacker, defender)
+        self.ui_attack = AttackComponent (game.ui_layer,
+                                          attacker,
+                                          defender,
+                                          self.manager.system.audio)
                 
 
     def do_release (self):
