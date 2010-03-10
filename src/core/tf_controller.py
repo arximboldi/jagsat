@@ -29,7 +29,7 @@ class TfController (Tracker):
     DEFAULT_BPP        = 32
     DEFAULT_ANTIALIAS  = 4
     DEFAULT_VSYNCH     = False
-    DEFAULT_FULLSCREEN = False
+    DEFAULT_FULLSCREEN = True
     
     def __init__ (self, conf = None, window_title = '', *a, **k):
         super (TfController, self).__init__ (*a, **k)
@@ -128,6 +128,8 @@ class TfController (Tracker):
 
         self._window.SetFramerateLimit (self._conf.child ('fps').value)
         self._window.UseVerticalSync (self._conf.child ('vsync').value)
+	self._window.SetJoystickThreshold (100)
+	self._window.EnableKeyRepeat (False)
 
         self._tf_window = Window (self._window)
         self._tf_view   = View (self._tf_window, self._window.GetDefaultView ())
