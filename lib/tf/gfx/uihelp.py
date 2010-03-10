@@ -166,7 +166,8 @@ def hit_sprites(layer, window_x, window_y):
     return hits
 
 # HACK HACK HACK HAK!!
-ratio = 1366./1024
+#xratio = 1366./1024
+xratio = 1
 
 class MouseState:
     """
@@ -189,7 +190,7 @@ class MouseState:
         for v in self.all_views[::-1]:
             for layer in v.layers[::-1]:
                 hits = hit_sprites(layer,
-                                   event.MouseButton.X * ratio,
+                                   event.MouseButton.X * xratio,
                                    event.MouseButton.Y)
                 if hits:
                     #print "HITS", hits
@@ -198,7 +199,7 @@ class MouseState:
     def mousebutton_pressed(self, gameloop, event):
         self.ticks = gameloop.ticks
         self.component_info = self._component_at(event)
-        self.start_event = (event.MouseButton.X * ratio,
+        self.start_event = (event.MouseButton.X * xratio,
                             event.MouseButton.Y)
         self.is_pan = False
 
@@ -248,7 +249,7 @@ class MouseState:
 
         # Start panning if large movement is detected
         if not self.is_pan and self.start_event is not None:
-            dx = event.MouseMove.X*ratio - self.start_event[0]
+            dx = event.MouseMove.X*xratio - self.start_event[0]
             dy = event.MouseMove.Y - self.start_event[1]
             dist = dx * dx + dy * dy
             if dist >= self.radius_to_pan:
@@ -261,11 +262,11 @@ class MouseState:
                 origc.signal_pan.call(\
                     signalslot.Event("DoPanEvent",
                                      component = origc,
-                                     x = event.MouseMove.X *ratio,
+                                     x = event.MouseMove.X *xratio,
                                      y = event.MouseMove.Y))
             else:
                 # BUG OBSOLETE DO NOT USE
-                self.component_info[0].do_pan((event.MouseMove.X *ratio,
+                self.component_info[0].do_pan((event.MouseMove.X *xratio,
                                                event.MouseMove.Y))
 
     def mousebutton_released(self, gameloop, event):
@@ -281,11 +282,11 @@ class MouseState:
                     origc.signal_pan.call(\
                         signalslot.Event("EndPanEvent",
                                          component = origc,
-                                         x = event.MouseButton.X * ratio,
+                                         x = event.MouseButton.X * xratio,
                                          y = event.MouseButton.Y))
                 else:
                     # BUG OBSOLETE DO NOT USE
-                    self.component_info[0].end_pan((event.MouseButton.X *ratio,
+                    self.component_info[0].end_pan((event.MouseButton.X *xratio,
                                                     event.MouseButton.Y))
             else:
                 if c and c[0] == self.component_info[0]:

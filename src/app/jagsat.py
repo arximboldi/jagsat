@@ -9,9 +9,11 @@
 
 from functools import partial
 
-from base.arg_parser import OptionWith
+from base.arg_parser import OptionWith, OptionFlag
 from base.log import get_log
 from core.app import GameApp
+
+from tf.gfx import uihelp
 
 from states.sandbox        import Sandbox
 from states.game           import GameState
@@ -36,6 +38,7 @@ class JagsatApp (GameApp):
 Game options:
   -m, --map <file>    Map file to load.
   -s, --state <state> Initial state.
+      --ratio-hack    Enable hack for the Asus tablet.
 """
 
     LICENSE = \
@@ -54,14 +57,16 @@ Game options:
 
         self._arg_map   = OptionWith (str)
         self._arg_state = OptionWith (str)
+        self._arg_rhack = OptionFlag ()
         
         self.root_state = 'game'
         
     def do_prepare (self, args):
         super (JagsatApp, self).do_prepare (args)
 
-        args.add ('m', 'map',   self._arg_map)
-        args.add ('s', 'state', self._arg_state)
+        args.add ('m',  'map',        self._arg_map)
+        args.add ('s',  'state',      self._arg_state)
+        args.add (None, 'ratio-hack', self._arg_rhack)
         
         self.add_state ('sandbox',          Sandbox)
         self.add_state ('game',             GameState)
@@ -80,5 +85,9 @@ Game options:
     
     def do_execute (self, freeargs):
         if self._arg_state.value:
-            self.root_state = self._arg_state.value                
+            self.root_state = self._arg_state.value
+
+        if self._arg_rhack.value:
+            uihelp.xratio = 1366./1024
+            
         super (JagsatApp, self).do_execute (freeargs)

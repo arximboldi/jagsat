@@ -29,7 +29,7 @@ class TfController (Tracker):
     DEFAULT_BPP        = 32
     DEFAULT_ANTIALIAS  = 4
     DEFAULT_VSYNCH     = False
-    DEFAULT_FULLSCREEN = True
+    DEFAULT_FULLSCREEN = False
     
     def __init__ (self, conf = None, window_title = '', *a, **k):
         super (TfController, self).__init__ (*a, **k)
@@ -128,20 +128,18 @@ class TfController (Tracker):
 
         self._window.SetFramerateLimit (self._conf.child ('fps').value)
         self._window.UseVerticalSync (self._conf.child ('vsync').value)
-	self._window.SetJoystickThreshold (100)
-	self._window.EnableKeyRepeat (False)
 
         self._tf_window = Window (self._window)
         self._tf_view   = View (self._tf_window, self._window.GetDefaultView ())
     
     def _setup_conf_defaults (self):
-        self._conf.child ('width').value  = self.DEFAULT_WIDTH
-        self._conf.child ('height').value = self.DEFAULT_HEIGHT
-        self._conf.child ('full').value   = self.DEFAULT_FULLSCREEN
-        self._conf.child ('fps').value    = self.DEFAULT_FPS
-        self._conf.child ('bpp').value    = self.DEFAULT_BPP
-        self._conf.child ('vsync').value  = self.DEFAULT_VSYNCH
-        self._conf.child ('antialias').value = self.DEFAULT_ANTIALIAS
+        self._conf.child ('width').default (self.DEFAULT_WIDTH)
+        self._conf.child ('height').default (self.DEFAULT_HEIGHT)
+        self._conf.child ('full').default (self.DEFAULT_FULLSCREEN)
+        self._conf.child ('fps').default (self.DEFAULT_FPS)
+        self._conf.child ('bpp').default (self.DEFAULT_BPP)
+        self._conf.child ('vsync').default (self.DEFAULT_VSYNCH)
+        self._conf.child ('antialias').default (self.DEFAULT_ANTIALIAS)
 
     def _setup_conf_signals (self):
         self._conf.on_conf_nudge                  += self._on_nudge_video
