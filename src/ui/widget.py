@@ -21,14 +21,14 @@ Component = ui.Component
 VBox = ui.VBox
 HBox = ui.HBox
 
-Frame = lambda parent, theme = theme.FRAME_THEME: \
+Frame = lambda parent, theme = theme.frame: \
     ui.RoundedRectangle (parent, 0, 0, 0, 0, 15,
                          theme ['inactive'],
                          theme ['border'],
                          theme ['thickness'])
 
 SmallButton = lambda *a, **k: \
-    Button (theme = theme.SMALL_BUTTON_THEME, *a, **k)
+    Button (theme = theme.small_button, *a, **k)
 
 Text = ui.String
 
@@ -39,7 +39,7 @@ class Button (ui3.Button, object):
                   text   = None,
                   image  = None,
                   vertical = True,
-                  theme  = theme.BUTTON_THEME,
+                  theme  = theme.button,
                   *a, **k):
         
         self._box    = VBox (center = True) if vertical else HBox () 

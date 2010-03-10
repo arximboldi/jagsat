@@ -22,6 +22,7 @@ from ui.world    import WorldComponent
 from ui.player   import PlayerComponent
 from ui.attack   import AttackComponent
 from ui          import widget
+from ui          import theme
 
 from util import QuittableState
 
@@ -66,7 +67,7 @@ class GameState (QuittableState):
         self._setup_ui ()
         self._setup_logic ()
         self.manager.enter_state ('init_game')
-        self.manager.system.play_music (random.choice (background_music))
+        self.manager.system.play_music (random.choice (theme.background_music))
         
     def _setup_state (self):
         # TODO: Get world as a parameter

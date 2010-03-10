@@ -40,7 +40,7 @@ class PlayerComponent (widget.VBox, object):
         
         self.on_player_pass = signal.Signal ()
 
-        self._but_theme = dict (theme.SMALL_BUTTON_THEME)
+        self._but_theme = dict (theme.small_button)
         pr, pg, pb = player.color
         self._but_theme.update (
             active   = sf.Color (* player.color),

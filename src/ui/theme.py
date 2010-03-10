@@ -9,7 +9,19 @@
 
 from PySFML import sf
 
-BUTTON_THEME = {
+background_music = [
+    'data/sfx/background/right-of-freedom.ogg',
+    'data/sfx/background/the-age-of-innocence.ogg',
+    'data/sfx/background/les-lois-du-ciel.ogg',
+    'data/sfx/background/scene-pour-orchestre.ogg',
+    'data/sfx/background/confrontation.ogg',
+    'data/sfx/background/apprentissage.ogg',
+    ]
+
+bad_click  = 'data/sfx/clicks/failed_click.wav'
+ok_click   = 'data/sfx/clicks/successful_click.wav' 
+
+button = {
     'active'    : sf.Color (0, 0, 0),
     'inactive_border' : sf.Color (100, 100, 100),
     'inactive'  : sf.Color (128, 128, 128), 
@@ -18,7 +30,7 @@ BUTTON_THEME = {
     'margin'    : 8
     }
 
-SMALL_BUTTON_THEME = {
+small_button = {
     'active'    : sf.Color (0, 0, 0, 200),
     'inactive'  : sf.Color (0, 0, 0, 100),
     'border'    : sf.Color (150, 150, 70, 255),
@@ -27,10 +39,10 @@ SMALL_BUTTON_THEME = {
     'margin'    : 2
     }
 
-FRAME_THEME = dict (BUTTON_THEME)
-FRAME_THEME ['thickness'] = 0
+frame = dict (button)
+frame ['thickness'] = 0
 
-MENU_THEME = {
+menu = {
     'active'    : sf.Color (0, 0, 0, 400),
     'inactive'  : sf.Color (0, 0, 0, 400), 
     'border'    : sf.Color (0, 0, 0),
@@ -38,7 +50,7 @@ MENU_THEME = {
     'margin'    : 6
 }
 
-PLAYER_THEME = {
+player = {
     'active'    : sf.Color (255, 180, 40, 200),
     'inactive'  : sf.Color (127, 127, 127, 200), 
     'border'    : sf.Color (0, 0, 0,200),

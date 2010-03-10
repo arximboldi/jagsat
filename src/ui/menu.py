@@ -75,8 +75,8 @@ class MenuComponent (ui.Image):
 	self.profile_ComboBox = ComboBox(self.profileL, self._listprof, self)
 	self.profile_HBox = ui.HBox(self.profileL)
 	self.profile_HBox.padding_right = 10
-        self.profile_SaveButton = widget.Button(self.profile_HBox, None,'data/icon/save-small.png',True, theme.MENU_THEME)
-	self.profile_DeleteButton = widget.Button(self.profile_HBox, None,'data/icon/delete.png',True, theme.MENU_THEME)
+        self.profile_SaveButton = widget.Button(self.profile_HBox, None,'data/icon/save-small.png',True, theme.menu)
+	self.profile_DeleteButton = widget.Button(self.profile_HBox, None,'data/icon/delete.png',True, theme.menu)
 
 	self.profile_SaveButton.on_click = signal.Signal ()
         self.profile_SaveButton.signal_click.add (self.profile_SaveButton.on_click)
@@ -120,9 +120,9 @@ class MenuComponent (ui.Image):
 
 	#Player1
         
-        self.en_button1 = EnableButton(self.playerL1, theme.MENU_THEME)
+        self.en_button1 = EnableButton(self.playerL1, theme.menu)
 	self.player_name1 = PlayerName(self.playerL1, 'Player1', theme.PLAYER_THEME)
-        self.player_color1 = ColorButton(self.playerL1, theme.MENU_THEME, 0)
+        self.player_color1 = ColorButton(self.playerL1, theme.menu, 0)
         self.player_pos1 = PositionButton(self.playerL1, 0)
 
 	self.en_button1.activate()
@@ -142,9 +142,9 @@ class MenuComponent (ui.Image):
 
 	#Player2
 
-	self.en_button2 = EnableButton(self.playerL2, theme.MENU_THEME)
+	self.en_button2 = EnableButton(self.playerL2, theme.menu)
         self.player_name2 = PlayerName(self.playerL2, 'Player2', theme.PLAYER_THEME)
-        self.player_color2 = ColorButton(self.playerL2, theme.MENU_THEME, 1)
+        self.player_color2 = ColorButton(self.playerL2, theme.menu, 1)
         self.player_pos2 = PositionButton(self.playerL2, 1)
 
 	self.en_button2.activate()
@@ -164,9 +164,9 @@ class MenuComponent (ui.Image):
 	
 	#Player3
         
-        self.en_button3 = EnableButton(self.playerL3, theme.MENU_THEME)
+        self.en_button3 = EnableButton(self.playerL3, theme.menu)
         self.player_name3 = PlayerName(self.playerL3, 'Player3', theme.PLAYER_THEME)
-        self.player_color3 = ColorButton(self.playerL3, theme.MENU_THEME, 2)
+        self.player_color3 = ColorButton(self.playerL3, theme.menu, 2)
         self.player_pos3 = PositionButton(self.playerL3, 2)
 
 	self.en_button3.activate()
@@ -186,9 +186,9 @@ class MenuComponent (ui.Image):
         
 	#Player4
 
-        self.en_button4 = EnableButton(self.playerL4, theme.MENU_THEME)
+        self.en_button4 = EnableButton(self.playerL4, theme.menu)
         self.player_name4 = PlayerName(self.playerL4, 'Player4', theme.PLAYER_THEME)
-        self.player_color4 = ColorButton(self.playerL4, theme.MENU_THEME, 3)
+        self.player_color4 = ColorButton(self.playerL4, theme.menu, 3)
         self.player_pos4 = PositionButton(self.playerL4, 3)
 
 	self.en_button4.on_click = signal.Signal ()
@@ -203,9 +203,9 @@ class MenuComponent (ui.Image):
         
 	#Player5
 
-        self.en_button5 = EnableButton(self.playerL5, theme.MENU_THEME)
+        self.en_button5 = EnableButton(self.playerL5, theme.menu)
         self.player_name5 = PlayerName(self.playerL5, 'Player5', theme.PLAYER_THEME)
-        self.player_color5 = ColorButton(self.playerL5, theme.MENU_THEME, 4)
+        self.player_color5 = ColorButton(self.playerL5, theme.menu, 4)
         self.player_pos5 = PositionButton(self.playerL5,4)
 
 	self.en_button5.on_click = signal.Signal ()
@@ -220,9 +220,9 @@ class MenuComponent (ui.Image):
         
 	#Player6
 
-        self.en_button6 = EnableButton(self.playerL6, theme.MENU_THEME)
+        self.en_button6 = EnableButton(self.playerL6, theme.menu)
         self.player_name6 = PlayerName(self.playerL6, 'Player6', theme.PLAYER_THEME)
-        self.player_color6 = ColorButton(self.playerL6, theme.MENU_THEME, 5)
+        self.player_color6 = ColorButton(self.playerL6, theme.menu, 5)
         self.player_pos6 = PositionButton(self.playerL6, 5)
 
 	self.en_button6.on_click = signal.Signal ()
@@ -238,9 +238,9 @@ class MenuComponent (ui.Image):
 	
 	#Action Layer
         
-        self.start_button = widget.Button(self.actionL, None, 'data/icon/world-small.png', True, theme.MENU_THEME)
-        #self.load_button = Button(self.actionL, ui.String(self.actionL, unicode('Load')), theme.MENU_THEME)
-	self.quit_button = widget.Button(self.actionL, None, 'data/icon/quit-small.png', True, theme.MENU_THEME)	
+        self.start_button = widget.Button(self.actionL, None, 'data/icon/world-small.png', True, theme.menu)
+        #self.load_button = Button(self.actionL, ui.String(self.actionL, unicode('Load')), theme.menu)
+	self.quit_button = widget.Button(self.actionL, None, 'data/icon/quit-small.png', True, theme.menu)	
 
 	self.start_button.signal_click.add (self.start_game)
         self.start_button.set_enable_hitting (True)
@@ -554,9 +554,9 @@ class ComboBox(ui.HBox):
 	self._menu = menu
 	self._text = ui.String(self, unicode(self._prof[self._index]))
 	self.padding_right = 12
-	self.left = widget.Button(self, None,'data/icon/go-previous-small.png', True, theme.MENU_THEME)
-	self.prof_txt = Button(self, self._text, theme.MENU_THEME)
-	self.right = widget.Button(self, None,'data/icon/go-next-small.png', True, theme.MENU_THEME)
+	self.left = widget.Button(self, None,'data/icon/go-previous-small.png', True, theme.menu)
+	self.prof_txt = Button(self, self._text, theme.menu)
+	self.right = widget.Button(self, None,'data/icon/go-next-small.png', True, theme.menu)
 
 	self.right.on_click = signal.Signal ()
         self.right.signal_click.add (self.right.on_click)
