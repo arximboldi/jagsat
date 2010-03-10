@@ -14,7 +14,6 @@ import random
 
 from PySFML import sf
 from tf.gfx import ui
-from tf.gfx import threed
 
 import ui.widget
 import ui.theme
