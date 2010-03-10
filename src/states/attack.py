@@ -37,7 +37,7 @@ class AttackState (GameSubstate):
         game.ui_world.on_pick_regions += self.on_attack
 	game.ui_player[game.world.current_player].on_player_pass += \
             lambda ev: self.on_pass (self)
-
+        
         self.manager.enter_state ('message', message =
             "You are ready to attack your enemies.")
 

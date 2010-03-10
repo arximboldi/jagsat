@@ -16,6 +16,7 @@ from base.signal import weak_slot
 from base.log import get_log
 from game import GameSubstate
 from ui import widget
+from ui import theme
 from core import task
 
 _log = get_log (__name__)
@@ -30,7 +31,8 @@ class InitGameState (GameSubstate):
         self._finished = set ()
         
 	self.game.ui_world.on_click_region += self.on_place_troop
-
+        self.game.ui_world.click_cond = lambda r: r.model.owner.troops > 0
+        
         if self.game.test_phase is None:
             self.manager.enter_state (
                 'message', message =
@@ -38,6 +40,9 @@ class InitGameState (GameSubstate):
                 "Check your missions and add the troops.\n")
         else:
             self._change_to_test ()
+
+    def do_release (self):
+        self.game.ui_world.click_cond = None
 
     def _change_to_test (self):
         world = self.game.world
@@ -89,10 +94,10 @@ class InitGameState (GameSubstate):
         """
         region = region.model
         _log.debug ('Placing troop on region: ' + region.definition.name)
-	if region.owner.troops > 0:	
-	    region.troops += 1
-	    region.owner.troops -= 1
 
+        region.troops += 1
+        region.owner.troops -= 1
+                    
         if region.owner.troops <= 0:
             self._finish_player (region.owner)
             

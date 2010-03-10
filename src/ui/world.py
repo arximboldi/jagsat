@@ -16,6 +16,7 @@ from base import signal
 from base.log import get_log
 
 from model.world import RegionListener
+import theme
 
 _log = get_log (__name__)
 
@@ -28,6 +29,7 @@ class WorldComponent (ui.Image, object):
     def __init__ (self,
                   parent = None,
                   world  = None,
+                  audio  = None, 
                   *a, **k):
         assert parent
         assert world
@@ -37,6 +39,7 @@ class WorldComponent (ui.Image, object):
             fname  = world.map.background,
             *a, **k)
 
+        self.audio = audio
         self.allow_repick = True
         self.on_click_region = signal.Signal ()
         self.on_pick_regions = signal.Signal ()
@@ -44,6 +47,7 @@ class WorldComponent (ui.Image, object):
         self.picked = None
         self._pick_cond_fst = None
         self._pick_cond_snd = None
+        self.click_cond = lambda r: True
         
         self.model  = world
         self._regions = []
@@ -52,8 +56,18 @@ class WorldComponent (ui.Image, object):
             comp = RegionComponent (self, r)
             pos  = r.definition.shape.center
             comp.set_position (pos.x, pos.y)
-            comp.on_click += self.on_click_region
+            comp.on_click += self._on_click_region
             self._regions.append (comp)
+
+    @signal.weak_slot
+    def _on_click_region (self, r):
+        if self._pick_cond_fst:
+            self.on_click_region (r)
+        elif not self.click_cond or self.click_cond (r):
+            self.audio.play_sound (theme.ok_click)
+            self.on_click_region (r)
+        else:
+            self.audio.play_sound (theme.bad_click)
 
     def enable_picking (self,
                         cond_fst = lambda *a, **k: True,
@@ -75,16 +89,20 @@ class WorldComponent (ui.Image, object):
         if not self.picked:
             if self._pick_cond_fst (region):
                 self._pick_region (region)
+            else:
+                self.audio.play_sound (theme.bad_click)
         elif self.picked != region:
             if self._pick_cond_snd (self.picked, region):
                 self.on_pick_regions (self.picked, region)
                 self._pick_region (None)
             elif self.allow_repick and self._pick_cond_fst (region):
                 self._pick_region (region)
+            else:
+                self.audio.play_sound (theme.bad_click)
                 
     def _pick_region (self, region):
+        self.audio.play_sound (theme.ok_click)
         if self.picked:
-            return # Disabling changing the source. Use 'undo ' instead.
             self.picked.unhighlight ()
             for r in filter (partial (self._pick_cond_snd, self.picked),
                              self._regions):

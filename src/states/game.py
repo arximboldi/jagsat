@@ -79,7 +79,8 @@ class GameState (QuittableState):
         self.map_layer = ui.Layer (system.view)
         self.ui_layer = ui.Layer (system.view)
 
-        self.ui_world  = WorldComponent (self.map_layer, self.world)
+        self.ui_world  = WorldComponent (self.map_layer, self.world,
+                                         self.manager.system.audio)
         self.ui_player = dict ((p, PlayerComponent (self.ui_layer, p))
                                for p in self.world.players.itervalues ())
 
