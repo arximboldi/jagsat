@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map SYSTEM "file:../file-formats/map-file.dtd">
 
-<map bg="doc/map/map1024x768edited.png" 
-     xscale="4" yscale="2.8" xoffset="0" yoffset="150">
+<map bg="doc/map/newmapx2.png" 
+     xscale="4" yscale="2.8" xoffset="0" yoffset="150" zoom="2">
   <meta>
     <author>The JAGSAT Development team.</author>
     <description>Original risk map.</description>

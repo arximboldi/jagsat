@@ -58,8 +58,9 @@ class MapContentHandler (AutoContentHandler):
         self.map = MapDef (background = attrs ['bg'])
         self.xscale  = float (attrs.get ('xscale', 1))
         self.yscale  = float (attrs.get ('yscale', 1))
-        self.xoffset = float (attrs.get ('xoffset', 1))
-        self.yoffset = float (attrs.get ('yoffset', 1))
+        self.xoffset = float (attrs.get ('xoffset', 0))
+        self.yoffset = float (attrs.get ('yoffset', 0))
+        self.map.zoom = float (attrs.get ('zoom', 1.))
         
     def _new_meta (self, attrs):
         self.map.meta = MetaDef ()

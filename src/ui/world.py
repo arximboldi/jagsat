@@ -61,19 +61,29 @@ class WorldComponent (ui.Image, object):
         self._regions = []
         
         for r in world.regions.itervalues ():
-            comp = RegionComponent (self, r)
+            comp = RegionComponent (self, r, zoom = world.map.zoom)
             pos  = r.definition.shape.center
-            comp.set_position (pos.x, pos.y)
+            comp.set_position (pos.x * world.map.zoom, pos.y * world.map.zoom)
             comp.on_click += self._on_click_region
             self._regions.append (comp)
 
         self._last_pan_pos = None
         self.set_center_rel (.5, .5)
         self.set_position_rel (.5, .5)
+        self.set_scale (1./world.map.zoom, 1./world.map.zoom)
         
-    def start_pan (self, ev):
-        _log.debug ('Start panning: ' + str (ev))
-        self._last_pan_pos = ev
+    def start_pan (self, (ex, ey)):
+        _log.debug ('Start panning: ' + str ((ex, ey)))
+        self._last_pan_pos = ex, ey
+        # pos = sf.Vector2 (ex, ey)
+        # ox, oy = 1024/2, 768/2
+        # cx, cy = self.GetCenter ()
+        # sx, sy = self.GetScale ()
+        # lx, ly = self.TransformToLocal (ox, oy)
+        # #lx, ly = lx / sx, ly / sy
+        # px, py = self.GetPosition ()
+        # self.SetCenter (lx, ly)
+        # #self.SetPosition (px - lx, py - ly)
         
     def end_pan (self, ev):
         _log.debug ('End panning: ' + str (ev))
@@ -86,13 +96,16 @@ class WorldComponent (ui.Image, object):
         
         if self.operation == map_op.move:
             self.set_position_delta (dx, dy)
+
         elif self.operation == map_op.zoom:
             dl = math.sqrt (dx ** 2 + dy ** 2) * 0.01 * (-1 if dy > 0 else 1)
             sx, sy = self.get_scale ()
             self.set_scale (sx + dl, sy + dl)
+            
         elif self.operation == map_op.rotate:
             dl = math.sqrt (dx ** 2 + dy ** 2) * 0.3 * (-1 if dy > 0 else 1)
             self.set_rotation (self.get_rotation () + dl)
+
         self._last_pan_pos = nx, ny
         
     @signal.weak_slot
@@ -171,6 +184,7 @@ class RegionComponent (RegionListener, ui.Circle, object):
     def __init__ (self,
                   parent = None,
                   model  = None,
+                  zoom   = 1.,
                   *a, **k):
         assert parent
         assert model
@@ -207,14 +221,16 @@ class RegionComponent (RegionListener, ui.Circle, object):
         self._txt_used.set_color (sf.Color (255, 255, 255))
         self._txt_used.set_visible (False)
 
+        self.set_scale (zoom, zoom)
+
     def highlight (self):
-        self._outline_color = sf.Color (255, 255, 128)
-        self._outline_width = 4.0
+        self._outline_color = sf.Color (255, 255, 96)
+        self._outline_width = 3.0
         self._rebuild_sprite ()
         
     def select (self):
         self._outline_color = sf.Color (255, 255, 255)
-        self._outline_width = 4.0
+        self._outline_width = 5.0
         self._rebuild_sprite ()
         
     def unhighlight (self):
