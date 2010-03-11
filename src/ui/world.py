@@ -68,27 +68,33 @@ class WorldComponent (ui.Image, object):
             self._regions.append (comp)
 
         self._last_pan_pos = None
+        self.set_center_rel (.5, .5)
+        self.set_position_rel (.5, .5)
         
     def start_pan (self, ev):
         _log.debug ('Start panning: ' + str (ev))
         self._last_pan_pos = ev
-            
+        
     def end_pan (self, ev):
         _log.debug ('End panning: ' + str (ev))
         
     def do_pan (self, (nx, ny)):
         _log.debug ('Do panning: ' + str ((nx, ny)))
 
-        ox, oy = self._last_move_pos
+        ox, oy = self._last_pan_pos
         dx, dy = nx - ox, ny - oy
         
         if self.operation == map_op.move:
             self.set_position_delta (dx, dy)
-        if self.operation == map_op.zoom:
-            dl = math.sqrt (dx ** 2 + dy ** 2)
-            self.set_scale (self.get_scale () + dl)
+        elif self.operation == map_op.zoom:
+            dl = math.sqrt (dx ** 2 + dy ** 2) * 0.01 * (-1 if dy > 0 else 1)
+            sx, sy = self.get_scale ()
+            self.set_scale (sx + dl, sy + dl)
+        elif self.operation == map_op.rotate:
+            dl = math.sqrt (dx ** 2 + dy ** 2) * 0.3 * (-1 if dy > 0 else 1)
+            self.set_rotation (self.get_rotation () + dl)
         self._last_pan_pos = nx, ny
-            
+        
     @signal.weak_slot
     def _on_click_region (self, r):
         if self._pick_cond_fst:
