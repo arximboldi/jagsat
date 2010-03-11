@@ -68,6 +68,13 @@ class GameState (State):
         self._setup_logic ()
         self.manager.enter_state ('init_game')
 
+    def do_release (self):
+        for x in self.ui_player.itervalues ():
+            x.remove_myself ()
+        self.ui_world.remove_myself ()
+        self.ui_bg.remove_myself ()
+        self.ui_menu.remove_myself ()
+        
     def do_unsink (self, *a, **k):
         if self.parent_state: # We are not running in test mode, go to menu
             self.manager.change_state ('main_menu')

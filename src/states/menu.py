@@ -20,3 +20,7 @@ class MainMenuState (State):
         menu_comp = MenuComponent(layer)
 	menu_comp.on_start_game += lambda p: self.manager.change_state ('game', profile = p)
 	menu_comp.on_quit_program += self.manager.leave_state
+        self.menu_comp = menu_comp
+        
+    def do_release (self):
+        self.menu_comp.remove_myself ()
