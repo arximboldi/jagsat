@@ -25,6 +25,9 @@ class IngameMenuState (GameSubstate):
     def do_setup (self, *a, **k):
         super (IngameMenuState, self).do_setup (*a, **k)
         self._ingame_menu = IngameMenu (self.game.ui_layer)
-        self._ingame_menu.on_quit_game += self.quit_state
+
+        self._ingame_menu.on_quit_game  += self.quit_state
+        self._ingame_menu.on_close_menu += self.manager.leave_state
+        
         self.game.disable_map ()
 

@@ -7,22 +7,19 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
-import random
 from PySFML import sf
 
 from base.signal import weak_slot
 from base.conf   import ConfNode
 from base.util   import lazyprop
 from core.input  import key
-from core.state  import State
 from core        import task
 from model.world import create_game
 
-from ui.world    import WorldComponent
-from ui.player   import PlayerComponent
-from ui.attack   import AttackComponent
-from ui          import widget
-from ui          import theme
+from ui.world     import WorldComponent
+from ui.player    import PlayerComponent
+from ui.game_menu import GameMenuComponent
+from ui           import widget
 
 from util import QuittableState
 
@@ -85,15 +82,20 @@ class GameState (QuittableState):
                                          self.manager.system.audio)
         self.ui_player = dict ((p, PlayerComponent (self.ui_layer, p))
                                for p in self.world.players.itervalues ())
-
+        self.ui_menu   = GameMenuComponent (self.ui_layer)
+        
         self.ui_bg = widget.Background (self.ui_layer)
         self._ui_bg_disabled = []
         
     def _setup_logic (self):
-        system = self.manager.system
-        
-        system.keys.get_key (key.escape).connect (self.toggle_menu)
+        # system = self.manager.system
+        # system.keys.get_key (key.escape).connect (self.toggle_menu)
+        self.ui_menu.but_menu.on_click += self.enter_menu
 
+    @weak_slot
+    def enter_menu (self, ev):
+        self.manager.enter_state ('ingame_menu')
+    
     @weak_slot
     def toggle_menu (self, k, m):
         current = self.manager.current
