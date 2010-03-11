@@ -17,6 +17,7 @@ from base.log import get_log
 
 from model.world import RegionListener
 import theme
+import math
 
 _log = get_log (__name__)
 
@@ -66,23 +67,27 @@ class WorldComponent (ui.Image, object):
             comp.on_click += self._on_click_region
             self._regions.append (comp)
 
-        self._last_move_pos = None
+        self._last_pan_pos = None
         
     def start_pan (self, ev):
         _log.debug ('Start panning: ' + str (ev))
-        if self.operation == map_op.move:
-            self._last_move_pos = ev
+        self._last_pan_pos = ev
             
     def end_pan (self, ev):
         _log.debug ('End panning: ' + str (ev))
         
     def do_pan (self, (nx, ny)):
         _log.debug ('Do panning: ' + str ((nx, ny)))
+
+        ox, oy = self._last_move_pos
+        dx, dy = nx - ox, ny - oy
+        
         if self.operation == map_op.move:
-            ox, oy = self._last_move_pos
-            dx, dy = nx - ox, ny - oy
             self.set_position_delta (dx, dy)
-            self._last_move_pos = nx, ny
+        if self.operation == map_op.zoom:
+            dl = math.sqrt (dx ** 2 + dy ** 2)
+            self.set_scale (self.get_scale () + dl)
+        self._last_pan_pos = nx, ny
             
     @signal.weak_slot
     def _on_click_region (self, r):
