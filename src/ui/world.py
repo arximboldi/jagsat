@@ -23,6 +23,8 @@ _log = get_log (__name__)
 region_radius     = 17
 region_free_color = sf.Color (128, 128, 128)
 
+class map_op:
+    none, move, rotate, zoom = range (4)
 
 class WorldComponent (ui.Image, object):
 
@@ -39,6 +41,7 @@ class WorldComponent (ui.Image, object):
             fname  = world.map.background,
             *a, **k)
 
+        self.operation = map_op.none
         self.audio = audio
         self.allow_repick = True
         self.on_click_region = signal.Signal ()

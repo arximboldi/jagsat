@@ -17,7 +17,7 @@ from core.input  import key
 from core        import task
 from model.world import create_game
 
-from ui.world     import WorldComponent
+from ui.world     import WorldComponent, map_op
 from ui.player    import PlayerComponent
 from ui.game_menu import GameMenuComponent
 from ui           import widget
@@ -91,6 +91,27 @@ class GameState (State):
         # system = self.manager.system
         # system.keys.get_key (key.escape).connect (self.toggle_menu)
         self.ui_menu.but_menu.on_click += self.enter_menu
+        for op in self.ui_menu.map_ops:
+            op.on_unselect += self.stop_map_operation
+        self.ui_menu.but_move.on_select += self.start_map_move
+        self.ui_menu.but_zoom.on_select += self.start_map_zoom
+        self.ui_menu.but_rot.on_select  += self.start_map_rot
+
+    @weak_slot
+    def stop_map_operation (self):
+        self.ui_world.operation = map_op.none
+
+    @weak_slot
+    def start_map_move (self):
+        self.ui_world.operation = map_op.move
+
+    @weak_slot
+    def start_map_zoom (self):
+        self.ui_world.operation = map_op.zoom
+
+    @weak_slot
+    def start_map_rot (self):
+        self.ui_world.operation = map_op.rotate
 
     @weak_slot
     def enter_menu (self, ev):

@@ -7,7 +7,8 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
-from widget import VBox, SmallButton
+from base import signal
+from widget import VBox, SmallButton, SelectButton
 
 class GameMenuComponent (VBox, object):
 
@@ -15,9 +16,9 @@ class GameMenuComponent (VBox, object):
         super (GameMenuComponent, self).__init__ (parent, *a, **k)
 
         self.but_menu = SmallButton (self, None, 'data/icon/home-small.png')
-        self.but_move = SmallButton (self, None, 'data/icon/move-small.png')
-        self.but_zoom = SmallButton (self, None, 'data/icon/zoom-small.png')
-        self.but_rot  = SmallButton (self, None, 'data/icon/rotate-small.png')
+        self.but_move = SelectButton (self, None, 'data/icon/move-small.png')
+        self.but_zoom = SelectButton (self, None, 'data/icon/zoom-small.png')
+        self.but_rot  = SelectButton (self, None, 'data/icon/rotate-small.png')
 
         self.but_menu.margin_right = 52
         self.but_move.margin_right = 52
@@ -29,6 +30,12 @@ class GameMenuComponent (VBox, object):
         self.set_center_rel (.5, .5)
         self.set_position_rel (1., .5)
 
-        self.but_move.deactivate ()
-        self.but_zoom.deactivate ()
-        self.but_rot.deactivate ()
+        self.map_ops = [self.but_move, self.but_zoom, self.but_rot]
+        for op in self.map_ops:
+            op.on_select += self._unselect_ops
+    
+    @signal.weak_slot
+    def _unselect_ops (self):
+        for x in self.map_ops:
+            x.unselect ()
+

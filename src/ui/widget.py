@@ -58,6 +58,39 @@ class Button (ui3.Button, object):
         self.signal_click.add (self.on_click)
 
 
+class SelectButton (Button):
+
+    def __init__ (self, *a, **k):
+        super (SelectButton, self).__init__ (theme=theme.select_button, *a, **k)
+        self._is_selected = False
+        self.on_select   = signal.Signal ()
+        self.on_unselect = signal.Signal ()
+        self.on_click += self.toggle_select
+        
+    @property
+    def is_selected (self):
+        return self._is_selected
+    
+    def select (self):
+        if not self._is_selected:
+            self.on_select ()
+            self._is_selected = True
+            self._rebuild (self.theme.selected)
+    
+    def unselect (self):
+        if self._is_selected:
+            self.on_unselect ()
+            self._is_selected = False
+            self._rebuild (self.theme.active)
+    
+    @signal.weak_slot
+    def toggle_select (self, ev = None):
+        if self._is_selected:
+            self.unselect ()
+        else:
+            self.select ()
+
+
 class Background (ui.Rectangle, object):
 
     def __init__ (self, parent = None, *a, **k):

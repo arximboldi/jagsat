@@ -46,6 +46,11 @@ class small_button:
     class clicked (inactive):
         pass
 
+class select_button (small_button):
+    class selected (small_button.active):
+        border    = sf.Color (220, 50, 50, 255)
+        color    = sf.Color (50, 0, 0, 200)
+
 class frame (button):
     pass
 
