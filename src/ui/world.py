@@ -11,9 +11,10 @@ from PySFML import sf
 from tf.gfx import ui
 from functools import partial
 
-from base.util import printfn
+from base import util
 from base import signal
 from base.log import get_log
+from core import task
 
 from model.world import RegionListener
 import theme
@@ -109,9 +110,19 @@ class WorldComponent (ui.Image, object):
         self._last_pan_pos = nx, ny
 
     def restore_transforms (self):
-        self.SetScale (1./self.model.map.zoom, 1./self.model.map.zoom)
-        self.SetRotation (0)
-        self.set_position_rel (.5, .5)
+        sx, sy = self.GetPosition ()
+        dx, dy = 1024./2, 768./2
+        rot = self.GetRotation ()
+        dest_rot = 360. if rot > 180. else 0.
+        return task.parallel (task.sinusoid (lambda x: self.SetScale (x, x),
+                                           self.GetScale () [0],
+                                           1./self.model.map.zoom),
+                              task.sinusoid (self.SetRotation,
+                                           self.GetRotation (),
+                                           dest_rot),
+                              task.sinusoid (lambda x: self.SetPosition (
+                                  util.linear (sx, dx, x),
+                                  util.linear (sy, dy, x))))
     
     @signal.weak_slot
     def _on_click_region (self, r):

@@ -112,7 +112,7 @@ class GameState (State):
 
     @weak_slot
     def restore_map (self, ev = None):
-        self.ui_world.restore_transforms ()
+        self.tasks.add (self.ui_world.restore_transforms ())
         
     @weak_slot
     def stop_map_operation (self):
