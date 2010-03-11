@@ -75,6 +75,8 @@ class PlayerComponent (widget.VBox, object):
         self._but_undo.deactivate ()
         self._but_pass.deactivate ()
 
+        self._but_pass.on_click += self.on_toggle_menu
+        
     @property
     def but_pass (self):
         return self._but_pass
