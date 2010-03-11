@@ -55,7 +55,7 @@ class WorldComponent (ui.Image, object):
         self._pick_cond_fst = None
         self._pick_cond_snd = None
         self.click_cond = lambda r: True
-        
+        self.set_enable_hitting(True)
         self.model  = world
         self._regions = []
         
@@ -66,6 +66,24 @@ class WorldComponent (ui.Image, object):
             comp.on_click += self._on_click_region
             self._regions.append (comp)
 
+        self._last_move_pos = None
+        
+    def start_pan (self, ev):
+        _log.debug ('Start panning: ' + str (ev))
+        if self.operation == map_op.move:
+            self._last_move_pos = ev
+            
+    def end_pan (self, ev):
+        _log.debug ('End panning: ' + str (ev))
+        
+    def do_pan (self, (nx, ny)):
+        _log.debug ('Do panning: ' + str ((nx, ny)))
+        if self.operation == map_op.move:
+            ox, oy = self._last_move_pos
+            dx, dy = nx - ox, ny - oy
+            self.set_position_delta (dx, dy)
+            self._last_move_pos = nx, ny
+            
     @signal.weak_slot
     def _on_click_region (self, r):
         if self._pick_cond_fst:
