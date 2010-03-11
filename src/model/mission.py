@@ -28,60 +28,60 @@ _log = get_log (__name__)
                 #'enabled'  : True },
               #'map' : '../doc/map/worldmap.xml' })
 
-def create_objectives (cfg):
+def create_missions (cfg):
     """
-    Creates a list of objectives from a ConfNode containing the 
+    Creates a list of missions from a ConfNode containing the 
     following childs:
       - player-X: with X \in [0, 5], contains the properties for
         player number X. See create_player.
       - map: Contains the path to the map file.
     """
     world = create_game (cfg)
-    return Objective (world).objectives
+    return Mission (world).missions
     
-class Objective (object):
+class Mission (object):
     
     def __init__ (self, world = None, *a, **k):
         assert world
-        super (Objective, self).__init__ (*a, **k)
+        super (Mission, self).__init__ (*a, **k)
 
-        self._objectives = []
+        self._missions = []
         self.map = world.map
         self.players = world.ordered_players ()
         self.n = len (self.map.regions)
 
-        self.create_player_objectives ()
-        self.create_country_objectives ()
-        self.create_continent_objectives ()
+        self.create_player_missions ()
+        self.create_country_missions ()
+        self.create_continent_missions ()
 
     @property
-    def objectives (self):
-        return self._objectives
+    def missions (self):
+        return self._missions
 
-    def create_player_objectives (self):
+    def create_player_missions (self):
         """
-        Objective: kill any of the other players
-            - kill_other_player objectives uses 'player' as key
-            - Generates one objective per player
-            - Adds default objective
+        Mission: kill any of the other players
+            - kill_other_player missions uses 'player' as key
+            - Generates one mission per player
+            - Adds default mission
         """
         for p in self.players:
-            self._objectives.append (ObjectiveDef ({'player' : p},\
+            self._missions.append (MissionDef ({'player' : p},\
                                                 [self.n*57/100, 1]))
 
-    def create_country_objectives (self):
+    def create_country_missions (self):
         """
-        - Objective 1: to conquer 57% of map regions with at least one 
+        - Mission 1: to conquer 57% of map regions with at least one 
         single troop per region
-        - Objective 2: to conquer 43% of map regions with at least 2 troops
+        - Mission 2: to conquer 43% of map regions with at least 2 troops
         in each region
         """
-        self._objectives.append (ObjectiveDef ({'region' : self.n*57/100}, 1))
-        self._objectives.append (ObjectiveDef ({'region' : self.n*43/100}, 2))
+        self._missions.append (MissionDef ({'region' : self.n*57/100}, 1))
+        self._missions.append (MissionDef ({'region' : self.n*43/100}, 2))
 
-    def create_continent_objectives (self):
+    def create_continent_missions (self):
         """
-        Possible continent objectives will include a list of continents which
+        Possible continent missions will include a list of continents which
         sum of regions should be between 35% and 43% of the total number
         of regions
         """
@@ -97,57 +97,57 @@ class Objective (object):
                       len (continents[j].regions)
                 
                 if sum > min and sum < max:
-                    _log.debug ("Generated objective[2]: "+\
+                    _log.debug ("Generated mission[2]: "+\
                                  continents[i].name+" "+\
                                  continents[j].name)
 
                     l = [continents[i], continents[j]]
-                    self._objectives.append (ObjectiveDef ({'continent' : l}))
+                    self._missions.append (MissionDef ({'continent' : l}))
 
                 elif sum < min:
                     for k in range(j+1, len(continents)):
                         sum2 = sum + len(continents[k].regions)
                         
                         if sum2 > min and sum2 < max:
-                            _log.debug ("Generated objective[3]: "+\
+                            _log.debug ("Generated mission[3]: "+\
                                          continents[i].name+" "+\
                                          continents[j].name+" "+\
                                          continents[k].name)
                             l = [continents[i],continents[j],continents[k]]
-                            self._objectives.append (ObjectiveDef (\
+                            self._missions.append (MissionDef (\
                                                     {'continent' : l})) 
 
 
-class ObjectiveDef (object):
+class MissionDef (object):
     """
-    There are three type of objectives {continent, country, player}:
+    There are three type of missions {continent, country, player}:
         - continent     -> goal is a list of continents to conquer
         - region        -> goal is a number of regions
         - player        -> player is the name of the player
-    The extra parameter refers to special issues in some objectives
+    The extra parameter refers to special issues in some missions
     """
     def __init__ (self,
-                  objective = None,
+                  mission = None,
                   extra = None,
                   *a, **k):
-        assert objective
+        assert mission
         if extra:
             self.extra = True
         else:
             self.extra = False
-        super (ObjectiveDef, self).__init__ (*a, **k)
+        super (MissionDef, self).__init__ (*a, **k)
 
         # Primary type and goal
-        self.type = objective.keys()[0]
-        self.goal = objective.values()[0]
-        # Extra information to acomplish the objective
+        self.type = mission.keys()[0]
+        self.goal = mission.values()[0]
+        # Extra information to acomplish the mission
         if self.extra:
             self.info = extra
 
-        # Dictionary of objectives
-        self.objective = objective       
+        # Dictionary of missions
+        self.mission = mission       
         if self.is_player ():
-            self.add_default_objective ()
+            self.add_default_mission ()
 
     def is_player (self):
         if self.type == 'player':
@@ -170,26 +170,26 @@ class ObjectiveDef (object):
     def has_extra (self):
         return self.extra
 
-    def add_default_objective (self):
+    def add_default_mission (self):
         """
         When a player has to kill himself or a death player, he will
-        have to acomplish the default objective which is to conquer
+        have to acomplish the default mission which is to conquer
         57% of the total regions.
         """
-        # Add to objective dictionary the number of regions
-        self.objective['region'] = self.info.pop(0)
+        # Add to mission dictionary the number of regions
+        self.mission['region'] = self.info.pop(0)
 
         # Stores in info the number of troops per region to acomplish
-        # 'region' objective
+        # 'region' mission
         self.info = self.info [0]
 
-    def check_objective (self, gworld):
+    def check_mission (self, gworld):
         if self.is_player ():
-            success = self.check_objective_player (gworld)
+            success = self.check_mission_player (gworld)
         if self.is_region ():
-            success = self.check_objective_region (gworld)
+            success = self.check_mission_region (gworld)
         if self.is_continent ():
-            success = self.check_objective_continent (gworld)
+            success = self.check_mission_continent (gworld)
 
         return success
 
@@ -204,11 +204,11 @@ class ObjectiveDef (object):
             # If the player-to-kill is dead removes that mission
             if not alive or\
                world.current_player.position == self.goal.position:
-                self.objective.pop('player')
-                self.type = self.objective.keys()[0]
-                self.goal = self.objective.values()[0]
+                self.mission.pop('player')
+                self.type = self.mission.keys()[0]
+                self.goal = self.mission.values()[0]
 
-    def check_objective_player (self, gworld):
+    def check_mission_player (self, gworld):
         world = gworld
         success = True
 
@@ -219,7 +219,7 @@ class ObjectiveDef (object):
         return success
 
 
-    def check_objective_region (self, gworld):
+    def check_mission_region (self, gworld):
         success = False
         world = gworld
 
@@ -240,7 +240,7 @@ class ObjectiveDef (object):
 
         return success
 
-    def check_objective_continent (self, gworld):
+    def check_mission_continent (self, gworld):
         world = gworld
         success = True
 
@@ -251,35 +251,35 @@ class ObjectiveDef (object):
         # Foreach continent I have to conquer
         for c in self.goal:
             # Check if the player has all the regions in that continent
-            if len(c.regions) != len(filter(lambda r:r.definition.continent.name == c.name,\
-                                        regions)):
+            if len(c.regions) != len (filter (
+                lambda r:r.definition.continent.name == c.name, regions)):
                 success = False
-
+        
         return success
     
-    def str_objective (self):
+    def str_mission (self):
         if self.is_player ():
-            objective_str = "Eliminate player "
-            objective_str += self.goal.name
-            objective_str += ". If that player is dead, conquer "
-            objective_str += str (self.objective['region'])
-            objective_str += " regions with at least "
-            objective_str += str (self.info)
-            objective_str += " troops on each"
+            mission_str = "Eliminate player "
+            mission_str += self.goal.name
+            mission_str += ". If that player is dead, conquer "
+            mission_str += str (self.mission['region'])
+            mission_str += " regions with at least "
+            mission_str += str (self.info)
+            mission_str += " troops on each"
 
         if self.is_region ():
-            objective_str = "Conquer "
-            objective_str += str(self.objective['region'])
-            objective_str += " regions with at least "
-            objective_str += str(self.info)
-            objective_str += " troops on each"
+            mission_str = "Conquer "
+            mission_str += str(self.mission['region'])
+            mission_str += " regions with at least "
+            mission_str += str(self.info)
+            mission_str += " troops on each"
 
         if self.is_continent ():
-            objective_str = "Conquer "+self.goal[0].name
+            mission_str = "Conquer "+self.goal[0].name
             for i in range (1,len(self.goal)):
                 if i < len(self.goal)-1:
-                    objective_str += ", "+self.goal[i].name
+                    mission_str += ", "+self.goal[i].name
                 else:
-                    objective_str += " and "+self.goal[i].name
+                    mission_str += " and "+self.goal[i].name
 
-        return objective_str
+        return mission_str

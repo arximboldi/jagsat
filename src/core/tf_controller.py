@@ -30,6 +30,7 @@ class TfController (Tracker):
     DEFAULT_ANTIALIAS  = 4
     DEFAULT_VSYNCH     = False
     DEFAULT_FULLSCREEN = False
+    DEFAULT_SHOWMOUSE  = False
     
     def __init__ (self, conf = None, window_title = '', *a, **k):
         super (TfController, self).__init__ (*a, **k)
@@ -125,7 +126,7 @@ class TfController (Tracker):
             sf.Style.Fullscreen if self._conf.child ('full').value else 0,
             sf.WindowSettings (AntialiasingLevel =
                                self._conf.child ('antialias').value))
-
+        self._window.ShowMouseCursor (self._conf.child ('showmouse').value)
         self._window.SetFramerateLimit (self._conf.child ('fps').value)
         self._window.UseVerticalSync (self._conf.child ('vsync').value)
 
@@ -140,6 +141,7 @@ class TfController (Tracker):
         self._conf.child ('bpp').default (self.DEFAULT_BPP)
         self._conf.child ('vsync').default (self.DEFAULT_VSYNCH)
         self._conf.child ('antialias').default (self.DEFAULT_ANTIALIAS)
+        self._conf.child ('showmouse').default (self.DEFAULT_SHOWMOUSE)
 
     def _setup_conf_signals (self):
         self._conf.on_conf_nudge                  += self._on_nudge_video

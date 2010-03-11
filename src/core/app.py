@@ -55,7 +55,11 @@ Display options:
         args.add ('S', 'no-vsync', OptionConfFlag (cfg.child ('vsync'), False))
         args.add ('W', 'width', OptionConfWith (cfg.child ('width'), int))
         args.add ('H', 'height', OptionConfWith (cfg.child ('height'), int))
-
+        args.add (None, 'show-mouse',
+                  OptionConfFlag (cfg.child ('showmouse'), True))
+        args.add (None, 'hide-mouse',
+                  OptionConfFlag (cfg.child ('showmouse'), False))
+        
     def do_execute (self, freeargs):
         _log.info ("Setting up system...")        
         self._system = TfController (self._video_cfg,
