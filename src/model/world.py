@@ -98,7 +98,16 @@ class Region (RegionSubject):
 
     def has_troops (self):
         return (self.troops > 0 and self.used > 0) or self.troops > 1 
-    
+
+    @property
+    def total (self):
+        return self.troops + self.used
+
+    @property
+    def can_attack (self):
+        return self.total > 1 and self.troops > 0
+
+
 class position:
     n, ne, se, s, sw, nw = range (6)
 

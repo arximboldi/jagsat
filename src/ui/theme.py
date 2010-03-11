@@ -21,39 +21,38 @@ background_music = [
 bad_click  = 'data/sfx/clicks/failed_click.wav'
 ok_click   = 'data/sfx/clicks/successful_click.wav' 
 
-button = {
-    'active'    : sf.Color (0, 0, 0),
-    'inactive_border' : sf.Color (100, 100, 100),
-    'inactive'  : sf.Color (128, 128, 128), 
-    'border'    : sf.Color (0x97, 0xBF, 0x60),
-    'thickness' : 5,
-    'margin'    : 8
-    }
+class button:
+    margin    = 5
+    class active:
+        color     = sf.Color (0, 0, 0)
+        border    = sf.Color (0x97, 0xBF, 0x60)
+        thickness = 5
+        radius    = 15
+    class inactive (active): pass
+    class clicked (active): pass
+        
+class small_button:
+    margin    = 2
+    class active:
+        color     = sf.Color (0, 0, 0, 200)
+        border    = sf.Color (150, 150, 70, 255)
+        thickness = 2
+        radius    = 15
+    class inactive (active):
+        color     = sf.Color (0, 0, 0, 100)
+        border    = sf.Color (0, 0, 0, 0)
+    class clicked (inactive):
+        pass
 
-small_button = {
-    'active'    : sf.Color (0, 0, 0, 200),
-    'inactive'  : sf.Color (0, 0, 0, 100),
-    'border'    : sf.Color (150, 150, 70, 255),
-    'inactive_border' : sf.Color (0, 0, 0, 0),
-    'thickness' : 2,
-    'margin'    : 2
-    }
+class frame (button):
+    pass
 
-frame = dict (button)
-frame ['thickness'] = 0
+def copy_button_theme (theme):
+    class new_theme (theme):
+        class active (theme.active): pass
+        class inactive (theme.inactive): pass
+        class clicked (theme.clicked): pass
+    return new_theme
 
-menu = {
-    'active'    : sf.Color (0, 0, 0, 400),
-    'inactive'  : sf.Color (0, 0, 0, 400), 
-    'border'    : sf.Color (0, 0, 0),
-    'thickness' : 4,
-    'margin'    : 6
-}
-
-player = {
-    'active'    : sf.Color (255, 180, 40, 200),
-    'inactive'  : sf.Color (127, 127, 127, 200), 
-    'border'    : sf.Color (0, 0, 0,200),
-    'thickness' : 2,
-    'margin'    : 6
-}
+menu   = small_button
+player = small_button

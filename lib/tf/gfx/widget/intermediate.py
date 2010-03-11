@@ -19,54 +19,51 @@ button_radious = 15
 class Button(ui.RoundedRectangle):
 
     def __init__(self, parent, str, theme):
-        active_color = theme["active"]
-        inactive_color = theme["inactive"]
-        border_color = theme["border"]
-        inactive_border_color = theme["inactive_border"]
-        thickness = theme["thickness"]
-        margin = theme['margin']
+        self.theme = theme
 
         ui.RoundedRectangle.__init__(self,
                                      parent,
                                      0, 0,
                                      0, 0,
-                                     button_radious,
-                                     inactive_color,
-                                     border_color,
-                                     thickness)
-        self.set_margin (margin)
+                                     theme.active.radius,
+                                     theme.active.color,
+                                     theme.active.border,
+                                     theme.active.thickness)
+        self.set_margin (theme.margin)
         self.set_enable_hitting(True)
         self.set_expand (True, True)
-        
-        self.active_color = active_color
-        self.border_color = border_color
-        self.inactive_color = inactive_color
-        self.inactive_border_color = inactive_border_color
 
         self.add_child (str)
         # TODO: After more than one our just trying to fix this
         # library... Lets just agree on that this sucks and all the
         # widget code have to be rewriten. The layout code is
         # unnecesarily complicated and full of bugs here and there.
-        str.set_position (margin*2, margin*2)
+        str.set_position (theme.margin * 2, theme.margin * 2)
 
         # str.set_center_rel (0.5,
         # 0.5) str.set_position (0.5, 0.5)
         self.need_recalculate = True
-                
+        self.signal_pan.set_enabled (True)
+        
     def activate(self):
-        self.ic = self.active_color
-        self.oc = self.border_color
-        
-        for i in range(self._sprite.GetNbPoints()):
-            self._sprite.SetPointColor(i, self.ic)
+        self.set_enable_hitting (True)
+        self._rebuild (self.theme.active)
 
-    def deactivate(self):
-        self.ic = self.inactive_color
-        self.oc = self.inactive_border_color
+    def deactivate (self):
+        self.set_enable_hitting (False)
+        self._rebuild (self.theme.inactive)
         
-        for i in range(self._sprite.GetNbPoints()):
-            self._sprite.SetPointColor(i, self.ic)
+    def _rebuild (self, theme):
+        self.ic = theme.color
+        self.oc = theme.border
+        self.ot = theme.thickness
+        self.radius = theme.radius
+        self._recreate (self._width,
+                        self._height,
+                        self.radius,
+                        self.ic,
+                        self.oc,
+                        self.ot)
 
 
 class Button2(ui.RoundedRectangle):

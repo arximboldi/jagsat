@@ -288,14 +288,14 @@ class MouseState:
                     # BUG OBSOLETE DO NOT USE
                     self.component_info[0].end_pan((event.MouseButton.X *xratio,
                                                     event.MouseButton.Y))
-            else:
-                if c and c[0] == self.component_info[0]:
-                    #print "USER HIT", self.component
-                    # BUG drop onto "c" component
-                    print "uihelp: mousereleased on", self.component_info
-                    x = self.component_info[1]
-                    y = self.component_info[2]
-                    self.component_info[0].user_hit(gameloop, x, y)
+            #else: HACK: For mouse down effects.
+            if c and c[0] == self.component_info[0]:
+                #print "USER HIT", self.component
+                # BUG drop onto "c" component
+                print "uihelp: mousereleased on", self.component_info
+                x = self.component_info[1]
+                y = self.component_info[2]
+                self.component_info[0].user_hit(gameloop, x, y)
         finally:
             self.component_info = None
             self.is_pan = False

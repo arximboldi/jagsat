@@ -67,7 +67,6 @@ class GameState (QuittableState):
         self._setup_ui ()
         self._setup_logic ()
         self.manager.enter_state ('init_game')
-        self.manager.system.play_music (random.choice (theme.background_music))
         
     def _setup_state (self):
         # TODO: Get world as a parameter
@@ -108,8 +107,9 @@ class GameState (QuittableState):
         return self.tasks.add (lambda t: None)
 
     def disable_map (self):
-        self._ui_bg_disabled.append (True)
-        if len (self._ui_bg_disabled) == 1:
+        # self._ui_bg_disabled.append (True)
+        if len (self._ui_bg_disabled) == 0:
+            self._ui_bg_disabled.append (True)
             self.ui_bg.set_enable_hitting (True)
             return self.tasks.add (self.ui_bg.fade_in ())
         return self.tasks.add (lambda t: None)

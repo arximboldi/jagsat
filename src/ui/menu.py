@@ -121,7 +121,7 @@ class MenuComponent (ui.Image):
 	#Player1
         
         self.en_button1 = EnableButton(self.playerL1, theme.menu)
-	self.player_name1 = PlayerName(self.playerL1, 'Player1', theme.PLAYER_THEME)
+	self.player_name1 = PlayerName(self.playerL1, 'Player1', theme.player)
         self.player_color1 = ColorButton(self.playerL1, theme.menu, 0)
         self.player_pos1 = PositionButton(self.playerL1, 0)
 
@@ -143,7 +143,7 @@ class MenuComponent (ui.Image):
 	#Player2
 
 	self.en_button2 = EnableButton(self.playerL2, theme.menu)
-        self.player_name2 = PlayerName(self.playerL2, 'Player2', theme.PLAYER_THEME)
+        self.player_name2 = PlayerName(self.playerL2, 'Player2', theme.player)
         self.player_color2 = ColorButton(self.playerL2, theme.menu, 1)
         self.player_pos2 = PositionButton(self.playerL2, 1)
 
@@ -165,7 +165,7 @@ class MenuComponent (ui.Image):
 	#Player3
         
         self.en_button3 = EnableButton(self.playerL3, theme.menu)
-        self.player_name3 = PlayerName(self.playerL3, 'Player3', theme.PLAYER_THEME)
+        self.player_name3 = PlayerName(self.playerL3, 'Player3', theme.player)
         self.player_color3 = ColorButton(self.playerL3, theme.menu, 2)
         self.player_pos3 = PositionButton(self.playerL3, 2)
 
@@ -187,7 +187,7 @@ class MenuComponent (ui.Image):
 	#Player4
 
         self.en_button4 = EnableButton(self.playerL4, theme.menu)
-        self.player_name4 = PlayerName(self.playerL4, 'Player4', theme.PLAYER_THEME)
+        self.player_name4 = PlayerName(self.playerL4, 'Player4', theme.player)
         self.player_color4 = ColorButton(self.playerL4, theme.menu, 3)
         self.player_pos4 = PositionButton(self.playerL4, 3)
 
@@ -204,7 +204,7 @@ class MenuComponent (ui.Image):
 	#Player5
 
         self.en_button5 = EnableButton(self.playerL5, theme.menu)
-        self.player_name5 = PlayerName(self.playerL5, 'Player5', theme.PLAYER_THEME)
+        self.player_name5 = PlayerName(self.playerL5, 'Player5', theme.player)
         self.player_color5 = ColorButton(self.playerL5, theme.menu, 4)
         self.player_pos5 = PositionButton(self.playerL5,4)
 
@@ -221,7 +221,7 @@ class MenuComponent (ui.Image):
 	#Player6
 
         self.en_button6 = EnableButton(self.playerL6, theme.menu)
-        self.player_name6 = PlayerName(self.playerL6, 'Player6', theme.PLAYER_THEME)
+        self.player_name6 = PlayerName(self.playerL6, 'Player6', theme.player)
         self.player_color6 = ColorButton(self.playerL6, theme.menu, 5)
         self.player_pos6 = PositionButton(self.playerL6, 5)
 
@@ -454,16 +454,22 @@ class MenuComponent (ui.Image):
 
 class PlayerName(LineEdit):
     def __init__(self, parent, str, theme):
-	LineEdit.__init__(self, parent, ui.String(parent, unicode(str)), theme['active'], theme['inactive'], theme['border'], theme['thickness'])
+	LineEdit.__init__(self, parent, ui.String(parent, unicode(str)),
+                          theme.active.color,
+                          theme.inactive.color,
+                          theme.active.border,
+                          theme.active.thickness)
 
 class EnableButton(ui.Circle):
 
     def __init__(self, parent, theme, radius = 8):
-	self.active_color = theme['active']
-	self.inactive_color = theme['inactive']
-	self.border_color = theme['border']
+	self.active_color = theme.active.color
+	self.inactive_color = theme.inactive.color
+	self.border_color = theme.active.border
 	self._radius = radius
-	ui.Circle.__init__(self, parent, self._radius, self.active_color, 1, self.border_color)
+	ui.Circle.__init__(self, parent,
+                           self._radius, self.active_color, 1,
+                           self.border_color)
 
     def  activate(self):
 	self._sprite = sf.Shape.Circle(self._radius,self._radius, self._radius, self.active_color, 1, self.border_color)
@@ -515,7 +521,7 @@ class PositionButton(Button):
      
     def __init__(self,parent,index):
 
-        Button.__init__(self, parent, ui.String(parent, unicode('')), theme.PLAYER_THEME)
+        Button.__init__(self, parent, ui.String(parent, unicode('')), theme.player)
         self._position = index
 	del self.children[0]
 
