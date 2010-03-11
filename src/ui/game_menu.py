@@ -19,7 +19,8 @@ class GameMenuComponent (VBox, object):
         self.but_move = SelectButton (self, None, 'data/icon/move-small.png')
         self.but_zoom = SelectButton (self, None, 'data/icon/zoom-small.png')
         self.but_rot  = SelectButton (self, None, 'data/icon/rotate-small.png')
-
+        self.but_restore = SmallButton (self, None, 'data/icon/undo-small.png')
+        
         self.but_menu.margin_right = 52
         self.but_move.margin_right = 52
         self.but_zoom.margin_right = 52

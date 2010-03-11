@@ -105,10 +105,15 @@ class GameState (State):
         self.ui_menu.but_menu.on_click += self.enter_menu
         for op in self.ui_menu.map_ops:
             op.on_unselect += self.stop_map_operation
-        self.ui_menu.but_move.on_select += self.start_map_move
-        self.ui_menu.but_zoom.on_select += self.start_map_zoom
-        self.ui_menu.but_rot.on_select  += self.start_map_rot
+        self.ui_menu.but_move.on_select   += self.start_map_move
+        self.ui_menu.but_zoom.on_select   += self.start_map_zoom
+        self.ui_menu.but_rot.on_select    += self.start_map_rot
+        self.ui_menu.but_restore.on_click += self.restore_map
 
+    @weak_slot
+    def restore_map (self, ev = None):
+        self.ui_world.restore_transforms ()
+        
     @weak_slot
     def stop_map_operation (self):
         self.ui_world.operation = map_op.none

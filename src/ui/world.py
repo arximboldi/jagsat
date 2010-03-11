@@ -107,7 +107,12 @@ class WorldComponent (ui.Image, object):
             self.set_rotation (self.get_rotation () + dl)
 
         self._last_pan_pos = nx, ny
-        
+
+    def restore_transforms (self):
+        self.SetScale (1./self.model.map.zoom, 1./self.model.map.zoom)
+        self.SetRotation (0)
+        self.set_position_rel (.5, .5)
+    
     @signal.weak_slot
     def _on_click_region (self, r):
         if self._pick_cond_fst:
