@@ -101,7 +101,7 @@ class RiskAttackState (GameSubstate, ui.widget.VBox):
                     defend_dice.win ()
                     self.attacker.model.used -= 1
                 self.manager.system.audio.play_sound (random.choice (map (
-                    lambda i: 'data/sfx/swords/sword_%i.wav'%i, range (1,8))))
+                    lambda i: 'data/sfx/swords/sword_%i.wav'%i, range (1,7))))
                 self.tasks.add (self._make_dice_eval_task (dice_iter))
             except StopIteration:
                 self.ui_attack.enable_continue ()

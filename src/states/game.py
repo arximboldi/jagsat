@@ -67,6 +67,9 @@ class GameState (QuittableState):
         self._setup_ui ()
         self._setup_logic ()
         self.manager.enter_state ('init_game')
+
+    def do_unsink (self, must_quit = True, *a, **k):
+        super (GameState, self).do_unsink (must_quit = must_quit, *a, **k)
         
     def _setup_state (self):
         # TODO: Get world as a parameter

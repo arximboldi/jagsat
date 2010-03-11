@@ -34,10 +34,12 @@ class InitGameState (GameSubstate):
         self.game.ui_world.click_cond = lambda r: r.model.owner.troops > 0
         
         if self.game.test_phase is None:
+            self.manager.system.audio.play_sound (
+                'data/sfx/drums/drum_march_2.wav')
             self.manager.enter_state (
                 'message', message =
                 "Welcome to the game, emperors.\n"
-                "Check your missions and add the troops.\n")
+                "Check your missions and place the troops.\n")
         else:
             self._change_to_test ()
 

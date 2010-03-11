@@ -7,7 +7,6 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
-import random
 from base.signal import weak_slot
 from base.log import get_log
 from game import GameSubstate
@@ -28,14 +27,16 @@ class ReinforcementState (GameSubstate):
         game.ui_world.click_cond = lambda r: player.troops > 0 and \
                                        r.model.owner == player
 	
+        self.manager.system.audio.play_sound (
+            'data/sfx/horses/horse_galloping.wav')
         self.manager.enter_state ('message', message =
             "New turn for player: %s.\n%s" % (game.world.current_player.name,
             "Place your reinforcements on the map."))
 
     def do_release (self):
-        self.game.ui_world.click_cond = None
-        pass # Fill with signal deallocation, but first try to check
-             # why the weak_slot is not doing the job.
+        game = self.game
+        game.world.current_player.troops = 0
+        game.ui_world.click_cond = None
         
     def _count_region_troops (self):
 	""" This method counts the reinforcements that the player
@@ -80,4 +81,4 @@ class ReinforcementState (GameSubstate):
         region.owner.troops -= 1
 
         if player.troops <= 0:
-            self.manager.change_state ('attack')
+            self.manager.leave_state ()

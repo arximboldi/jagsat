@@ -37,8 +37,6 @@ class PlayerComponent (widget.VBox, object):
         self.player = player
         self.menu_enabled = False
         move_to_player_position (self, player)
-        
-        self.on_player_pass = signal.Signal ()
 
         self._but_theme = theme.copy_button_theme (theme.small_button)
         pr, pg, pb = player.color
@@ -71,7 +69,12 @@ class PlayerComponent (widget.VBox, object):
         self.padding_bottom = 0
         self._box_main.padding_bottom = 6
         self._box_main.set_visible (self.menu_enabled)
-        self.activate ()
+
+        self._but_pass.deactivate ()
+
+    @property
+    def but_pass (self):
+        return self._but_pass
 
     @signal.signal
     def on_toggle_menu (self, _):
@@ -88,13 +91,8 @@ class PlayerComponent (widget.VBox, object):
             self._txt_troops.set_visible (False)
 
     def enable_undo (self):
-        pass
+        pass # TODO
 
     def disable_undo (self):
-        pass
-    
-    def enable_pass (self):
-        pass
+        pass # TODO
 
-    def disable_pass (self):
-        pass

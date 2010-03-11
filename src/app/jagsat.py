@@ -74,14 +74,18 @@ Game options:
         self.add_state ('game_round',       GameRoundState)
         self.add_state ('ingame_menu',      IngameMenuState)
 	self.add_state ('main_menu',        MainMenuState)
-	self.add_state ('reinforcements',   ReinforcementState)
+	self.add_state ('reinforce',        ReinforcementState)
 	self.add_state ('attack',	    AttackState)
 	self.add_state ('move',		    MovementState)
 	self.add_state ('risk_attack',      RiskAttackState)
         self.add_state ('message',          GameMessageState)
-        
-        self.add_state ('test_attack', partial (GameState, test_phase='attack'))
-        self.add_state ('test_move',   partial (GameState, test_phase='move'))
+
+        self.add_state ('test_reinforce', partial (GameState,
+                                                   test_phase='reinforce'))
+        self.add_state ('test_attack',    partial (GameState,
+                                                   test_phase='attack'))
+        self.add_state ('test_move',      partial (GameState,
+                                                   test_phase='move'))
     
     def do_execute (self, freeargs):
         if self._arg_state.value:

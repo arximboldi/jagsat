@@ -21,7 +21,10 @@ _log = get_log (__name__)
 
 
 class AttackState (GameSubstate):
-
+    """
+    TODO: Automatic pass to next phase when no more attacks are possible?
+    """
+    
     def do_setup (self, *a, **k):
         super (AttackState, self).do_setup (*a, **k)
         game = self.game
@@ -34,26 +37,21 @@ class AttackState (GameSubstate):
             lambda p, r:
             r.model.owner != game.world.current_player and
             r.model.definition in p.model.definition.neighbours)
-        game.ui_world.on_pick_regions += self.on_attack
-	game.ui_player[game.world.current_player].on_player_pass += \
-            lambda ev: self.on_pass (self)
+        game.ui_world.on_pick_regions += self._on_attack
         
         self.manager.enter_state ('message', message =
             "You are ready to attack your enemies.")
 
     def do_release (self):
+        self.game.world.clean_used ()
         self.game.ui_world.disable_used ()
 	self.game.ui_world.disable_picking ()
         super (AttackState, self).do_release ()
-
+    
     @weak_slot
-    def on_attack (self, src, dst):
+    def _on_attack (self, src, dst):
         _log.debug ('Attacking from %s to %s.' %
                     (str (src.model), str (dst.model)))
         self.manager.enter_state ('risk_attack',
                                   attacker = src,
                                   defender = dst)
- 
-    def on_pass (self, random):
-        self.manager.change_state ('move')
-        

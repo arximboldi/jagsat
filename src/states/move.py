@@ -20,6 +20,9 @@ _log = get_log (__name__)
 
 
 class MovementState (GameSubstate):
+    """
+    TODO: Automatic pass to next player when no more movements are possible?
+    """
     
     def do_setup (self, *a, **k):
         super (MovementState, self).do_setup (*a, **k)
@@ -51,7 +54,7 @@ class MovementState (GameSubstate):
         _log.debug ('Moving from %s to %s.' %
                     (str (src.model), str (dst.model)))
 	self.risk_move(src, dst)
-
+    
     @weak_slot
     def on_click_region (self, region):
         game = self.game
