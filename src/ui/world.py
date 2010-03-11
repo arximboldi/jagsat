@@ -130,6 +130,8 @@ class WorldComponent (ui.Image, object):
         if self._pick_cond_fst is not None:
             self._pick_cond_fst = None
             self._pick_cond_snd = None
+            for x in self._regions:
+                x.unhighlight ()
 
     @signal.weak_slot
     def _on_pick_one_region (self, region):

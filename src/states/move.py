@@ -40,12 +40,15 @@ class MovementState (GameSubstate):
 
         game.ui_world.on_pick_regions += self.on_move
         game.ui_world.on_click_region += self.on_click_region
-
         self.manager.enter_state ('message', message =
                                   'Move your troops among your countries.')
 
     def do_release (self):
         super (MovementState, self).do_release ()
+        if self.game.ui_world.picked:
+            self.game.ui_world.picked.model.troops += \
+                self.game.world.current_player.troops
+            self.game.world.current_player.troops = 0
         self.game.world.clean_used ()
         self.game.ui_world.disable_used ()
         self.game.ui_world.disable_picking ()
@@ -68,7 +71,6 @@ class MovementState (GameSubstate):
             if region.model.can_attack:
                 region.model.troops -= 1
                 game.world.current_player.troops += 1
-
         
 
 

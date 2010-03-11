@@ -48,6 +48,11 @@ test_profile = ConfNode (
         'color'    : sf.Color (0, 255, 0),
         'position' : 4,
         'enabled'  : True },
+      'player-3' :
+      { 'name'     : 'pjj',
+        'color'    : sf.Color (0, 0, 255),
+        'position' : 5,
+        'enabled'  : True },
       'map' : 'doc/map/worldmap.xml' })
 
 class GameState (State):
