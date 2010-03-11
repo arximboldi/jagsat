@@ -12,6 +12,7 @@ from PySFML import sf
 from base.signal import weak_slot
 from base.conf   import ConfNode
 from base.util   import lazyprop
+from core.state  import State
 from core.input  import key
 from core        import task
 from model.world import create_game
@@ -36,41 +37,40 @@ class GameSubstate (QuittableState):
         return result
 
 
-def make_test_game ():
-    cfg = ConfNode (
-        { 'player-0' :
-          { 'name'     : 'jp',
-            'color'    : (255, 0, 0),
-            'position' : 3,
-            'enabled'  : True },
-          'player-2' :
-          { 'name'     : 'pj',
-            'color'    : (0, 255, 0),
-            'position' : 4,
-            'enabled'  : True },
-          'map' : 'doc/map/worldmap.xml' })
-    return create_game (cfg)
+test_profile = ConfNode (
+    { 'player-0' :
+      { 'name'     : 'jp',
+        'color'    : sf.Color (255, 0, 0),
+        'position' : 3,
+        'enabled'  : True },
+      'player-2' :
+      { 'name'     : 'pj',
+        'color'    : sf.Color (0, 255, 0),
+        'position' : 4,
+        'enabled'  : True },
+      'map' : 'doc/map/worldmap.xml' })
 
-
-class GameState (QuittableState):
+class GameState (State):
 
     def __init__ (self, test_phase = None, *a, **k):
         super (GameState, self).__init__ (*a, **k)
         self.test_phase = test_phase
         
-    def do_setup (self, *a, **k):
+    def do_setup (self, profile = None, *a, **k):
         super (GameState, self).do_setup (*a, **k)
-        self._setup_state ()
+        self._setup_state (profile)
         self._setup_ui ()
         self._setup_logic ()
         self.manager.enter_state ('init_game')
 
-    def do_unsink (self, must_quit = True, *a, **k):
-        super (GameState, self).do_unsink (must_quit = must_quit, *a, **k)
-        
-    def _setup_state (self):
-        # TODO: Get world as a parameter
-        self.world = make_test_game ()
+    def do_unsink (self, *a, **k):
+        if self.parent_state: # We are not running in test mode, go to menu
+            self.manager.change_state ('main_menu')
+        else:
+            self.manager.leave_state ()
+    
+    def _setup_state (self, profile):
+        self.world = create_game (profile or test_profile)
 
     def _setup_ui (self):
         system = self.manager.system

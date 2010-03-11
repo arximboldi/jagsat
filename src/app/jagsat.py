@@ -16,6 +16,7 @@ from core.app import GameApp
 from tf.gfx import uihelp
 
 from states.sandbox        import Sandbox
+from states.root           import RootState
 from states.game           import GameState
 from states.game           import GameMessageState
 from states.init_game      import InitGameState
@@ -59,7 +60,7 @@ Game options:
         self._arg_state = OptionWith (str)
         self._arg_rhack = OptionFlag ()
         
-        self.root_state = 'game'
+        self.root_state = 'root'
         
     def do_prepare (self, args):
         super (JagsatApp, self).do_prepare (args)
@@ -69,6 +70,7 @@ Game options:
         args.add (None, 'ratio-hack', self._arg_rhack)
         
         self.add_state ('sandbox',          Sandbox)
+        self.add_state ('root',             RootState)
         self.add_state ('game',             GameState)
         self.add_state ('init_game',        InitGameState)
         self.add_state ('game_round',       GameRoundState)

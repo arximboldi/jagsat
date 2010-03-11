@@ -13,6 +13,7 @@ from tf.gfx.widget.intermediate import Button, Button2
 from tf.gfx.widget.intermediate import LineEdit
 from base.conf import ConfNode, GlobalConf
 from base import signal
+from base import util
 from base.log import get_log
 from tf.gfx.widget.basic import Keyboard
 
@@ -23,6 +24,13 @@ _log = get_log (__name__)
 
 _TITLE = unicode ('Bloody Empire')
 _TITLE_COLOR = sf.Color(127,127,127,400)
+
+COLOR = {0: sf.Color.Blue,
+         1: sf.Color.Red,
+         2: sf.Color.Black,
+         3: sf.Color.Yellow,
+         4: sf.Color.Green,
+         5: sf.Color.Magenta}
 
 class MenuComponent (ui.Image):
     
@@ -266,7 +274,7 @@ class MenuComponent (ui.Image):
             if pinf._active:
                 pdic = {}
                 pdic['name'] = pinf.get_child(1).get_child(0)._sprite.GetText()
-                pdic['color'] = pinf.get_child(2)._col
+                pdic['color'] = COLOR [pinf.get_child(2)._col]
                 pdic['position'] = pinf.get_child(3)._position
                 pdic['enabled'] = True
                 dic['player-' + str(i)] = pdic
@@ -280,17 +288,17 @@ class MenuComponent (ui.Image):
         cfg = ConfNode (
             { 'player-0' :
               { 'name'     : 'Player1',
-                'color'    : 0,
+                'color'    : COLOR [0],
                 'position' : 0,
                 'enabled'  : True },
               'player-1' :
               { 'name'     : 'Player2',
-                'color'    : 1,
+                'color'    : COLOR [1],
                 'position' : 1,
                 'enabled'  : True },
               'player-2' :
               { 'name'     : 'Player3',
-                'color'    : 2,
+                'color'    : COLOR [2],
                 'position' : 2,
                 'enabled'  : True },
               'map' : 'doc/map/worldmap.xml' })
@@ -479,7 +487,7 @@ class EnableButton(ui.Circle):
 
 class ColorButton(ui.Circle):
     _COLOR_NUM = 6
-    _COLOR = {0: sf.Color.White, 1: sf.Color.Blue, 2: sf.Color.Red, 3: sf.Color.Yellow, 4: sf.Color.Green, 5: sf.Color.Magenta}
+    _COLOR = COLOR
 
     
     def __init__(self, parent, theme, index, radius = 15):
@@ -505,6 +513,7 @@ class ColorButton(ui.Circle):
 	    self._sprite = sf.Shape.Circle(self._radius, self._radius,self._radius, self.active_color, 2, sf.Color.Black)
 
     def update(self,col):
+        col = util.flip_dict (self._COLOR) [col]
 	self._col = col
 	self.active_color = self._COLOR[self._col]
 	if self.parent._active:

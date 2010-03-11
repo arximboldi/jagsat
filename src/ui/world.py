@@ -20,8 +20,8 @@ import theme
 
 _log = get_log (__name__)
 
-_REGION_RADIUS     = 17
-_REGION_FREE_COLOR = sf.Color (128, 128, 128)
+region_radius     = 17
+region_free_color = sf.Color (128, 128, 128)
 
 
 class WorldComponent (ui.Image, object):
@@ -143,7 +143,7 @@ class RegionComponent (RegionListener, ui.Circle, object):
         assert parent
         assert model
         super (RegionComponent, self).__init__ (parent = parent,
-                                                radius = _REGION_RADIUS,
+                                                radius = region_radius,
                                                 *a, **k)
 
         self.on_click = signal.Signal ()
@@ -157,7 +157,7 @@ class RegionComponent (RegionListener, ui.Circle, object):
 
         self._outline_width = 2.0
         self._outline_color = sf.Color (0, 0, 0)
-        self._fill_color    = _REGION_FREE_COLOR
+        self._fill_color    = region_free_color
         self._rebuild_sprite ()
 
         self._txt_troops = ui.String (self, u"0")
@@ -210,15 +210,14 @@ class RegionComponent (RegionListener, ui.Circle, object):
                                    unicode (used))
 
     def on_set_region_owner (self, region, owner):
-        self._fill_color = sf.Color (*(
-            _REGION_FREE_COLOR if owner is None else owner.color))
+        self._fill_color = (owner and owner.color) or region_free_color
         self._rebuild_sprite ()
 
     def _rebuild_sprite (self):
         self._sprite = sf.Shape.Circle (
-            _REGION_RADIUS,
-            _REGION_RADIUS,
-            _REGION_RADIUS,
+            region_radius,
+            region_radius,
+            region_radius,
             self._fill_color,
             self._outline_width,
             self._outline_color)

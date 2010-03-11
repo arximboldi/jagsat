@@ -39,8 +39,8 @@ class PlayerComponent (widget.VBox, object):
         move_to_player_position (self, player)
 
         self._but_theme = theme.copy_button_theme (theme.small_button)
-        pr, pg, pb = player.color
-        self._but_theme.active.color  = sf.Color (* player.color)
+        pr, pg, pb = player.color.r, player.color.g, player.color.b
+        self._but_theme.active.color  = player.color
         self._but_theme.active.border = sf.Color (pr*.5, pg*.5, pb*.5)
 
         # The main menu

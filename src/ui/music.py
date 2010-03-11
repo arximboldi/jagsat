@@ -7,8 +7,9 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
-from base.log import get_log
-from core     import task
+from base.log  import get_log
+from core      import task
+from itertools import cycle
 
 import theme
 import random
@@ -57,16 +58,18 @@ class MusicPlayer (task.Task):
         if self.shuffle:
             random.shuffle (self._queue)
 
-        self._iter = iter (self._queue) 
+        self._iter = iter (self._queue)
+        if self.loop:
+            self._iter = cycle (self._iter)
+        
         self.jump_next ()
 
     def jump_next (self):
         try:
             self._current = self._iter.next ()
-            self._play_file (self._current)
+            self.play_file (self._current)
         except StopIteration:
-            if self.loop and self.playlist:
-                self.play ()
+            self.stop ()
 
     def play_file (self, file):
         if self._music:
@@ -80,7 +83,9 @@ class MusicPlayer (task.Task):
         
     def stop (self):
         self._music.Stop ()
-        self._
+        self._music = None
     
-    def do_update (self):
-        pass
+    def do_update (self, timer):
+        super (MusicPlayer, self).do_update (timer)
+        if self._music and self._music.GetStatus () == sf.Sound.Stopped:
+            self.jump_next ()
