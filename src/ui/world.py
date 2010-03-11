@@ -45,6 +45,10 @@ class WorldComponent (ui.Image, object):
         self.on_pick_regions = signal.Signal ()
         
         self.picked = None
+        self.new_picked = None # A bit hackish just to let the
+                               # on_pick_regions callback choose a new
+                               # pick
+        
         self._pick_cond_fst = None
         self._pick_cond_snd = None
         self.click_cond = lambda r: True
@@ -63,6 +67,7 @@ class WorldComponent (ui.Image, object):
     def _on_click_region (self, r):
         if self._pick_cond_fst:
             self.on_click_region (r)
+            self._on_pick_one_region (r)
         elif not self.click_cond or self.click_cond (r):
             self.audio.play_sound (theme.ok_click)
             self.on_click_region (r)
@@ -73,13 +78,11 @@ class WorldComponent (ui.Image, object):
                         cond_fst = lambda *a, **k: True,
                         cond_snd = lambda *a, **k: True):
         if self._pick_cond_fst is None:
-            self.on_click_region += self._on_pick_one_region
             self._pick_cond_fst = cond_fst
             self._pick_cond_snd = cond_snd
             
     def disable_picking (self):
         if self._pick_cond_fst is not None:
-            self.on_click_region -= self._on_pick_one_region
             self._pick_cond_fst = None
             self._pick_cond_snd = None
 
@@ -93,8 +96,9 @@ class WorldComponent (ui.Image, object):
                 self.audio.play_sound (theme.bad_click)
         elif self.picked != region:
             if self._pick_cond_snd (self.picked, region):
+                self.new_pick = None
                 self.on_pick_regions (self.picked, region)
-                self._pick_region (None)
+                self._pick_region (self.new_pick)
             elif self.allow_repick and self._pick_cond_fst (region):
                 self._pick_region (region)
             else:

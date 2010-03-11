@@ -96,9 +96,6 @@ class Region (RegionSubject):
         
         self.definition = definition
 
-    def has_troops (self):
-        return (self.troops > 0 and self.used > 0) or self.troops > 1 
-
     @property
     def total (self):
         return self.troops + self.used

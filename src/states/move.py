@@ -31,8 +31,9 @@ class MovementState (GameSubstate):
 	game.ui_world.enable_used ()
         game.ui_world.enable_picking (
             lambda r:
+            game.world.current_player.troops == 0 and
             r.model.owner == game.world.current_player and
-            r.model.has_troops (),
+            r.model.can_attack,
             lambda p, r:
             r.model.owner == game.world.current_player and
             r.model.definition in p.model.definition.neighbours)
@@ -53,21 +54,22 @@ class MovementState (GameSubstate):
     def on_move (self, src, dst):
         _log.debug ('Moving from %s to %s.' %
                     (str (src.model), str (dst.model)))
-	self.risk_move(src, dst)
-    
+        player = self.game.world.current_player
+        if player.troops > 0:
+            dst.model.used += player.troops
+            player.troops = 0
+        else:
+            self.game.ui_world.new_pick = dst # HACK
+
     @weak_slot
     def on_click_region (self, region):
         game = self.game
         if region == self.game.ui_world.picked:
-            if region.model.has_troops ():
+            if region.model.can_attack:
                 region.model.troops -= 1
                 game.world.current_player.troops += 1
 
-    def risk_move (self, src, dst):
-        player = self.game.world.current_player
-        dst.model.used += player.troops
-        player.troops = 0
-
+        
 
 
 

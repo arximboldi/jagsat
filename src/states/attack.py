@@ -33,7 +33,7 @@ class AttackState (GameSubstate):
         game.ui_world.enable_picking (
             lambda r:
             r.model.owner == game.world.current_player and
-            r.model.has_troops (),
+            r.model.can_attack,
             lambda p, r:
             r.model.owner != game.world.current_player and
             r.model.definition in p.model.definition.neighbours)
@@ -52,6 +52,4 @@ class AttackState (GameSubstate):
     def _on_attack (self, src, dst):
         _log.debug ('Attacking from %s to %s.' %
                     (str (src.model), str (dst.model)))
-        self.manager.enter_state ('risk_attack',
-                                  attacker = src,
-                                  defender = dst)
+        self.manager.enter_state ('risk_attack', attacker = src, defender = dst)
