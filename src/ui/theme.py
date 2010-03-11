@@ -16,6 +16,8 @@ background_music = [
     'data/sfx/background/scene-pour-orchestre.ogg',
     'data/sfx/background/confrontation.ogg',
     'data/sfx/background/apprentissage.ogg',
+    'data/sfx/background/angel-needs-pollution-to-breathe.ogg',
+    'data/sfx/background/nebulous-notions.ogg'
     ]
 
 bad_click  = 'data/sfx/clicks/failed_click.wav'
