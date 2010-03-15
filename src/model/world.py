@@ -12,6 +12,7 @@ from base.observer import make_observer
 from map import load_map
 from operator import attrgetter
 
+
 def create_game (cfg):
     """
     Creates a game from a ConfNode containing the following childs:
@@ -105,27 +106,46 @@ class Region (RegionSubject):
         return self.total > 1 and self.troops > 0
 
 
+class card:
+    infantry, cavalry, artillery = range (3)
+
 class position:
     n, ne, se, s, sw, nw = range (6)
 
+
 PlayerSubject, PlayerListener = \
-    make_observer (['on_set_player_troops'])
+    make_observer (['on_set_player_troops',
+                    'on_set_player_alive',
+                    'on_add_player_card',
+                    'on_del_player_card' ])
 
 class Player (PlayerSubject):
 
     troops = InstChanger ('on_set_player_troops', 0)
+    alive  = InstChanger ('on_set_player_alive',  True)
     
     def __init__ (self,
                   name = 'Unnamed',
                   color = None,
                   position = position.n,
-                  objective = None,
+                  mission  = None,
                   *a, **k):
         super (Player, self).__init__ (*a, **k)
                 
         self.name       = name
         self.color      = color
         self.position   = position
-        self.objective  = None
-        self.cards      = []
+        self.mission    = None
+        
+    @property
+    def cards (self):
+        return tuple (self._cards)
+
+    def add_card (self, card):
+        self._cards.append (card)
+        self.on_add_player_card (self, card)
+
+    def del_card (self, card):
+        self._cards.remove (card)
+        self.on_del_player_card (self, card)
 

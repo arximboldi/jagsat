@@ -51,7 +51,7 @@ class select_button (small_button):
         border    = sf.Color (220, 50, 50, 255)
         color    = sf.Color (50, 0, 0, 200)
 
-class frame (button):
+class frame (small_button):
     pass
 
 def copy_button_theme (theme):

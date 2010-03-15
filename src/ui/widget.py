@@ -21,11 +21,13 @@ Component = ui.Component
 VBox = ui.VBox
 HBox = ui.HBox
 
-Frame = lambda parent, theme = theme.frame: \
-    ui.RoundedRectangle (parent, 0, 0, 0, 0, 15,
-                         theme ['inactive'],
-                         theme ['border'],
-                         theme ['thickness'])
+def Frame (parent, theme = theme.frame):
+    r = ui.RoundedRectangle (parent, 0, 0, 0, 0, 15,
+                             theme.active.color,
+                             theme.active.border,
+                             theme.active.thickness)
+    r.set_expand (True, True)
+    return r
 
 SmallButton = lambda *a, **k: \
     Button (theme = theme.small_button, *a, **k)

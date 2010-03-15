@@ -8,42 +8,23 @@
 #
 
 from base.log import get_log
-from world import create_game
-from base.conf   import ConfNode
 
 _log = get_log (__name__)
 
-# This ConfNode is here just for testing issues
-# TODO: delete this cfg = ...
-#cfg = ConfNode (
-            #{ 'player-0' :
-              #{ 'name'     : 'jp',
-                #'color'    : (255, 0, 0),
-                #'position' : 2,
-                #'enabled'  : True },
-              #'player-2' :
-              #{ 'name'     : 'pj',
-                #'color'    : (0, 255, 0),
-                #'position' : 4,
-                #'enabled'  : True },
-              #'map' : '../doc/map/worldmap.xml' })
 
-def create_missions (cfg):
+def create_missions (world):
     """
-    Creates a list of missions from a ConfNode containing the 
-    following childs:
-      - player-X: with X \in [0, 5], contains the properties for
-        player number X. See create_player.
-      - map: Contains the path to the map file.
+    Given a world object, creates all the missions appropiate for its
+    map and players.
     """
-    world = create_game (cfg)
-    return Mission (world).missions
-    
-class Mission (object):
+    return MissionCreator (world).missions
+
+
+class MissionCreator (object):
     
     def __init__ (self, world = None, *a, **k):
         assert world
-        super (Mission, self).__init__ (*a, **k)
+        super (MissionCreator, self).__init__ (*a, **k)
 
         self._missions = []
         self.map = world.map
@@ -66,7 +47,7 @@ class Mission (object):
             - Adds default mission
         """
         for p in self.players:
-            self._missions.append (MissionDef ({'player' : p},\
+            self._missions.append (Mission ({'player' : p},\
                                                 [self.n*57/100, 1]))
 
     def create_country_missions (self):
@@ -76,8 +57,8 @@ class Mission (object):
         - Mission 2: to conquer 43% of map regions with at least 2 troops
         in each region
         """
-        self._missions.append (MissionDef ({'region' : self.n*57/100}, 1))
-        self._missions.append (MissionDef ({'region' : self.n*43/100}, 2))
+        self._missions.append (Mission ({'region' : self.n*57/100}, 1))
+        self._missions.append (Mission ({'region' : self.n*43/100}, 2))
 
     def create_continent_missions (self):
         """
@@ -102,7 +83,7 @@ class Mission (object):
                                  continents[j].name)
 
                     l = [continents[i], continents[j]]
-                    self._missions.append (MissionDef ({'continent' : l}))
+                    self._missions.append (Mission ({'continent' : l}))
 
                 elif sum < min:
                     for k in range(j+1, len(continents)):
@@ -114,11 +95,11 @@ class Mission (object):
                                          continents[j].name+" "+\
                                          continents[k].name)
                             l = [continents[i],continents[j],continents[k]]
-                            self._missions.append (MissionDef (\
+                            self._missions.append (Mission (\
                                                     {'continent' : l})) 
 
 
-class MissionDef (object):
+class Mission (object):
     """
     There are three type of missions {continent, country, player}:
         - continent     -> goal is a list of continents to conquer
@@ -135,7 +116,7 @@ class MissionDef (object):
             self.extra = True
         else:
             self.extra = False
-        super (MissionDef, self).__init__ (*a, **k)
+        super (Mission, self).__init__ (*a, **k)
 
         # Primary type and goal
         self.type = mission.keys()[0]
@@ -198,6 +179,7 @@ class MissionDef (object):
         if self.is_player ():
             world = gworld
             alive = False
+            # TODO: Player life test should be make elsewhere and stored.
             for r in world.regions.itervalues ():
                 if r.owner.position == self.goal.position:
                     alive = True
@@ -256,30 +238,34 @@ class MissionDef (object):
                 success = False
         
         return success
+
+    @property
+    def description (self):
+        return self.str_mission ()
     
     def str_mission (self):
         if self.is_player ():
-            mission_str = "Eliminate player "
+            mission_str = "Eliminate player:\n"
             mission_str += self.goal.name
-            mission_str += ". If that player is dead, conquer "
+            mission_str += ".\nIf that player is dead,\nconquer "
             mission_str += str (self.mission['region'])
-            mission_str += " regions with at least "
+            mission_str += " regions\nwith at least "
             mission_str += str (self.info)
-            mission_str += " troops on each"
+            mission_str += " troops\non each"
 
         if self.is_region ():
             mission_str = "Conquer "
             mission_str += str(self.mission['region'])
-            mission_str += " regions with at least "
+            mission_str += " regions\nwith at least "
             mission_str += str(self.info)
-            mission_str += " troops on each"
+            mission_str += " troops\non each"
 
         if self.is_continent ():
-            mission_str = "Conquer "+self.goal[0].name
+            mission_str = "Conquer\n"+self.goal[0].name
             for i in range (1,len(self.goal)):
                 if i < len(self.goal)-1:
-                    mission_str += ", "+self.goal[i].name
+                    mission_str += ",\n"+self.goal[i].name
                 else:
-                    mission_str += " and "+self.goal[i].name
+                    mission_str += "\nand\n"+self.goal[i].name
 
         return mission_str

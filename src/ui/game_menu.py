@@ -25,6 +25,7 @@ class GameMenuComponent (VBox, object):
         self.but_move.margin_right = 52
         self.but_zoom.margin_right = 52
         self.but_rot.margin_right  = 52
+        self.but_restore.margin_right  = 52
 
         self.padding_bottom = 10
         

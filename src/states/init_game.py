@@ -15,9 +15,11 @@ from base.signal import weak_slot
 
 from base.log import get_log
 from game import GameSubstate
+
 from ui import widget
 from ui import theme
 from core import task
+from model.mission import create_missions
 
 _log = get_log (__name__)
 
@@ -27,7 +29,7 @@ class InitGameState (GameSubstate):
     def do_setup (self, *a, **k):
         self._give_regions ()
         self._give_troops ()
-	self._give_objectives ()
+	self._give_missions ()
         self._finished = set ()
         
 	self.game.ui_world.on_click_region += self.on_place_troop
@@ -63,17 +65,17 @@ class InitGameState (GameSubstate):
         for p in world.players.itervalues ():
             p.troops = standard_troops - len (world.regions_of (p))
     
-    def _give_objectives (self):
+    def _give_missions (self):
         """
-        Randomly give one objective to each player, should be
-        filled in with the missions that alberto is working on
+        Randomly give one mission to each player.
         """
-
-        objectives = ['obj-a', 'obj-b', 'obj-c', 'obj-d', 'obj-e', 'obj-f']
-        random.shuffle (objectives)
+        world = self.game.world
         
-	for p in self.game.world.players.itervalues ():
-	    p.objective = objectives.pop ()
+        missions = create_missions (world)
+        random.shuffle (missions)
+        
+	for p in world.players.itervalues ():
+	    p.mission = missions.pop ()
     
     def _give_regions (self):
         """

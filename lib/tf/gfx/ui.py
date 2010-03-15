@@ -1334,12 +1334,13 @@ class i18nString(String):
 
 class MultiLineString(VBox):
 
-    def __init__(self, parent = None, strings = None, *args, **kwargs):
+    def __init__(self, parent = None, strings = None, center=False,
+                 *args, **kwargs):
         if strings is not None:
             for s in strings:
                 assert isinstance(s, unicode)
 
-        VBox.__init__(self, parent)
+        VBox.__init__(self, parent, center=center)
         self.args = args
         self.kwargs = kwargs
         if isinstance(strings, unicode):
