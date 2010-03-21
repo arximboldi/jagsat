@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map SYSTEM "file:../file-formats/map-file.dtd">
+
+<map bg="doc/map/solarsystem.png" 
+     xscale="4" yscale="2.8" xoffset="0" yoffset="150" zoom="2">
+  <meta>
+    <author>The JAGSAT Development team.</author>
+    <description>solarsystem map.</description>
+  </meta>
+
+  <!-- continent mercury, venus, tellus -->
+
+  <continent name="mercury venus and tellus"
+	     troops="4">
+    <region name="mercury">
+      <circle>
+	<point x="46" y="75"/>
+      </circle>
+    </region>
+    <region name="venus1">
+      <circle>
+	<point x="60" y="65"/>
+      </circle>
+    </region>
+    <region name="venus2">
+      <circle>
+	<point x="60" y="40"/>
+      </circle>
+    </region>
+    <region name="tellus1">
+      <circle>
+	<point x="79" y="52"/>
+      </circle>
+    </region>
+    <region name="tellus2">
+      <circle>
+	<point x="79" y="27"/>
+      </circle>
+    </region>
+  </continent>
+
+  <!-- continent mars and jupiter -->
+
+  <continent name="mars and jupiter"
+	     troops="5">
+    <region name="mars1">
+      <circle>
+	<point x="92" y="10"/>
+      </circle>
+    </region>
+    <region name="mars2">
+      <circle>
+	<point x="92" y="33"/>
+      </circle>
+    </region>
+    <region name="jupiter1">
+      <circle>
+	<point x="125" y="30"/>
+      </circle>
+    </region>
+    <region name="jupiter2">
+      <circle>
+	<point x="118" y="5"/>
+      </circle>
+    </region>
+    <region name="jupiter3">
+      <circle>
+	<point x="130" y="5"/>
+      </circle>
+    </region>
+    <region name="jupiter4">
+      <circle>
+	<point x="118" y="55"/>
+      </circle>
+    </region>   
+    <region name="jupiter5">
+      <circle>
+	<point x="130" y="55"/>
+      </circle>
+    </region>
+  </continent>
+
+  <!-- continent saturn and uranus -->
+
+  <continent name="saturn and uranus"
+	     troops="5">
+
+    <region name="saturn1">
+      <circle>
+	<point x="155" y="-5"/>
+      </circle>
+    </region>
+    <region name="saturn2">
+      <circle>
+	<point x="168" y="5"/>
+      </circle>
+    </region>
+    <region name="saturn3">
+      <circle>
+	<point x="155" y="18"/>
+      </circle>
+    </region>
+    <region name="uranus1">
+      <circle>
+	<point x="180" y="-25"/>
+      </circle>
+    </region>
+    <region name="uranus2">
+      <circle>
+	<point x="188" y="-15"/>
+      </circle>
+    </region>   
+    <region name="uranus3">
+      <circle>
+	<point x="180" y="-5"/>
+      </circle>
+    </region>
+  </continent>
+
+
+  <!-- continent deathstar, neputune, pluto -->
+
+  <continent name="deathstar nepute and pluto"
+	     troops="4">
+    <region name="deathstar1">
+      <circle>
+	<point x="220" y="25"/>
+      </circle>
+    </region>
+    <region name="deathstar2">
+      <circle>
+	<point x="210" y="10"/>
+      </circle>
+    </region>
+    <region name="deathstar3">
+      <circle>
+	<point x="210" y="30"/>
+      </circle>
+    </region>
+    <region name="neptune1">
+      <circle>
+	<point x="199" y="-39"/>
+      </circle>
+    </region>   
+   <region name="neptune2">
+      <circle>
+	<point x="207" y="-15"/>
+      </circle>
+    </region>
+    <region name="pluto">
+      <circle>
+	<point x="220" y="-30"/>
+      </circle>
+    </region>
+  </continent>
+
+  <!-- first continent links -->
+
+  <link type="clique">
+    <node name="venus1"/>
+    <node name="venus2"/>
+    <node name="tellus1"/>
+    <node name="tellus2"/>
+  </link>
+
+  <link type="line">
+    <node name="venus1"/>
+    <node name="mercury"/>
+    <node name="venus2"/>
+  </link>
+
+  <!-- second continent links -->
+
+  <link type="clique">
+    <node name="mars1"/>
+    <node name="mars2"/>
+    <node name="jupiter2"/>
+    <node name="jupiter4"/>
+  </link>
+  <link type="line">
+    <node name="jupiter3"/>
+    <node name="jupiter1"/>
+    <node name="jupiter5"/>
+  </link>
+  <link type="circle">
+    <node name="jupiter2"/>
+    <node name="jupiter1"/>
+    <node name="jupiter4"/>
+  </link>
+  <link type="line">
+    <node name="jupiter2"/>
+    <node name="jupiter3"/>
+  </link>
+  <link type="line">
+    <node name="jupiter4"/>
+    <node name="jupiter5"/>
+  </link>
+  <!-- third continent links -->
+  <link type="circle">
+    <node name="saturn1"/>
+    <node name="saturn2"/>
+    <node name="saturn3"/>
+  </link>
+  <link type="circle">
+    <node name="uranus1"/>
+    <node name="uranus2"/>
+    <node name="uranus3"/>
+  </link>
+  <link type="line">
+    <node name="uranus1"/>
+    <node name="saturn2"/>
+    <node name="uranus3"/>
+  </link>
+
+  <!-- fourth continent links -->
+  <link type="circle">
+    <node name="deathstar1"/>
+    <node name="deathstar2"/>
+    <node name="deathstar3"/>
+  </link>
+  <link type="circle">
+    <node name="neptune1"/>
+    <node name="neptune2"/>
+    <node name="pluto"/>
+  </link>
+  <link type="line">
+    <node name="neptune2"/>
+    <node name="deathstar2"/>
+    <node name="pluto"/>
+  </link>
+ <!-- intercontinental links -->
+  <link type="clique">
+    <node name="mars1"/>
+    <node name="mars2"/>
+    <node name="tellus1"/>
+    <node name="tellus2"/>
+  </link>
+  <link type="clique">
+    <node name="jupiter3"/>
+    <node name="jupiter5"/>
+    <node name="saturn1"/>
+    <node name="saturn3"/>
+  </link>
+  <link type="line">
+    <node name="neptune1"/>
+    <node name="uranus2"/>
+    <node name="neptune2"/>
+  </link>
+  <link type="line">
+    <node name="pluto"/>
+    <node name="mercury"/>
+  </link>
+  <link type="line">
+    <node name="deathstar3"/>
+    <node name="jupiter5"/>
+  </link>
+  <link type="line">
+    <node name="uranus3"/>
+    <node name="deathstar2"/>
+    <node name="saturn3"/>
+  </link>
+  
+</map>
