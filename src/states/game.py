@@ -15,17 +15,18 @@ from base.util   import lazyprop
 from core.state  import State
 from core.input  import key
 from core        import task
-from model.world import create_game
+from model.world import create_game, cardset_value
 
 from ui.world     import WorldComponent, map_op
 from ui.player    import PlayerComponent
 from ui.game_menu import GameMenuComponent
 from ui           import widget
+from ui           import theme
 
 from util import QuittableState
 
 from tf.gfx import ui
-
+from functools import partial
 
 class GameSubstate (QuittableState):
 
@@ -94,11 +95,31 @@ class GameState (State):
                                          self.manager.system.audio)
         self.ui_player = dict ((p, PlayerComponent (self.ui_layer, p))
                                for p in self.world.players.itervalues ())
+        for p in self.ui_player.itervalues ():
+            p.on_exchange_cards += partial (self.exchange_cards, p.player)
+            p.on_drop_cards     += partial (self.drop_cards, p.player)
         self.ui_menu   = GameMenuComponent (self.ui_layer)
         
         self.ui_bg = widget.Background (self.ui_layer)
         self._ui_bg_disabled = []
-        
+
+    def exchange_cards (self, player, cards):
+        value = cardset_value (cards)
+        if value > 0:
+            player.troops += value
+            map (player.del_card, cards)
+            self.manager.system.audio.play_sound (
+                'data/sfx/drums/drum_march_short.wav')
+        else:
+            self.manager.system.audio.play_sound (theme.bad_click)
+    
+    def drop_cards (self, player, cards):
+        map (player.del_card, cards)
+        if cards:
+            self.manager.system.audio.play_sound (theme.ok_click)
+        else:
+            self.manager.system.audio.play_sound (theme.bad_click)
+    
     def _setup_logic (self):
         # system = self.manager.system
         # system.keys.get_key (key.escape).connect (self.toggle_menu)

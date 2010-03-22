@@ -26,6 +26,7 @@ class ReinforcementState (GameSubstate):
 	game.ui_world.on_click_region += self.on_place_troop
         game.ui_world.click_cond = lambda r: player.troops > 0 and \
                                        r.model.owner == player
+        game.ui_player [game.world.current_player].enable_exchange_cards ()
 	
         self.manager.system.audio.play_sound (
             'data/sfx/horses/horse_galloping.wav')
@@ -35,6 +36,7 @@ class ReinforcementState (GameSubstate):
 
     def do_release (self):
         game = self.game
+        game.ui_player [game.world.current_player].disable_exchange_cards ()
         game.world.current_player.troops = 0
         game.ui_world.click_cond = None
         

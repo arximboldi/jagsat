@@ -70,6 +70,7 @@ class RiskAttackState (GameSubstate, ui.widget.VBox):
             attacker.used -= conquerors
             defender.owner = attacker.owner
             self.defender.enable_used ()
+            attacker.owner.conquered += 1
             
             self.manager.change_state ('message', message =
                 "Player %s conquered %s." % (attacker.owner.name,

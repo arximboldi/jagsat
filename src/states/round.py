@@ -10,11 +10,13 @@
 from base.util import printfn
 from base.log import get_log
 from game import GameSubstate
+from model.world import card
 
 from PySFML import sf
 from tf.gfx import ui
 from itertools import cycle, islice
-from random import randint
+from random import randint, choice
+from itertools import repeat, chain
 
 _log = get_log (__name__)
 
@@ -46,7 +48,8 @@ class GameRoundState (GameSubstate):
                 [ lambda: self._next_turn (player_iter),
                   lambda: self.manager.enter_state ('reinforce'),
                   lambda: self.manager.enter_state ('attack'),
-                  lambda: self.manager.enter_state ('move') ])
+                  lambda: self.manager.enter_state ('move'),
+                  lambda: self._finish_turn () ])
         self._action_iter.next () ()
 
     def _next_turn (self, player_iter):
@@ -57,6 +60,28 @@ class GameRoundState (GameSubstate):
         game.ui_player [game.world.current_player].but_pass.activate ()
         self._action_iter.next () ()
 
+    def _next_card (self):
+        return choice (list (chain (repeat (card.infantry,  25),
+                                    repeat (card.cavalry,   11),
+                                    repeat (card.artillery, 18),
+                                    repeat (card.wildcard,  2))))
+
+    def _finish_turn (self):
+        player = self.game.world.current_player
+        if player.conquered > 0:
+            player.conquered = 0
+            if len (player.cards) < 5:
+                player.add_card (self._next_card ())
+                self.manager.enter_state (
+                    'message', message =
+                    'Player %s got a new reinforcement card.' % player.name)
+            else:
+                self.manager.enter_state ('message', message =
+                                          'Player %s can not get more cards.' %
+                                          player.name)
+        else:
+            self._action_iter.next () ()
+    
     def do_unsink (self, *a, **k):
         super (GameRoundState, self).do_unsink (*a, **k)
         if not k.get ('must_quit', False):

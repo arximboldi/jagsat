@@ -11,7 +11,7 @@ from base.changer import InstChanger
 from base.observer import make_observer
 from map import load_map
 from operator import attrgetter
-
+from collections import defaultdict
 
 def create_game (cfg):
     """
@@ -107,10 +107,31 @@ class Region (RegionSubject):
 
 
 class card:
-    infantry, cavalry, artillery = range (3)
+    infantry, cavalry, artillery, wildcard = range (4)
 
 class position:
     n, ne, se, s, sw, nw = range (6)
+
+
+def cardset_value (cards):
+    ncard = defaultdict (lambda: 0)
+    total = 0 
+    for x in cards:
+        ncard [x] += 1
+        total     += 1
+    
+    if total != 3:
+        return 0
+    if ncard [card.infantry]  + ncard [card.wildcard] == 3:
+        return 3
+    if ncard [card.cavalry]   + ncard [card.wildcard] == 3:
+        return 5
+    if ncard [card.artillery] + ncard [card.wildcard] == 3:
+        return 8
+    if ncard [card.artillery] != 2 and ncard [card.cavalry] != 2 and \
+       ncard [card.artillery] != 2:
+        return 10
+    return 0
 
 
 PlayerSubject, PlayerListener = \
@@ -136,6 +157,8 @@ class Player (PlayerSubject):
         self.color      = color
         self.position   = position
         self.mission    = None
+        self._cards     = []
+        self.conquered  = 0
         
     @property
     def cards (self):
