@@ -21,17 +21,14 @@ Component = ui.Component
 VBox = ui.VBox
 HBox = ui.HBox
 
-def Frame (parent, theme = theme.frame):
-    r = ui.RoundedRectangle (parent, 0, 0, 0, 0, 15,
-                             theme.active.color,
-                             theme.active.border,
-                             theme.active.thickness)
-    r.set_expand (True, True)
-    return r
-
-SmallButton = lambda *a, **k: \
-    Button (theme = theme.small_button, *a, **k)
-
+class Frame (ui.RoundedRectangle, object):
+    def __init__ (self, parent = None, theme = theme.frame):
+        super (Frame, self).__init__ (parent, 0, 0, 0, 0, 15,
+                                      theme.active.color,
+                                      theme.active.border,
+                                      theme.active.thickness)
+        self.set_expand (True, True)
+    
 Text = ui.String
 
 class Button (ui3.Button, object):
@@ -58,6 +55,11 @@ class Button (ui3.Button, object):
 
         self.on_click = signal.Signal ()
         self.signal_click.add (self.on_click)
+
+
+class SmallButton (Button):
+    def __init__ (self, *a, **k):
+        super (SmallButton, self).__init__ (theme = theme.small_button, *a, **k)
 
 
 class SelectButton (Button):

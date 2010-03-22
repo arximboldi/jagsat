@@ -19,7 +19,7 @@ from model.world import create_game, cardset_value
 
 from ui.world     import WorldComponent, map_op
 from ui.player    import PlayerComponent
-from ui.game_menu import GameMenuComponent
+from ui.game_menu import GameMenuComponent, GameHudComponent
 from ui           import widget
 from ui           import theme
 
@@ -99,6 +99,8 @@ class GameState (State):
             p.on_exchange_cards += partial (self.exchange_cards, p.player)
             p.on_drop_cards     += partial (self.drop_cards, p.player)
         self.ui_menu   = GameMenuComponent (self.ui_layer)
+        self.ui_hud    = GameHudComponent (parent = self.ui_layer,
+                                           world = self.world)
         
         self.ui_bg = widget.Background (self.ui_layer)
         self._ui_bg_disabled = []

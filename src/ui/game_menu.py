@@ -8,7 +8,41 @@
 #
 
 from base import signal
-from widget import VBox, SmallButton, SelectButton
+from widget import VBox, SmallButton, SelectButton, Frame
+from model.world import WorldListener
+
+from tf.gfx import ui
+
+class GameHudComponent (WorldListener, Frame):
+
+    def __init__ (self, world = None, *a, **k):
+        super (GameHudComponent, self).__init__ (*a, **k)
+        
+        self.set_margin (7)
+        self.margin_top= 48
+        self.text = ui.MultiLineString (
+            self, [u"Player: ", u"Round: "])
+        self.text.set_size (18)
+        self.text.set_position (14, 7)
+        self.set_enable_hitting (False)
+        self.deactivate ()
+        self.set_rotation (-90)
+        self.set_center_rel (.5, 0.)
+        self.set_position (54., 768./2) # hack
+        self._do_update (world)
+        world.connect (self)
+        
+    def on_set_world_round (self, world, round):
+        self._do_update (world)
+
+    def on_set_world_current_player (self, world, player):
+        self._do_update (world)
+
+    def _do_update (self, world):
+        self.text.set_strings ([
+            u"Player: %s" % (world.current_player and
+                             world.current_player.name) or "<None>",
+            u"Round: %i"  % world.round ])
 
 class GameMenuComponent (VBox, object):
 

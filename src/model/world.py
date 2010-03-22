@@ -42,15 +42,23 @@ def create_player (cfg):
                    cfg.child ('color').value,
                    cfg.child ('position').value)
 
+WorldSubject, WorldListener = \
+    make_observer (['on_set_world_current_player',
+                    'on_set_world_phase',
+                    'on_set_world_round'],
+                   'World', __name__)
 
-class World (object):
+class World (WorldSubject):
+
+    phase          = InstChanger ('on_set_world_phase',          None) # TODO
+    round          = InstChanger ('on_set_world_round',          0)
+    current_player = InstChanger ('on_set_world_current_player', None)
 
     def __init__ (self, map_ = None, players = None, *a, **k):
         assert map_
         super (World, self).__init__ (*a, **k)
 
         self.map            = map_
-        self.current_player = None
         
         self._players = {} if players is None \
                            else dict ((p.name, p) for p in players)

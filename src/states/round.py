@@ -36,7 +36,7 @@ class GameRoundState (GameSubstate):
 	game.world.current_player = None
         
         players = game.world.ordered_players ()        
-        player_iter = islice (cycle (players), randint (1, len (players)), None)
+        player_iter = islice (cycle (players), randint (0, len (players)), None)
 
         if game.test_phase:
             self._action_iter = iter (
@@ -54,10 +54,21 @@ class GameRoundState (GameSubstate):
 
     def _next_turn (self, player_iter):
         game = self.game
-        if game.world.current_player:
-            game.ui_player [game.world.current_player].but_pass.deactivate ()
-        game.world.current_player = player_iter.next ()
-        game.ui_player [game.world.current_player].but_pass.activate ()
+
+        old_player = game.world.current_player
+        new_player = player_iter.next ()
+
+        game.world.current_player = new_player
+        
+        game.ui_player [new_player].but_pass.activate ()
+        if old_player:
+            game.ui_player [old_player].but_pass.deactivate ()
+        else:
+            self._first_player = new_player # Hack
+
+        if new_player == self._first_player:
+            game.world.round += 1
+        
         self._action_iter.next () ()
 
     def _next_card (self):
