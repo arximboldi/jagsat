@@ -28,6 +28,8 @@ class MovementState (GameSubstate):
         super (MovementState, self).do_setup (*a, **k)
         game = self.game
 
+        game.world.phase = 'movement'
+
 	game.ui_world.enable_used ()
         game.ui_world.enable_picking (
             lambda r:

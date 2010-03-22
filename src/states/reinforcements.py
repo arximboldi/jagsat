@@ -19,6 +19,8 @@ class ReinforcementState (GameSubstate):
         super (ReinforcementState, self).do_setup (*a, **k)
 
         game = self.game
+        game.world.phase = 'reinforce'
+
 	player = game.world.current_player
         
 	game.world.current_player.troops = self._count_continent_troops () + \

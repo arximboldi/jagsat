@@ -27,6 +27,9 @@ _log = get_log (__name__)
 class InitGameState (GameSubstate):
     
     def do_setup (self, *a, **k):
+
+        self.game.phase = 'init'
+        
         self._give_regions ()
         self._give_troops ()
 	self._give_missions ()

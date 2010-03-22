@@ -50,7 +50,7 @@ WorldSubject, WorldListener = \
 
 class World (WorldSubject):
 
-    phase          = InstChanger ('on_set_world_phase',          None) # TODO
+    phase          = InstChanger ('on_set_world_phase',          'init') # TODO
     round          = InstChanger ('on_set_world_round',          0)
     current_player = InstChanger ('on_set_world_current_player', None)
 

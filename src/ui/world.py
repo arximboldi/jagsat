@@ -76,16 +76,7 @@ class WorldComponent (ui.Image, object):
     def start_pan (self, (ex, ey)):
         _log.debug ('Start panning: ' + str ((ex, ey)))
         self._last_pan_pos = ex, ey
-        # pos = sf.Vector2 (ex, ey)
-        # ox, oy = 1024/2, 768/2
-        # cx, cy = self.GetCenter ()
-        # sx, sy = self.GetScale ()
-        # lx, ly = self.TransformToLocal (ox, oy)
-        # #lx, ly = lx / sx, ly / sy
-        # px, py = self.GetPosition ()
-        # self.SetCenter (lx, ly)
-        # #self.SetPosition (px - lx, py - ly)
-        
+         
     def end_pan (self, ev):
         _log.debug ('End panning: ' + str (ev))
         
@@ -96,12 +87,17 @@ class WorldComponent (ui.Image, object):
         dx, dy = nx - ox, ny - oy
         
         if self.operation == map_op.move:
-            self.set_position_delta (dx, dy)
-
+            cx, cy = self.GetCenter ()
+            sx, sy = self.GetScale  ()
+            angle  = self.GetRotation () / 180. * math.pi
+            c, s   = math.cos (angle), math.sin (angle)
+            self.SetCenter (cx - (dx*c - dy*s)/sx,
+                            cy - (dx*s + dy*c)/sy)
+            
         elif self.operation == map_op.zoom:
-            dl = math.sqrt (dx ** 2 + dy ** 2) * 0.01 * (-1 if dy > 0 else 1)
+            dl = math.sqrt (dx ** 2 + dy ** 2) * 0.005 * (-1 if dy > 0 else 1)
             sx, sy = self.get_scale ()
-            self.set_scale (sx + dl, sy + dl)
+            self.set_scale (sx + dl*sx, sy + dl*sy)
             
         elif self.operation == map_op.rotate:
             dl = math.sqrt (dx ** 2 + dy ** 2) * 0.3 * (-1 if dy > 0 else 1)
@@ -110,17 +106,17 @@ class WorldComponent (ui.Image, object):
         self._last_pan_pos = nx, ny
 
     def restore_transforms (self):
-        sx, sy = self.GetPosition ()
-        dx, dy = 1024./2, 768./2
+        sx, sy = self.GetCenter ()
+        dx, dy = 1024./2 * self.model.map.zoom, 768/2. * self.model.map.zoom
         rot = self.GetRotation ()
         dest_rot = 360. if rot > 180. else 0.
         return task.parallel (task.sinusoid (lambda x: self.SetScale (x, x),
-                                           self.GetScale () [0],
-                                           1./self.model.map.zoom),
+                                             self.GetScale () [0],
+                                             1./self.model.map.zoom),
                               task.sinusoid (self.SetRotation,
-                                           self.GetRotation (),
-                                           dest_rot),
-                              task.sinusoid (lambda x: self.SetPosition (
+                                             self.GetRotation (),
+                                             dest_rot),
+                              task.sinusoid (lambda x: self.SetCenter (
                                   util.linear (sx, dx, x),
                                   util.linear (sy, dy, x))))
     
