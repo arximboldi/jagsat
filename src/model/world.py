@@ -86,7 +86,10 @@ class World (WorldSubject):
         players.sort (key = attrgetter ('position'))
         return players
 
-
+    def check_alive (self, player):
+        return bool (filter (lambda r: r.owner == player,
+                             self._regions.itervalues ()))
+    
 RegionSubject, RegionListener = \
     make_observer (['on_set_region_troops',
                     'on_set_region_used',

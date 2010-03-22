@@ -66,15 +66,31 @@ class RiskAttackState (GameSubstate, ui.widget.VBox):
             # Note that it is impossible to the country to be conquered
             # if the defender killed a unit
             conquerors = len (self.ui_attack.attacker_dices.dices)
+
             defender.used += conquerors
             attacker.used -= conquerors
+
+            old_owner = defender.owner
             defender.owner = attacker.owner
             self.defender.enable_used ()
             attacker.owner.conquered += 1
-            
-            self.manager.change_state ('message', message =
-                "Player %s conquered %s." % (attacker.owner.name,
-                                             defender.definition.name))
+
+            old_owner.alive = self.game.world.check_alive (old_owner)
+
+            if old_owner.alive:
+                self.manager.change_state (
+                    'message', message =
+                    "Player %s conquered %s." % (attacker.owner.name,
+                                                 defender.definition.name))
+            else:
+                self.manager.change_state (
+                    'message', message =
+                    "Player %s conquered %s.\nPlayer %s is now dead." %
+                    (attacker.owner.name, defender.definition.name,
+                     old_owner.name))
+                self.manager.system.audio.play_sound (
+                    'data/sfx/marchs/killed_player.wav')
+                
         elif not attacker.can_attack:
             self.manager.change_state ('message', message =
                 "No more availible troops in %s." % attacker.definition.name)

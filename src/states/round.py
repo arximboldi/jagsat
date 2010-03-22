@@ -65,10 +65,13 @@ class GameRoundState (GameSubstate):
             self._first_player = new_player # Hack
         if new_player == self._first_player:
             game.world.round += 1
-        new_player.mission.pre_check_mission (game.world)
-        
-        self._action_iter.next () ()
 
+        if not new_player.alive:
+            self._next_turn (player_iter)
+        else:
+            new_player.mission.pre_check_mission (game.world)
+            self._action_iter.next () ()
+    
     def _next_card (self):
         return choice (list (chain (repeat (card.infantry,  25),
                                     repeat (card.cavalry,   11),
