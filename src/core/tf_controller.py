@@ -27,7 +27,7 @@ class TfController (Tracker):
     DEFAULT_HEIGHT     = 768
     DEFAULT_FPS        = 60
     DEFAULT_BPP        = 32
-    DEFAULT_ANTIALIAS  = 0
+    DEFAULT_ANTIALIAS  = 4
     DEFAULT_VSYNCH     = False
     DEFAULT_FULLSCREEN = False
     DEFAULT_SHOWMOUSE  = False
