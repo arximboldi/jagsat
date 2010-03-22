@@ -33,12 +33,13 @@
 \textbf {Revision history}
 
 \begin{tabular}{ l | l | l | l }
-Date			&Version	&Description		&Author\\\hline\hline
-01.10.2009	&0.1		&Design document	&Thomas Forss\\
-10.10.2009	&0.2		&Use cases		&Thomas Forss\\
+Date			&Version	&Description			&Author\\\hline\hline
+01.10.2009	&0.1		&Design document		&Thomas Forss\\
+10.10.2009	&0.2		&Use cases			&Thomas Forss\\
 20.10.2009	&0.3		&Added user Interface	&Juan Pedro Bolívar\\
 30.10.2009	&0.3		&Added state diagrams	&Juan Pedro Bolívar\\
-10.12.2009	&1.0		&Delivery editing 	&Alberto Villegas
+10.12.2009	&1.0		&Delivery editing 		&Alberto Villegas\\
+22.03.2010	&2.0		&Reviewed			&Alberto Villegas
 \end{tabular}
 \label{tab:rev}
 \end{center}
@@ -66,16 +67,6 @@ document and the final released product. As a game itself, its design
 relies on the playability which, in any case, can only be measured
 empirically through a process of testing and continuous elliptical
 modifications and refining.
- 
-\begin{todo}[Juan Pedro]
-  Add description about the purpose of the document and bla bla bla. I
-  think that, given the inconsistencies between different parts of the
-  document and also the potential inconsistencies between this
-  document and the final released product, we could include a
-  disclaimer stating that game design relies on playability and that
-  playability can be only measured empirically, therefore requiring
-  continuous elliptical modifications and refining. 
-\end{todo}
 
 \section{Game design}
 
@@ -87,18 +78,6 @@ players will be able to do and not to do. Secondly an overview of the
 user interface which, in any case, is deeply detailed and illustrated in
 section 7. Thirdly, and finally, a detailed list of the graphics and 
 animations that will be needed in the final version.
-
-
-\begin{todo}[Juan Pedro]
-  Improve this introduction. Also, some parts of this section might need
-  some refactoring. For example, the \emph{Graphics} part might be worth
-  having its own section, also the \emph{User interface} could be
-  integrated with the \emph{User interface} later section.
-\end{todo}
-
-\begin{todo}[Alberto]
-  Can we consider this introduction as done?
-\end{todo}
 
 \begin{todo}[Juan Pedro]
   While reading the whole text during the refactor we have found
@@ -141,19 +120,14 @@ animations that will be needed in the final version.
 \begin{itemize}
 \item There are 3 phases in a players turn. Reinforcements, attacking
   and moving.
-\item Reinforcements can be placed within countries with a ratio of
-  1/3 of each country. Exception on first turn where the minimum is
-  one unit.
-\item The player receives additional units based on territories and
-  continents.
-\item Once the player has possession of nine territories, for every
-  three additional territories in possession, the player gains an
-  additional unit per turn.
+\item Reinforcement troops are obtained at the beginning of the turn. 
+  The player obtains 1/3 of his/her number of countries units with a minimum 
+  of three.
+\item The player receives additional units based on continents.
 \item The player may also receive units if he turns in a set of unit
   cards. He then places the units on any of his territories.
 \item If the player has conquered at least one territory, he draws a
-  unit card from the deck. Once the player has enough cards to acquire
-  a unit the game will do so automatically.
+  unit card from the deck. 
 \item A set of unit cards consists of one of the following:
   \begin{itemize}
   \item Three cards depicting the same unit (eg. all three cards have
@@ -162,23 +136,21 @@ animations that will be needed in the final version.
     barrier, cannon).
   \end{itemize}
 \item A country must always have one unit in it.
-\item A unit can only move to a country next to the country it is
-  in. \emph{Optional.}
+\item A unit in a country can only move to a neighbor country.
 \item A player can attack nearby countries from the country he owns.
 \item A player must have more than one unit in a country to be able to
   attack another country.
-\item When a player attacks he attacks with all units he has in the
-  country he is attacking from.
-\item The defender defends with all units he has in the country he is defending.
-\item If the defender only has one unit in a country he is
-  defending. He can not conquer the attackers country.
+\item When a player attacks he attacks with a chosen number of units,
+  between 1 to 3, from the attacking country.
+\item The defender defends with a chosen number of units, one or two,
+  from the defending country.
 \item A conquered country cannot attack nearby countries within the
   same turn it gets conquered.
-\item Units can only be used once every turn.
-\item A unit is considered used when it destroys an enemy unit or
-  passes the line for the defending country.
-\item A unit is also considered used when it has been moved to another
-  country.
+\item Units can only attack once every turn.
+\item A unit is considered used when it destroys an enemy unit or is
+  moved in the moving phase.
+\item Units can be moved between owned neighbor countries if they 
+  have not been used before.
 \end{itemize}
 
 \subsection{Tower defense}
@@ -251,21 +223,21 @@ animations that will be needed in the final version.
 \subsubsection{World map}
 
 \begin{itemize}
+\item Every player has a personal menu button that shows player 
+  options: next, undo, objectives and cards.
 \item Objective cards are shown when clicking on the objective button.
+\item Cards are shown when clicking on the card button.
+\item Player passes to next phase when clicking on the next button.
+\item Player undo his last action by clicking on the undo button.
 \item In the deployment and reinforcement phase. A player can deploy
-  his units by clicking on a unit icon and then clicking on a
-  country. If he wants to deploy several units to the same country he
-  can click the icon several times and a counter will show how many
-  units he has chosen.
-\item In the deployment phase a player can move units from one country
-  to another without any limits.
+  his units by clicking repetitively on a country, as many times as units
+  he want to place.
 \item A player can move units from one country to another by clicking
-  on a country he wants to move units from. If he wants to move
-  several units at the same time he can do so by clicking several
-  times on the country and a counter will show how many units he has
-  chosen.
+  on a country he wants to move units from. Then the neighbor owned
+  countries are highlighted. By clicking the source country, units are 
+  stored on a counter waiting for a neighbor country click to move.
 \item Attacking a country is done by clicking on an own country and
-  then clicking a nearby enemy country.
+  then clicking a neighbor enemy country.
 \end{itemize}
 
 \subsubsection{Tower defense}
@@ -305,11 +277,10 @@ animations that will be needed in the final version.
 \begin{itemize}
 \item Main game menu
 \item New game options screen
-\item Difficulty
-\item Number of players
-\item A base character that will work as units on main map
-\item Different characters to choose from \emph{Optional}.
+\item Number of players.
 \item Different colors for player characters
+\item Player position
+\item Player name
 \item Sound menu
 \end{itemize}
 
@@ -317,16 +288,12 @@ animations that will be needed in the final version.
 \begin{itemize}
 \item Divided in areas
 \item Even and squared or uneven areas
-\item Size always same but more areas depending on difficulty. \emph{Optional}.
 \item Player name whose turn it is, is shown 
 \item Turn number shown/ Year or equivalent
 \item Player controlled areas shown
 \item Different colors for each players
 \item Player units shown
-\item Different colors on units aswell
-\item Animations on main map. \emph{Optional}.
-\item These would be extras
-\item Attack screen/ animation shown when attacking. \emph{optional}.
+\item Attack screen/ animation shown when attacking.
 \end{itemize}
 
 \subsubsection{Battlefields}
@@ -471,8 +438,8 @@ animations that will be needed in the final version.
   \item Player places reinforcements on field.
   \item Player attacks enemy countries.
     \begin{enumerate}
-    \item Tower defence starts.
-    \item Tower defence ends.
+    \item Tower defense starts.
+    \item Tower defense ends.
     \end{enumerate}
   \item Player moves troops.
   \item User ends turn.
@@ -484,7 +451,7 @@ animations that will be needed in the final version.
   %   \end{enumerate}
 \end{description}
 
-\subsection{Attacker (Tower defence)}
+\subsection{Attacker (Tower defense)}
 
 \begin{description}
 \item[Priority] 3
@@ -583,7 +550,7 @@ animations that will be needed in the final version.
 \item[Precondition]  Game has started.
 \item[Flow]\mbox{}
   \begin{enumerate}
-  \item Player take control of last area.
+  \item Player accomplish his mission.
   \item All other users are removed from turn list.
   \item Winning sound is played.
   \item Game statistics are showed.
@@ -690,7 +657,11 @@ animations that will be needed in the final version.
   \begin{enumerate}
   \item Player marks a country that has at least two unused units.
   \item Player selects neighbouring enemy country to attack.
-  \item Tower defence is initiated.
+  \item Dices are thrown 
+  \end{enumerate}
+\item[Alternative Flow 1]\mbox{}
+  \begin{enumerate}
+  \item Tower defense is initiated.
   \end{enumerate}
 \item[Postcondition] None.
   % \item[Alternative Flow 1]\mbox{}
@@ -727,17 +698,20 @@ animations that will be needed in the final version.
 \item[Precondition] Player takes turn.
 \item[Flow]\mbox{}
   \begin{enumerate}
-  \item Attacking player wins tower defence battle.
-  \item All units except one move into conquered country.
+  \item Attacking player wins dices phase.
+  \item All surviving units are moved to the conquered country.
   \item Player draws conquer card.
   \end{enumerate}
-\item[Postcondition] None. 
+\item[Postcondition] None.
 \item[Alternative Flow 1]\mbox{}
+  \item Attacking player wins tower defense battle.
+  \item All units except one move into conquered country.
+  \item Player draws conquer card.
+\item[Alternative Flow 2]\mbox{}
   \begin{enumerate}
-  \item Defending player wins tower defence battle (no surviving
+  \item Defending player wins tower defense battle (no surviving
     attackers).
   \item One unit move into attackers country.
-  \item Player draws conquer card.
   \end{enumerate}
 \end{description}
 
@@ -748,32 +722,32 @@ animations that will be needed in the final version.
   border are marked as used.
 \end{todo}
 
-\subsection{Retreat (Tower defence)}
+\subsection{Retreat (Tower defense)}
 \begin{description}
 \item[Priority] 3
 \item[Users] User, game.
-\item[Precondition] Tower defence is initiated.
+\item[Precondition] Tower defense is initiated.
 \item[Flow]\mbox{}
   \begin{enumerate}
   \item Attacking player uses retreat option.
-  \item Tower defence is ended.
+  \item Tower defense is ended.
   \item Surviving attacking units go back to attackers country.
   \end{enumerate}
 \item[Postcondition] None.
 \item[Alternative Flow 1]\mbox{}
   \begin{enumerate}
   \item Defending player uses retreat option.
-  \item Tower defence is ended.
+  \item Tower defense is ended.
   \item Attacking player conquers country.
   \item Surviving defending units move into closes country (random if several).
   \end{enumerate}
 \end{description}
 
-\subsection{Build (Tower defence)}
+\subsection{Build (Tower defense)}
 \begin{description}
 \item[Priority] 3
 \item[Users] User, game.
-\item[Precondition] Tower defence initiated.
+\item[Precondition] Tower defense initiated.
 \item[Flow]\mbox{}
   \begin{enumerate}
   \item Player selects troops.
@@ -790,17 +764,17 @@ animations that will be needed in the final version.
   \end{enumerate}
 \end{description}
 
-\subsection{Coin flip (Tower defence)}
+\subsection{Coin flip (Tower defense)}
 \begin{description}
 \item[Priority] 4
 \item[Users] User, game.
-\item[Precondition] Tower defence is initiated. Attacker has more
+\item[Precondition] Tower defense is initiated. Attacker has more
   units than defender.
 \item[Flow]\mbox{}
   \begin{enumerate}
   \item Defending player flips coin.
   \item Coin flip successful.
-  \item Virtual unit (only valid during this tower defence battle) added
+  \item Virtual unit (only valid during this tower defense battle) added
     to defender.
   \item Repeat if attacker has more units.
   \end{enumerate}
@@ -812,11 +786,11 @@ animations that will be needed in the final version.
   \end{enumerate}
 \end{description}
 
-\subsection{Collision (Tower defence)}
+\subsection{Collision (Tower defense)}
 \begin{description}
 \item[Priority] 3
 \item[Users] User, game
-\item[Precondition] Tower defence is initiated.
+\item[Precondition] Tower defense is initiated.
 \item[Flow]\mbox{}
   \begin{enumerate}
   \item Two troops from different team collide.
@@ -836,11 +810,11 @@ animations that will be needed in the final version.
   being killed by the archers or something).
 \end{todo}
 
-\subsection{Shoot cannon (Tower defence)}
+\subsection{Shoot cannon (Tower defense)}
 \begin{description}
 \item[Priority] 3
 \item[Users] User, game.
-\item[Precondition] Tower defence is initiated.
+\item[Precondition] Tower defense is initiated.
 \item[Flow]\mbox{}
   \begin{enumerate}
   \item Player selects cannon.
@@ -861,11 +835,11 @@ animations that will be needed in the final version.
   \end{enumerate}
 \end{description}
 
-\subsection{Change direction (Tower defence)}
+\subsection{Change direction (Tower defense)}
 \begin{description}
 \item[Priority] 4
 \item[Users] User, game.
-\item[Precondition] Tower defence is initiated.
+\item[Precondition] Tower defense is initiated.
 \item[Flow]\mbox{}
   \begin{enumerate}
   \item Player selects a troop on his side of the field.
@@ -875,14 +849,14 @@ animations that will be needed in the final version.
 \item[Postcondition] None.
 \end{description}
 
-\subsection{Used unit (Tower defence)}
+\subsection{Used unit (Tower defense)}
 \begin{description}
 \item[Priority] 3
 \item[Users] User, game.
-\item[Precondition] Tower defence is initiated.
+\item[Precondition] Tower defense is initiated.
 \item[Flow]\mbox{}
   \begin{enumerate}
-  \item A unit passes enemy defences in tower defence.
+  \item A unit passes enemy defenses in tower defense.
   \item The unit is marked as used.
   \item A unit is deducted form the opponents country units and
     considered \emph{dead}.
