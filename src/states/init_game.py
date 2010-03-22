@@ -93,6 +93,14 @@ class InitGameState (GameSubstate):
 	    r.owner  = p
             r.troops = 1
 
+        # DEBUG
+        """
+        for r, p in zip (regions, cycle ([world.ordered_players () [0]])):
+	    r.owner  = p
+            r.troops = 1
+        self.manager.change_state ('game_round')
+        """
+    
     @weak_slot
     def on_place_troop (self, region):
         """

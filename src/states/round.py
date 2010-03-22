@@ -65,6 +65,7 @@ class GameRoundState (GameSubstate):
             self._first_player = new_player # Hack
         if new_player == self._first_player:
             game.world.round += 1
+        new_player.mission.pre_check_mission (game.world)
         
         self._action_iter.next () ()
 
@@ -76,7 +77,16 @@ class GameRoundState (GameSubstate):
 
     def _finish_turn (self):
         player = self.game.world.current_player
-        if player.conquered > 0:
+
+        if player.mission.check_mission (self.game.world):
+            self.manager.enter_state (
+                'message', message =
+                'Player %s won the game!' % player.name)
+            self.manager.system.audio.play_sound (
+                'data/sfx/marchs/winning_player.wav')
+            self._action_iter = iter ([ self.manager.leave_state ])
+        
+        elif player.conquered > 0:
             player.conquered = 0
             if len (player.cards) < 5:
                 player.add_card (self._next_card ())

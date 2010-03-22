@@ -184,7 +184,7 @@ class Mission (object):
                 if r.owner.position == self.goal.position:
                     alive = True
             # If the player-to-kill is dead removes that mission
-            if not alive or\
+            if not alive or \
                world.current_player.position == self.goal.position:
                 self.mission.pop('player')
                 self.type = self.mission.keys()[0]
