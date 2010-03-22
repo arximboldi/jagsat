@@ -54,18 +54,15 @@ class GameRoundState (GameSubstate):
 
     def _next_turn (self, player_iter):
         game = self.game
-
+        
         old_player = game.world.current_player
         new_player = player_iter.next ()
-
         game.world.current_player = new_player
-        
         game.ui_player [new_player].but_pass.activate ()
         if old_player:
             game.ui_player [old_player].but_pass.deactivate ()
         else:
             self._first_player = new_player # Hack
-
         if new_player == self._first_player:
             game.world.round += 1
         

@@ -8,6 +8,7 @@
 #
 import sys
 
+from base.conf import ConfNode
 from model.mission import *
 from model.world import create_game
 
@@ -17,25 +18,23 @@ import random
 from itertools import cycle
 
 cfg = ConfNode (
-            { 'player-0' :
-              { 'name'     : 'jp',
-                'color'    : (255, 0, 0),
-                'position' : 2,
-                'enabled'  : True },
-              'player-2' :
-              { 'name'     : 'pj',
-                'color'    : (0, 255, 0),
-                'position' : 4,
-                'enabled'  : True },
-              'map' : 'doc/map/worldmap.xml' })
+    { 'player-0' :
+      { 'name'     : 'jp',
+        'color'    : (255, 0, 0),
+        'position' : 2,
+        'enabled'  : True },
+      'player-2' :
+      { 'name'     : 'pj',
+        'color'    : (0, 255, 0),
+        'position' : 4,
+        'enabled'  : True },
+      'map' : 'doc/map/worldmap.xml' })
 
 class TestMissions (unittest.TestCase):
 
     def setUp (self):
-        self.obj = create_missions (cfg)
-        #self.obj = self.obj.missions
-        
         self.world = create_game (cfg)
+        self.obj = create_missions (self.world)
         
     def test_show_mission (self):
         pass # print "\nTesting show mission"
@@ -141,7 +140,7 @@ class TestMissions (unittest.TestCase):
         for p in world.players.itervalues():
             world.current_player = p
             p.mission = pla_obj.pop()
-            p.mission.check_if_alive(world)
+            p.mission.pre_check_mission (world)
             pass # print "Player: "+p.name+" has to "+p.mission.str_mission()
 
         for r in world.regions.values():

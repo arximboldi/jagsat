@@ -174,7 +174,7 @@ class Mission (object):
 
         return success
 
-    def check_if_alive (self, gworld):
+    def pre_check_mission (self, gworld):
         # Check if the player-to-kill is alive
         if self.is_player ():
             world = gworld
