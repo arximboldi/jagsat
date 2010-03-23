@@ -19,11 +19,30 @@ from xml_util import AutoContentHandler
 def read_bool (msg):
     return True if msg.lower () == 'true' else False
 
-XML_CONF_TYPES = { "int"     : int,
-                   "string"  : str,
-                   "float"   : float,
-                   "bool"    : read_bool,
-                   "default" : str }
+from PySFML import sf
+
+COLOR = {0: sf.Color.Blue,
+         1: sf.Color.Red,
+         2: sf.Color.Black,
+         3: sf.Color.Yellow,
+         4: sf.Color.Green,
+         5: sf.Color.Magenta}
+
+def read_color (msg):
+    return COLOR [msg]
+def write_color (msg):
+    return str (flip_dict (COLOR) [msg])
+    
+XML_CONF_TYPES_READ = { "int"     : int,
+                        "string"  : str,
+                        "float"   : float,
+                        "bool"    : read_bool,
+                        "default" : str,
+                        "Color"   : read_color # HACK!!
+                        }
+XML_CONF_TYPES_WRITE = { "default" : str,
+                         "Color"   : write_color # HACK!!
+                         } 
 
 class XmlConfError (ConfError):
     pass
@@ -49,12 +68,12 @@ class XmlConfBackend (NullBackend):
 
         try:
             fh = open (self.file_name, 'r')
-        except IOError, e:
+        except IOError:
             raise XmlConfError (message =
-                                'Could not open config file. ' +
-                                'If this is the first time you ' +
-                                'run the application it might be created later.',
-                                level = LOG_WARNING)
+                'Could not open config file. ' +
+                'If this is the first time you ' +
+                'run the application it might be created later.',
+                level = LOG_WARNING)
         
         parser.parse (fh)
         fh.close ()
@@ -91,8 +110,11 @@ class XmlConfWriter (object):
         if node.get_name ():
             self._fh.write (' name="' + node.get_name() + '"')
         if not node.value is None:
-            self._fh.write (' type="' + node.value.__class__.__name__ + '"')
-            self._fh.write (' value="' + str (node.value) + '"')
+            cls = node.value.__class__.__name__
+            writer = XML_CONF_TYPES_WRITE.get (cls,
+                        XML_CONF_TYPES_WRITE ["default"])
+            self._fh.write (' type="' + cls + '"')
+            self._fh.write (' value="' + writer (node.value) + '"')
                     
         childs = node.childs ()
         if len (childs) > 0:
@@ -141,9 +163,9 @@ class XmlSaxConfParser (AutoContentHandler):
 
     def _fill_node (self, attrs):
         try:
-            self._curr_type = XML_CONF_TYPES [attrs ['type']]
+            self._curr_type = XML_CONF_TYPES_READ [attrs ['type']]
         except KeyError:
-            self._curr_type = XML_CONF_TYPES ['default']
+            self._curr_type = XML_CONF_TYPES_READ ['default']
 
         try:
             self._setter (self._curr_node, self._curr_type (attrs ['value']))
