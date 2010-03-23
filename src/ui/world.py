@@ -91,8 +91,8 @@ class WorldComponent (ui.Image, object):
             sx, sy = self.GetScale  ()
             angle  = self.GetRotation () / 180. * math.pi
             c, s   = math.cos (angle), math.sin (angle)
-            self.SetCenter (cx - (dx*c - dy*s)/sx,
-                            cy - (dx*s + dy*c)/sy)
+            self.set_center (cx - (dx*c - dy*s)/sx,
+                             cy - (dx*s + dy*c)/sy)
             
         elif self.operation == map_op.zoom:
             dl = math.sqrt (dx ** 2 + dy ** 2) * 0.005 * (-1 if dy > 0 else 1)
