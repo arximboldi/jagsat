@@ -6,6 +6,8 @@ Background music (most of them found at www.jamendo.com):
 'Les Lois du Ciel' by Sina Mohseni
 'confrontation' by Flavio Simone
 'Scene pour Orchestre' by Benjamin Moreau
+'Nebulous Notion' by Revolution Void
+'Angel Needs Pollution to Breathe' by Circ
 
 Sound clips:
 http://www.freesound.org/
@@ -14,12 +16,15 @@ Clipart from:
 http://alove4horses.com/vintage-horse-clip-art/
 http://www.1clipart.com
 
+Icon theme:
+http://gnome-look.org/content/show.php/GNOME-colors?content=82562
+
 
 The JAGSAT team:
 
-Juan Pedro Bolívar Puente         main programmer
-Aksel Junkkila                         game designer
-Guillem Medina                         programmer
-Sarah Lindström                 business consultant
-Alberto Villegas Erce                 documentation manager
-Thomas Forss                         project manager
+Juan Pedro Bolívar Puente         	main programmer
+Aksel Junkkila                         	game designer
+Guillem Medina                         	programmer
+Sarah Lindström                 	business consultant
+Alberto Villegas Erce     		documentation manager
+Thomas Forss                         	project manager
