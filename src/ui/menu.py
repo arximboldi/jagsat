@@ -262,7 +262,7 @@ class MenuComponent (ui.Image):
         #self.load_button.on_click += self.load_game
         #self.load_button.set_enable_hitting (True)
 
-	self.load_profile('Default')
+	#self.load_profile('Default')
 
     #It creats a profile from the active information of the main menu
 
@@ -326,8 +326,8 @@ class MenuComponent (ui.Image):
 	    if i._name <> 'map':	    
 		aux = self.infoplayerL.get_child(index)	    
 		self.enable_player(index)
-	    #else:
-		#self.mapL.select(i.get_value())
+	    else:
+		self.mapL.select(i.get_value())
 
 	    for j in i.childs() :
 
