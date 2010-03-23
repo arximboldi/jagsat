@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map SYSTEM "file:../file-formats/map-file.dtd">
+
+<map bg="doc/map/newmapx2.png" 
+     xscale="4" yscale="2.8" xoffset="0" yoffset="150" zoom="2">
+  <meta>
+    <author>The JAGSAT Development team.</author>
+    <description>solarsystem map.</description>
+  </meta>
+
+  <!-- continent Starburst -->
+
+  <continent name="Starburst"
+	     troops="4">
+    <region name="Magellan">
+      <circle>
+	<point x="128" y="137"/>	<!-- first group starts --> <!-- down in middle -->
+      </circle>
+    </region>
+    <region name="Pinwheel">
+      <circle>
+	<point x="95" y="135"/>
+      </circle>
+    </region>
+    <region name="Stox">
+      <circle>
+	<point x="85" y="165"/>
+      </circle>
+    </region>
+    <region name="Entrome">
+      <circle>
+	<point x="113" y="170"/>
+      </circle>
+    </region>
+    <region name="Mayall's Object">
+      <circle>
+	<point x="141" y="165"/>	<!-- first group ends -->
+      </circle>
+    </region>
+  </continent>
+
+  <!-- continent Virgo Cluster -->
+
+  <continent name="Virgo Cluster"
+	     troops="4">
+  
+    <region name="Sunflower">
+      <circle>
+	<point x="45" y="163"/>		<!-- second group starts -->	<!-- left down -->
+      </circle>
+    </region>
+    <region name="Sombrero">
+      <circle>
+	<point x="41" y="115"/>
+      </circle>
+    </region>
+    <region name="Whirlpool">
+      <circle>
+	<point x="25" y="137"/>
+      </circle>
+    </region>
+    <region name="Tadpole">
+      <circle>
+	<point x="33" y="84"/>
+      </circle>
+    </region>
+    <region name="Triangulum">
+      <circle>
+	<point x="60" y="135"/>		<!-- second group ends -->
+      </circle>
+    </region>
+  </continent>
+
+  <!-- continent Supernova Factory -->
+
+   <continent name="Supernova Factory"
+	     troops="4">
+
+
+    <region name="Sculptor">
+      <circle>
+	<point x="33" y="47"/>		<!-- third group starts -->	<!-- left up -->
+      </circle>
+    </region>   
+    <region name="Bode">
+      <circle>
+	<point x="24" y="10"/>  <!-- left second highest -->
+      </circle>
+    </region>
+    <region name="Factory1">
+      <circle>
+	<point x="50" y="15"/>
+      </circle>
+    </region>
+    <region name="Goldmine">
+      <circle>
+	<point x="58" y="-12"/>
+      </circle>
+    </region>
+    <region name="Androidfarm">
+      <circle>
+	<point x="35" y="-18"/>
+      </circle>
+    </region>
+   </continent>
+
+  <!-- continent Andromeda -->
+
+   <continent name="Andromeda"
+	     troops="4">
+
+
+    <region name="Superluminal">
+      <circle>
+	<point x="91" y="-20"/>		<!-- fourth group starts -->	<!-- middle up-->
+      </circle>
+    </region>
+    <region name="luminar">
+      <circle>
+	<point x="130" y="-20"/>
+      </circle>
+    </region>   
+    <region name="blazar">
+      <circle>
+	<point x="153" y="-20"/>
+      </circle>
+    </region>
+    <region name="Canter">
+      <circle>
+	<point x="115" y="3"/>
+      </circle>
+    </region>
+    <region name="Millius">
+      <circle>
+	<point x="155" y="15"/>		<!-- fourth group ends -->
+      </circle>
+    </region>
+   </continent>
+
+  <!-- continent Magoo's Palace -->
+
+  <continent name="Magoo's Palace"
+	     troops="4">
+
+    <region name="Abandoned">
+      <circle>
+	<point x="186" y="16"/>		<!-- fifth group starts -->	<!-- right up -->
+      </circle>
+    </region>
+    <region name="neptunel">
+      <circle>
+	<point x="192" y="-10"/>
+      </circle>
+    </region>   
+   <region name="Sagittaurus">
+      <circle>
+	<point x="209" y="-25"/>
+      </circle>
+    </region>
+    <region name="Gant">
+      <circle>
+	<point x="213" y="11"/>
+      </circle>
+    </region>
+    <region name="quasar">
+      <circle>
+	<point x="209" y="45"/>		<!-- fifth group ends -->
+      </circle>
+    </region>
+   </continent>
+  
+  <!-- continent Cigar Galaxy -->
+
+  <continent name="Cigar Galaxy"
+	     troops="4">
+    <region name="Aarseth">
+      <circle>
+	<point x="212" y="102"/>	<!-- sixth group starts -->	<!-- right down -->
+      </circle>
+    </region>
+    <region name="Abdulla">
+      <circle>
+	<point x="225" y="131"/>
+      </circle>
+    </region>
+    <region name="Nolan">
+      <circle>
+	<point x="195" y="131"/>
+      </circle>
+    </region>
+    <region name="Nora">
+      <circle>
+	<point x="202" y="160"/>
+      </circle>
+    </region>
+    <region name="Rokkosan">
+      <circle>
+	<point x="175" y="160"/>	<!-- sixth group ends -->
+      </circle>
+    </region>
+   </continent>
+
+  <!-- galaxy links -->
+
+  <link type="clique">
+    <node name="Magellan"/>
+    <node name="Pinwheel"/>
+    <node name="Stox"/>
+    <node name="Entrome"/>
+    <node name="Mayall's Object"/>
+  </link>
+
+  <link type="clique">
+    <node name="Sunflower"/>
+    <node name="Sombrero"/>
+    <node name="Whirlpool"/>
+    <node name="Tadpole"/>
+    <node name="Triangulum"/>
+  </link>
+
+ <link type="clique">
+    <node name="Sculptor"/>
+    <node name="Bode"/>
+    <node name="Factory1"/>
+    <node name="Goldmine"/>
+    <node name="Androidfarm"/>
+  </link>
+ 
+ <link type="clique">
+    <node name="Superluminal"/>
+    <node name="luminar"/>
+    <node name="blazar"/>
+    <node name="Canter"/>
+    <node name="Millius"/>
+  </link>
+ <link type="clique">
+    <node name="Abandoned"/>
+    <node name="neptunel"/>
+    <node name="Sagittaurus"/>
+    <node name="Gant"/>
+    <node name="quasar"/>
+  </link>
+ <link type="clique">
+    <node name="Aarseth"/>
+    <node name="Abdulla"/>
+    <node name="Nolan"/>
+    <node name="Nora"/>
+    <node name="Rokkosan"/>
+ </link>
+  
+  <!-- interGalaxy links -->	
+
+  <link type="line">
+    <node name="Pinwheel"/>
+    <node name="Triangulum"/>
+  </link>
+    <link type="line">
+    <node name="Sunflower"/>
+    <node name="Stox"/>
+  </link>
+    <link type="line">
+    <node name="Tadpole"/>
+    <node name="Sculptor"/>
+  </link>
+    <link type="line">
+    <node name="Millius"/>
+    <node name="Abandoned"/>
+  </link>
+   <link type="line">
+    <node name="quasar"/>
+    <node name="Aarseth"/>
+  </link>
+    <link type="line">
+    <node name="Rokkosan"/>
+    <node name="Mayall's Object"/>
+  </link>
+    <link type="line">
+    <node name="Goldmine"/>
+    <node name="Superluminal"/>
+  </link>
+</map>
