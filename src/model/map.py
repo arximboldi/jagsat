@@ -35,6 +35,7 @@ def load_map (file_name):
     except SAXException, e:
         raise MapError ('Map parsing error: ' + str (e))
 
+    reader.map.file_name = file_name
     return reader.map
 
 

@@ -29,6 +29,8 @@ Display options:
   -H, --height <value> Set window height.
   -s, --vsync          Enable V-Sync.
   -S, --no-vsync       Disable V-Sync.
+      --show-mouse     Shows the mouse cursor.
+      --hide-mouse     Hides the mouse cursor.
 """
 
     def __init__ (self, *a, **k):

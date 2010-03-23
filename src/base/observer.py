@@ -17,8 +17,10 @@ Listener.
 
 import new
 
-from signal import signal
+from signal import signal, Signal
 from sender import Receiver, Sender
+import util
+from functools import wraps, partial
 
 class Naming:
     SUBJECT_CLASS_POSTFIX  = 'Subject'
@@ -128,13 +130,14 @@ def make_observer (signals,
 
     return subject, listener
 
+_empty_func = util.nop
+
 def _extend_observer_class (cls, build_signal_fn):
     for message in cls.SIGNALS:
-
         method = build_signal_fn (cls, message)
-        method.__name__ = message
-        if isinstance (cls.SIGNALS, dict):
-            method.__doc__ = cls.SIGNALS [message]
+        # method.__name__ = message
+        # if isinstance (cls.SIGNALS, dict):
+        #    method.__doc__ = cls.SIGNALS [message]
         setattr (cls, message, method)
 
 def _listener_make_signal (cls, name):
@@ -144,7 +147,21 @@ def _subject_make_signal (cls, name):
     return lambda self, *a, **k: self.send (name, a, k)
 
 def _signal_subject_make_signal (cls, name):
-    func = lambda *a, **k: None
-    func.__name__ = name
-    return signal (func)
+    return util.lazyprop (partial (_mk_observer_signal, name), name)
+
+def _mk_observer_signal (name, obj):
+    sig = _ObserverSignal ()
+    sig._observer_signal_obj  = obj
+    sig._observer_signal_name = name
+    return sig
+
+class _ObserverSignal (Signal):
+    _observer_signal_obj   = None
+    _observer_signal_name  = None
+
+    def notify (self, *args, **kws):
+        name = self._observer_signal_name
+        obj  = self._observer_signal_obj
+        obj.send (name, *args, **kws)
+        return Signal.notify (self, *args, **kws)
 

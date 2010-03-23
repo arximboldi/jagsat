@@ -15,6 +15,7 @@ import unittest
 from test.model_map import *
 from test.model_world import *
 from test.model_mission import *
+from test.model_worldio import *
 
 from test.base_arg_parser import *
 from test.base_tree import *

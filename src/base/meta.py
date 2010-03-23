@@ -10,6 +10,7 @@
 #
 
 from util import memoize, nop
+from functools import wraps
 
 class Mockup (object):
 
@@ -69,7 +70,6 @@ def instance_decorator (decorator):
             decorated = decorator (obj, self._func, *self._args, **self._kws)
             obj.__dict__[self.__name__] = decorated
             return decorated
-
     return Decorator
 
 

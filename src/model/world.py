@@ -58,6 +58,8 @@ class World (WorldSubject):
         assert map_
         super (World, self).__init__ (*a, **k)
 
+        self.use_on_move    = True
+        self.use_on_attack  = True
         self.map            = map_
         
         self._players = {} if players is None \
@@ -87,9 +89,9 @@ class World (WorldSubject):
         return players
 
     def check_alive (self, player):
-        return bool (filter (lambda r: r.owner == player,
-                             self._regions.itervalues ()))
-    
+        return bool (self.regions_of (player))
+
+
 RegionSubject, RegionListener = \
     make_observer (['on_set_region_troops',
                     'on_set_region_used',

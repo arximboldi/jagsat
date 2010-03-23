@@ -13,6 +13,9 @@ import functools
 
 near0 = 0.0001
 
+def const (val):
+    return lambda: val
+
 class Selfable (object):
 
     def myself (self):
@@ -54,15 +57,14 @@ _multimethod_registry = {}
 
 class lazyprop (object):
 
-    def __init__ (self, func):
+    def __init__ (self, func, name = None):
         self._func    = func
-        self.__name__ = func.__name__
-        self.__doc__  = func.__doc__
-
+        self._name    = name or func.__name__
+        
     def __get__ (self, obj, cls = None):
         if obj is None:
             return None
-        result = obj.__dict__ [self.__name__] = self._func (obj)
+        result = obj.__dict__ [self._name] = self._func (obj)
         return result
 
 

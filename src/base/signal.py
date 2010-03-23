@@ -19,6 +19,7 @@ from util import *
 from meta import *
 from proxy import *
 import weakref
+from functools import wraps
 
 class Slot (Destiny):
     """
@@ -331,29 +332,17 @@ def signal (obj, func):
     message.
     """
     
-    if isinstance (obj, Sender) and not \
-       isinstance (obj, AutoSignalSenderGet):
-        class ExtendedSignal (Signal):
-            def notify (self, *args, **kws):
-                res = func (obj, *args, **kws)
-                obj.send (func.__name__, *args, **kws)
-                Signal.notify (self, *args, **kws)
-                return res
-    else:
-        class ExtendedSignal (Signal):
-            def notify (self, *args, **kws):
-                res = func (obj, *args, **kws)
-                Signal.notify (self, *args, **kws)
-                return res
-
-    return ExtendedSignal ()
-
+    sig = _ExtendedSignal ()
+    sig._extended_signal_obj  = obj
+    sig._extended_signal_func = func
+    return wraps (func) (sig)
 
 @instance_decorator
 def signal_before (obj, func):
     """
     This behaves exactly like the 'signal' decorator, but notifies the
     slots before calling the function and not the other way.
+    TODO: Make Pickable.
     """
     
     if isinstance (obj, Sender) and not\
@@ -371,4 +360,22 @@ def signal_before (obj, func):
                 res = func (obj, *args, **kws)
                 return res
         
-    return ExtendedSignalBefore ()
+    return wraps (func) (ExtendedSignalBefore ())
+
+
+class _ExtendedSignal (Signal):
+
+    _extended_signal_obj   = None
+    _extended_signal_func  = nop
+
+    def notify (self, *args, **kws):
+        func = self._extended_signal_func
+        obj  = self._extended_signal_obj
+        
+        res = func (obj, *args, **kws)
+        if isinstance (obj, Sender) and not \
+           isinstance (obj, AutoSignalSenderGet):
+            obj.send (func.__name__, *args, **kws)
+        Signal.notify (self, *args, **kws)
+        return res
+

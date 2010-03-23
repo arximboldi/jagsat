@@ -93,6 +93,17 @@ class Container (Source):
         for dest in self._destinies:
             dest.handle_disconnect (self)
 
+    def __getstate__ (self):
+        """
+        We should not store connections when pickling. 
+        """
+        try:
+            d = dict (super (Container, self).__getstate__ ())
+        except Exception:
+            d = dict (self.__dict__)
+        d.update ({ '_destinies' : self._destinies.__class__ () })
+        return d
+
     def connect (self, destiny):
         """
         Connects a destiny to this source, storying it and properly
@@ -177,6 +188,12 @@ class Trackable (Destiny):
     def __del__ (self):
         self.disconnect_sources ()
 
+    def __getstate__ (self):
+        """
+        We should not store connections when pickling. 
+        """
+        return { '_sources' : [] }
+
     def handle_connect (self, source):
         """
         Handles the connection to the source by keeping a weak
@@ -217,6 +234,12 @@ class Tracker (object):
     def __init__ (self, *a, **k):
         super (Tracker, self).__init__ (*a, **k)
         self._trackables = []
+
+    def __getstate__ (self):
+        """
+        We should not store connections when pickling. 
+        """
+        return { '_trackables' : [] }
 
     def register_trackable (self, trackable):
         """
