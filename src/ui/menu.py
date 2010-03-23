@@ -17,6 +17,8 @@ from base import util
 from base.log import get_log
 from tf.gfx.widget.basic import Keyboard
 
+from os import listdir
+
 import theme
 import widget
 
@@ -43,7 +45,6 @@ class MenuComponent (ui.Image):
 	self.on_quit_program = signal.Signal ()
 
 	self._profile = None     # Profile used to create the game
-        self._map = 'doc/map/worldmap.xml'   # Path of the selected map
 	self._listprof = None    # List of profilessaved on the congifuration file
        
 
@@ -98,7 +99,7 @@ class MenuComponent (ui.Image):
         
 
  	#Game Layer
-        
+        self.gameL.padding_right = 30
         self.infoplayerL = ui.VBox(self.gameL)
 	self.infoplayerL.padding_bottom = 8
         self.mapL = MapSelector(self.gameL)
@@ -279,7 +280,7 @@ class MenuComponent (ui.Image):
                 pdic['enabled'] = True
                 dic['player-' + str(i)] = pdic
                     
-        dic['map'] = self._map
+        dic['map'] = self.mapL.get_map()
         
         self._profile.fill(dic)   
 
@@ -319,12 +320,14 @@ class MenuComponent (ui.Image):
 	    self.disable_player(i)	
 	
         index = 0
-	
+
 	for i in GlobalConf ().path('profiles').path(str(name)).childs() :
 
 	    if i._name <> 'map':	    
 		aux = self.infoplayerL.get_child(index)	    
 		self.enable_player(index)
+	    #else:
+		#self.mapL.select(i.get_value())
 
 	    for j in i.childs() :
 
@@ -394,9 +397,6 @@ class MenuComponent (ui.Image):
         lname = []
         lcol = []
         lpos = []
-
-	if self._map == None:
-	    return False
         
         for i in range(0,6):
             pinf = self.infoplayerL.get_child(i)
@@ -602,8 +602,56 @@ class ComboBox(ui.HBox):
     def get_text(self):
 	return self._text
 
-class MapSelector():
-    #TODO: Widget used to select the map we want to play. Implement only if more maps will be available
+class MapSelector(ui.HBox):
+
     def __init__(self, parent = None):
-        pass
+
+	ui.HBox.__init__(self, parent)
+	self._path_img = 'doc/map/small/'
+	self._path = 'doc/map/'
+
+	self._listmaps = []
+	self.init_list()
+
+	self._num = len(self._listmaps)
+	self._index = 0
+	self.padding_right = 10
+
+	self.left = widget.Button(self, None,'data/icon/go-previous-small.png', True, theme.menu)
+	self._map = widget.Button(self, None, self._path_img + self._listmaps[self._index] + '_small.png', True, theme.menu)
+	self.right = widget.Button(self, None,'data/icon/go-next-small.png', True, theme.menu)
+
+	self.right.on_click = signal.Signal ()
+        self.right.signal_click.add (self.right.on_click)
+        self.right.on_click += self.next
+        self.right.set_enable_hitting (True)
+	self.right.set_position_rel (1, .1)
+
+	self.left.on_click = signal.Signal ()
+        self.left.signal_click.add (self.left.on_click)
+        self.left.on_click += self.prev
+        self.left.set_enable_hitting (True)
+		
+    def next(self,random):
+        self._index = (self._index+1)%self._num
+	self._map.set_image(self._path_img + self._listmaps[self._index] + '_small.png')
+ 
+    def prev(self,random):
+        self._index = (self._index-1)%self._num
+	self._map.set_image(self._path_img + self._listmaps[self._index] + '_small.png')
+
+    def select(self, new_map):
+	img = new_map[len(self._path):-4]
+	self._index = self._listmaps.index(img)
+	self._map.set_image(self._path_img + self._listmaps[self._index] + '_small.png')
+
+    def get_map(self):
+	return self._path + self._listmaps[self._index] + '.xml'
+
+    def init_list(self):
+	l = listdir(self._path)
+	for i in l:
+	    if i[-4:] == '.xml':
+		self._listmaps.append(i[:-4])
+
 
