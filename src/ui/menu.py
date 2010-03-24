@@ -289,54 +289,6 @@ class PositionButton (widget.SmallButton):
         self._position = pos
         self.set_image (pic)
 
-
-class ComboBox(ui.HBox):
-    
-    def __init__(self, parent, profiles, menu):
-        
-	ui.HBox.__init__(self, parent)
-	
-	self._prof = profiles
-	self._index = 0
-	self._menu = menu
-	self._text = ui.String(self, unicode(self._prof[self._index]))
-	self.separation = 12
-	self.left = widget.Button (
-            self, None,'data/icon/go-previous-small.png', True, theme.menu)
-	self.prof_txt = Button(self, self._text, theme.menu)
-	self.right = widget.Button(
-            self, None,'data/icon/go-next-small.png', True, theme.menu)
-
-	self.right.on_click = signal.Signal ()
-        self.right.signal_click.add (self.right.on_click)
-        self.right.on_click += self.next
-        self.right.set_enable_hitting (True)
-
-	self.left.on_click = signal.Signal ()
-        self.left.signal_click.add (self.left.on_click)
-        self.left.on_click += self.prev
-        self.left.set_enable_hitting (True)
-
-    def load(self,profiles):
-	self._prof = profiles
-	self._index = 0
-	self._text.set_string(unicode(self._prof[self._index]))
-	self._menu.load_profile(self._prof[self._index])
-
-    def next(self,random):
-        self._index = (self._index-1)%len(self._prof)
-	self._text.set_string(unicode(self._prof[self._index]))
-	self._menu.load_profile(self._prof[self._index])  
- 
-    def prev(self,random):
-        self._index = (self._index+1)%len(self._prof)
-	self._text.set_string(unicode(self._prof[self._index]))
-	self._menu.load_profile(self._prof[self._index])
-
-    def get_text(self):
-	return self._text
-
-
 def get_map_list (path):
     return filter (lambda f: f [-4:] == '.xml', listdir (path))
 
