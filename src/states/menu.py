@@ -9,22 +9,22 @@
 
 from base import signal
 
-from core.state import State
+from root import RootSubstate
 from tf.gfx import ui
 from ui.menu import *
 
-class MainMenuState (State):
+class MainMenuState (RootSubstate):
     
     def do_setup (self, *a, **k):
 	
 	system = self.manager.system 
         self.ui_layer = ui.Layer (system.view)
-
+        self.ui_layer.zorder = -1
         self._menu = MainMenu (self.ui_layer)
         
         self._menu.actions.quit.on_click += self.manager.leave_state
         self._menu.actions.play.on_click += self._on_click_play
-
+        
     @signal.weak_slot
     def _on_click_play (self, ev = None):
         self.manager.change_state ('game', profile = self._menu.options.config)

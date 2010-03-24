@@ -41,7 +41,15 @@ class button:
         text_size = 20
     class inactive (active): pass
     class clicked (active): pass
-        
+
+class keyboard:
+    directory = 'data/key/'
+    class blackbox (button.active): pass
+    class whitebox (button.active):
+        thickness = 2
+        #border    = sf.Color (255, 100, 100, 64)
+        color     = sf.Color (255, 255, 255, 44)
+
 class small_button:
     margin    = 2
     class active:

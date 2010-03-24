@@ -12,6 +12,7 @@ from base import util
 from base import signal
 from core import task
 import theme
+from error import UiError
 
 from PySFML import sf
 from tf.gfx import ui
@@ -25,6 +26,8 @@ _log = get_log (__name__)
 Component = ui.Component
 VBox = ui.VBox
 HBox = ui.HBox
+
+class WidgetError (UiError): pass
 
 class Frame (ui.RoundedRectangle, object):
     def __init__ (self, parent = None, theme = theme.frame):
@@ -265,16 +268,36 @@ class List (HBox):
             slot.select ()
 
 
+def get_keyboard_input (orign, callback):
+    raise UiError ("No keyboard callback set.")
+
 class LineEdit (SelectButton):
 
-    def __init__(self, parent, theme = theme.line_edit, *a, **k):
+    def __init__(self, parent, text = u"", theme = theme.line_edit, *a, **k):
 	super (LineEdit, self).__init__(parent = parent,
                                         theme = theme,
                                         vertical = False,
-                                        button_size = (200, 40),
+                                        text = text,
+                                        button_size = (220, 40),
                                         image = 'data/icon/edit-tiny.png',
                                         *a, **k)
-        self.on_edit = signal.Signal ()
+        self.on_select += self._on_select_to_edit
+        self._text = text
+    
+    @property
+    def text (self):
+        return self._text
+    
+    @signal.signal
+    def on_edit (self, text):
+        print "EDITED TO ", text
+        self.unselect ()
+        self.set_string (text)
+        self._text = text
+    
+    @signal.weak_slot
+    def _on_select_to_edit (self, but):
+        get_keyboard_input (self.text, self.on_edit)
 
 
 class Background (ui.Rectangle, object):

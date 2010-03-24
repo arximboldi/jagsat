@@ -173,12 +173,12 @@ def get_dir_of_python_file(file):
 
 class _KeyboardConfig:
 
-    def __init__(self, parent):
+    def __init__(self, parent, theme = None):
         self.keys = set()
 
         self.is_shifted = False
 
-        dir = get_dir_of_python_file(__file__)
+        dir = theme.directory if theme else get_dir_of_python_file(__file__)
 
         start_x = 30
         start_y = 90
@@ -319,7 +319,7 @@ class _KeyboardConfig:
 
 class Keyboard(ui.FreeformContainer):
 
-    def __init__(self, parent):
+    def __init__(self, parent, theme = None):
         ui.FreeformContainer.__init__(self, parent)
         self.width = 750
         self.height = 300
@@ -327,16 +327,16 @@ class Keyboard(ui.FreeformContainer):
         self.set_position_rel(ui.CENTER)
         self.set_center_rel(ui.CENTER)
 
-        # In letters
-        self.maxlength = 15
+        # In letters -- not anymore, now in pixels :D
+        self.maxlength = 260
 
         blackbox = ui.RoundedRectangle(None,
                                        0, 0,
                                        self.width, self.height,
-                                       15,
-                                       sf.Color(0, 174, 209, 255),
-                                       sf.Color(0, 151, 195, 255),
-                                       2)
+                                       theme.blackbox.radius,
+                                       theme.blackbox.color,
+                                       theme.blackbox.border,
+                                       theme.blackbox.thickness)
         self.set_enable_hitting(True)
         self.add_back_child(blackbox)
 
@@ -345,19 +345,24 @@ class Keyboard(ui.FreeformContainer):
         whitebox = ui.RoundedRectangle(None,
                                        170, 30,
                                        300, whitestr._get_height() + 45,
-                                       10,
-                                       sf.Color(0, 255, 255, 128),
-                                       sf.Color(0, 150, 150, 128), 1)
-        whitestr.SetPosition(5, 0)
+                                       theme.whitebox.radius,
+                                       theme.whitebox.color,
+                                       theme.whitebox.border,
+                                       theme.whitebox.thickness)
+        whitestr.SetPosition(15, 7)
+        whitestr.set_size (25)
+        
         self.add_child(whitebox)
         whitebox.add_child(whitestr)
 
         self.whitestr = whitestr
 
-        self.kconfig = _KeyboardConfig(self)
+        self.kconfig = _KeyboardConfig(self, theme)
 
         self.signal_text_entered = signalslot.Signal("text_entered")
         self.signal_text_failed = signalslot.Signal("text_failed")
+
+        uiactions.move_out(self, 200)
 
     def reinitialize(self):
         uiactions.move_in(self, 50)
@@ -418,7 +423,7 @@ class Keyboard(ui.FreeformContainer):
             else:
                 assert 0
         else:
-            if len(s) >= self.maxlength:
+            if self.whitestr._get_width () >= self.maxlength:
                 return
 
             s += key.keysprite.get_string()

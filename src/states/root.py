@@ -7,13 +7,15 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
-from base.util  import lazyprop
+from base.util  import lazyprop, nop
 from base.log   import get_log
 from core.state import State
 from ui.music   import MusicPlayer
 from ui         import widget
+from ui         import theme
 
 from tf.gfx import ui
+from tf.gfx.widget import basic
 
 _log = get_log (__name__)
 
@@ -44,9 +46,22 @@ class RootState (State):
         self.ui_layer.zorder = 1
         
         self.ui_bg = widget.Background (self.ui_layer)
-        self._ui_bg_disabled = []
+        self._ui_bg_disabled = True
 
+        self.ui_keyboard = basic.Keyboard (self.ui_layer, theme.keyboard)
+        # HACK
+        widget.get_keyboard_input = self._get_keyboard_input
+                
         self.manager.enter_state ('main_menu')
+
+    def _get_keyboard_input (self, originstr, callback):
+        self.enable_bg ()
+        def callback_wrapper (ev):
+             self.disable_bg ()
+             callback (ev.text)
+        self.ui_keyboard.show_keyboard_and_inject_answer (
+             originstr, callback_wrapper, nop)
+
 
     def do_release (self):
         super (RootState, self).do_release ()
@@ -56,16 +71,15 @@ class RootState (State):
         self.manager.leave_state ()
     
     def disable_bg (self):
-        self._ui_bg_disabled.pop ()
         if not self._ui_bg_disabled:
+            self._ui_bg_disabled = True
             self.ui_bg.set_enable_hitting (False)
             return self.tasks.add (self.ui_bg.fade_out ())
         return self.tasks.add (lambda t: None)
 
     def enable_bg (self):
-        # self._ui_bg_disabled.append (True)
-        if len (self._ui_bg_disabled) == 0:
-            self._ui_bg_disabled.append (True)
+        if self._ui_bg_disabled:
+            self._ui_bg_disabled = False
             self.ui_bg.set_enable_hitting (True)
             return self.tasks.add (self.ui_bg.fade_in ())
         return self.tasks.add (lambda t: None)
