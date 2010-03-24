@@ -28,7 +28,7 @@ cfg = ConfNode (
         'color'    : (0, 255, 0),
         'position' : 4,
         'enabled'  : True },
-      'map' : 'doc/map/worldmap.xml' })
+      'map' : 'data/map/worldmap.xml' })
 
 class TestMissions (unittest.TestCase):
 

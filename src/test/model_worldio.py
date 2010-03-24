@@ -35,7 +35,7 @@ _test_profile = ConfNode (
         'color'    : sf.Color (0, 0, 255),
         'position' : 5,
         'enabled'  : True },
-      'map' : 'doc/map/worldmap.xml' })
+      'map' : 'data/map/worldmap.xml' })
 
 
 class TestWorldIO (unittest.TestCase):
@@ -43,7 +43,6 @@ class TestWorldIO (unittest.TestCase):
     def test_save (self):        
         x = create_game (_test_profile)
         save_game (x, _TEMP_FILE)
-        os.remove (_TEMP_FILE)
 
     def test_load (self):
         x = create_game (_test_profile)
@@ -51,7 +50,7 @@ class TestWorldIO (unittest.TestCase):
         save_game (x, _TEMP_FILE)
         y = load_game (_TEMP_FILE)
         self.assertEquals (y.regions ['spain'].used, 10)
-        os.remove (_TEMP_FILE)
+
 
 
         
