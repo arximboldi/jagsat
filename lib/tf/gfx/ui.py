@@ -972,6 +972,7 @@ class VBox(OrganizedContainer):
     def __init__(self, parent = None, center = False):
         OrganizedContainer.__init__(self, parent)
         self.center_childs = center
+        self.separation = 0
         
     def _do_recalculate(self, window):
         OrganizedContainer._do_recalculate(self, window)
@@ -989,7 +990,7 @@ class VBox(OrganizedContainer):
                 x = (width - child._get_width ()) / 2
             child.SetPosition(x + child.padding_left,
                               y + child.padding_top)
-            y += self.padding_top + self.padding_bottom
+            y += self.padding_top + self.padding_bottom + self.separation
             y += child._get_height()
 
     def _get_unscaled_width(self):
@@ -1006,28 +1007,32 @@ class VBox(OrganizedContainer):
             #if not child._visible:
             #    continue
             h += child._get_height()
-            h += self.padding_top + self.padding_bottom
+            h += self.padding_top + self.padding_bottom + self.separation
         return h
 
 
 class HBox(OrganizedContainer):
 
-    def __init__(self, parent = None):
+    def __init__(self, parent = None, center = False):
         OrganizedContainer.__init__(self, parent)
-
+        self.center_childs = center
+        self.separation = 0
+        
     def _do_recalculate(self, window):
         OrganizedContainer._do_recalculate(self, window)
 
-        x = self.margin_left + self.padding_left
-        y = self.margin_top + self.padding_top
-
+        x, y = 0, 0
+        height = self._get_height ()
+        
         for child in self.children:
             #if not child._visible:
             #    continue
-            child.SetPosition(x + child.padding_left,
-                              y + child.padding_top)
-            x += self.padding_left + self.padding_right
-            x += child._get_width()
+            if self.center_childs:
+                y = (height - child._get_height ()) / 2
+            child.SetPosition (x + child.padding_left,
+                               y + child.padding_top)
+            x += self.padding_left + self.padding_right + self.separation
+            x += child._get_width ()
 
     def _get_unscaled_width(self):
         w = self.margin_left + self.margin_right
@@ -1035,7 +1040,7 @@ class HBox(OrganizedContainer):
             #if not child._visible:
             #    continue
             w += child._get_width()
-            w += self.padding_left + self.padding_right
+            w += self.padding_left + self.padding_right + self.separation
         return w
 
     def _get_unscaled_height(self):

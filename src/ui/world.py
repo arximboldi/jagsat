@@ -275,7 +275,8 @@ class RegionComponent (RegionListener, ui.Circle, object):
                                    unicode (used))
 
     def on_set_region_owner (self, region, owner):
-        self._fill_color = (owner and owner.color) or region_free_color
+        self._fill_color = (owner and theme.player_color [owner.color]) \
+                           or region_free_color
         self._rebuild_sprite ()
 
     def _rebuild_sprite (self):

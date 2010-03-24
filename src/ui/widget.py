@@ -33,10 +33,7 @@ class Frame (ui.RoundedRectangle, object):
                                       theme.active.border,
                                       theme.active.thickness)
         self.set_expand (True, True)
-
-SmallButton = lambda *a, **k: \
-    Button (theme = theme.small_button, *a, **k)
-
+    
 Text = ui.String
 
 class Button (ui3.Button, object):
@@ -46,14 +43,15 @@ class Button (ui3.Button, object):
                   text   = None,
                   image  = None,
                   vertical = True,
+                  button_size = None,
                   theme  = theme.button,
                   *a, **k):
 
         if vertical:
             self._box    = VBox (center = True)
         else:
-            self._box    = HBox ()
-            self._box.padding_right = 6
+            self._box    = HBox (center = True)
+            self._box.separation = 6
         
         self.string = None
         self.image = ui.Image (self._box, image)
@@ -61,12 +59,16 @@ class Button (ui3.Button, object):
         if text is None: text = u""
         self.string = ui.MultiLineString (self._box, unicode (text))
         self.string.set_size (theme.active.text_size)
-            
+        
         super (Button, self).__init__ (
             parent, self._box, theme, *a, **k)
 
         self.on_click = signal.Signal ()
         self.signal_click.add (self.on_click)
+
+        if button_size:
+            self._width, self._height = button_size
+            self.set_expand (False, False)
 
     def set_image (self, fname):
         if self.image:
@@ -76,38 +78,71 @@ class Button (ui3.Button, object):
         if self.string:
             self.string.set_string (unicode (string))
 
+class SmallButton (Button):
+    def __init__ (self, *a, **k):
+        super (SmallButton, self).__init__ (theme = theme.small_button, *a, **k)
+        pass
+
 
 class SelectButton (Button):
 
-    def __init__ (self, *a, **k):
-        super (SelectButton, self).__init__ (theme=theme.select_button, *a, **k)
+    def __init__ (self,
+                  parent = None,
+                  selected = False,
+                  theme = theme.select_button,
+                  selected_img = None,
+                  unselected_img = None,
+                  *a, **k):
+        super (SelectButton, self).__init__ (parent = parent,
+                                             theme = theme, *a, **k)
         self._is_selected = False
+        self._selected_img = selected_img
+        self._unselected_img = unselected_img
         self.on_select   = signal.Signal ()
         self.on_unselect = signal.Signal ()
         self.on_click += self.toggle_select
-        
+        if unselected_img:
+            self.set_image (self._unselected_img)
+        if selected:
+            self.select ()
+    
+    
     @property
     def is_selected (self):
         return self._is_selected
     
     def select (self):
         if not self._is_selected:
-            self.on_select (self)
             self._is_selected = True
+            if self._selected_img:
+                self.set_image (self._selected_img)
             self._rebuild (self.theme.selected)
-    
+            self.on_select (self)
+            
     def unselect (self):
         if self._is_selected:
-            self.on_unselect (self)
             self._is_selected = False
+            if self._unselected_img:
+                self.set_image (self._unselected_img)
             self._rebuild (self.theme.active)
-    
+            self.on_unselect (self)
+            
     @signal.weak_slot
     def toggle_select (self, ev = None):
         if self._is_selected:
             self.unselect ()
         else:
             self.select ()
+
+
+class CheckButton (SelectButton):
+
+    def __init__ (self, parent = None, *a, **k):
+        super (CheckButton, self).__init__ (
+            parent = parent,
+            selected_img = 'data/icon/accept-tiny.png',
+            unselected_img = 'data/icon/empty-tiny.png',
+            *a, **k)
 
 
 class List (HBox):
@@ -120,6 +155,8 @@ class List (HBox):
                   *a, **k):
         super (List, self).__init__ (parent)
 
+        self.on_change_select = signal.Signal ()
+
         self._slot_box     = VBox (self)
         self._but_box      = VBox (self)
         self._contents     = contents
@@ -130,23 +167,20 @@ class List (HBox):
         self._but_down     = SmallButton (self._but_box, None,
                                           'data/icon/down-tiny.png')
         
-        self._slots        = map (lambda _: SelectButton (self._slot_box,
-                                                          vertical = False),
+        self._slots        = map (lambda _: SelectButton (
+            self._slot_box, vertical = False, button_size = button_size),
                                   xrange (num_slots))
 
-        self._selected_idx = -1
+        self._selected_idx = 0 if contents else -1
         self._offset       = 0
 
-        self._but_box.padding_bottom  = 6
-        self._slot_box.padding_bottom = 6
-        self.padding_right            = 6
+        self._but_box.separation  = 6
+        self._slot_box.separation = 6
+        self.separation           = 6
         
         for i, s in enumerate (self._slots):
             s.on_select   += self._on_select_slot
             s.on_unselect += self._on_unselect_slot
-            if button_size:
-                s.set_expand (False, False)
-                s._width, s._height = button_size
             s.deactivate ()
 
         self._but_down.on_click += self.on_move_down
@@ -196,7 +230,6 @@ class List (HBox):
     @property
     def selected (self):
         if self._selected_idx < 0:
-            print "WTF: ", self._selected_idx
             return None
         try:
             return self._contents [self._selected_idx] [2]
@@ -220,18 +253,29 @@ class List (HBox):
         if slot._list_idx < 0:
             slot.unselect ()
             return
+        self._selected_idx = slot._list_idx
         for s in self._slots:
             if s != slot:
                 s.unselect ()
-        print "Selecting: ", slot._list_idx
-        self._selected_idx = slot._list_idx
-
+        self.on_change_select (self.selected)
+    
     @signal.weak_slot
     def _on_unselect_slot (self, slot):
         if slot._list_idx == self._selected_idx:
-            print "Unselecting: ", self._selected_idx
-            self._selected_idx = -1
-    
+            slot.select ()
+
+
+class LineEdit (SelectButton):
+
+    def __init__(self, parent, theme = theme.line_edit, *a, **k):
+	super (LineEdit, self).__init__(parent = parent,
+                                        theme = theme,
+                                        vertical = False,
+                                        button_size = (200, 40),
+                                        image = 'data/icon/edit-tiny.png',
+                                        *a, **k)
+        self.on_edit = signal.Signal ()
+
 
 class Background (ui.Rectangle, object):
 
@@ -239,7 +283,9 @@ class Background (ui.Rectangle, object):
         super (Background, self).__init__ (
             parent, 0, 0,
             1024 * 2, 768 * 2, # HACK!
-            sf.Color.Black, sf.Color.Black, 1., *a, **k)
+            sf.Color (0, 0, 30, 128),
+            sf.Color (0, 0, 30, 128),
+            1., *a, **k)
         self.set_center_rel (.5, .5)
         self.set_position_rel (.5, .5)
         self.on_click = signal.Signal ()

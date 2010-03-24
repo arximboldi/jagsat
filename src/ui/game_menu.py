@@ -8,56 +8,65 @@
 #
 
 from base import signal
-from widget import VBox, SmallButton, SelectButton, Frame
+from widget import HBox, VBox, SmallButton, SelectButton, Frame
 from model.world import WorldListener
 
 from tf.gfx import ui
 
-class GameHudComponent (WorldListener, Frame):
+def game_hud_text (parent, string):
+    frame = Frame (parent)
+    frame.set_margin (7)
+    frame.margin_top = 48
+    text = ui.String (frame, unicode (string))
+    text.set_size (18)
+    text.set_position (14, 7)
+    return text
+
+class GameHudComponent (WorldListener, HBox):
 
     def __init__ (self, world = None, *a, **k):
         super (GameHudComponent, self).__init__ (*a, **k)
         
-        self.set_margin (7)
-        self.margin_top= 48
-        self.text = ui.MultiLineString (
-            self, [u"Player: ", u"Phase: ", u"Round: "])
-        self.text.set_size (18)
-        self.text.set_position (14, 7)
-        self.set_enable_hitting (False)
-        self.deactivate ()
+        self.separation = 10
+        
+        self.text_player = game_hud_text (self, "Player: ")
+        self.text_round  = game_hud_text (self, "Round: ")
+        self.text_phase  = game_hud_text (self, "Phase: ")
+
         self.set_rotation (-90)
         self.set_center_rel (.5, 0.)
-        self.set_position (70., 768./2) # hack
+        self.set_position (36, 768./2) # hack
         self._do_update (world)
         world.connect (self)
         
     def on_set_world_round (self, world, round):
-        self._do_update (world)
+        self.text_round.set_string (u"Round: %i" % round)
 
     def on_set_world_current_player (self, world, player):
-        self._do_update (world)
+        self.text_player.set_string (u"Player: %s" %
+                                     (player and player.name) or "None")
 
     def on_set_world_phase (self, world, phase):
-        self._do_update (world)
+        self.text_phase.set_string (u"Phase: %s" % phase)
 
     def _do_update (self, world):
-        self.text.set_strings ([
+        self.text_player.set_string (
             u"Player: %s" % (world.current_player and
-                             world.current_player.name) or "None",
-            u"Phase: %s"  % world.phase,
-            u"Round: %i"  % world.round ])
+                             world.current_player.name) or "None")
+        self.text_round.set_string (u"Round: %i" % world.round)
+        self.text_phase.set_string (u"Phase: %s" % world.phase)
+
 
 class GameMenuComponent (VBox, object):
 
     def __init__ (self, parent = None, *a, **k):
         super (GameMenuComponent, self).__init__ (parent, *a, **k)
 
-        self.but_menu = SmallButton (self, None, 'data/icon/home-small.png')
-        self.but_move = SelectButton (self, None, 'data/icon/move-small.png')
-        self.but_zoom = SelectButton (self, None, 'data/icon/zoom-small.png')
-        self.but_rot  = SelectButton (self, None, 'data/icon/rotate-small.png')
-        self.but_restore = SmallButton (self, None, 'data/icon/undo-small.png')
+        self.but_menu = SmallButton (self, image='data/icon/home-small.png')
+        self.but_move = SelectButton (self, image='data/icon/move-small.png')
+        self.but_zoom = SelectButton (self, image='data/icon/zoom-small.png')
+        self.but_rot  = SelectButton (self, image='data/icon/rotate-small.png')
+        self.but_restore = SmallButton (self, image='data/icon/undo-small.png')
         
         self.but_menu.margin_right = 52
         self.but_move.margin_right = 52

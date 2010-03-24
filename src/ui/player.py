@@ -48,9 +48,9 @@ class PlayerComponent (widget.VBox, object):
 
         # The main button
         self._but_theme = theme.copy_button_theme (theme.small_button)
-        pr, pg, pb = player.color.r, player.color.g, player.color.b
-        self._but_theme.active.color  = player.color
-        self._but_theme.active.border = sf.Color (pr*.5, pg*.5, pb*.5)
+        pc = theme.player_color [player.color]
+        self._but_theme.active.color  = pc
+        self._but_theme.active.border = sf.Color (pc.r*.4, pc.g*.4, pc.b*.4)
 
         self._but_main = widget.Button (
             self, None, 'data/icon/small.png', theme = self._but_theme)

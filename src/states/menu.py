@@ -7,9 +7,11 @@
 #  completely forbidden without explicit permission of their authors.
 #
 
+from base import signal
+
 from core.state import State
 from tf.gfx import ui
-from ui.menu import MenuComponent
+from ui.menu import *
 
 class MainMenuState (State):
     
@@ -17,10 +19,15 @@ class MainMenuState (State):
 	
 	system = self.manager.system 
         layer = ui.Layer (system.view)
-        menu_comp = MenuComponent(layer)
-	menu_comp.on_start_game += lambda p: self.manager.change_state ('game', profile = p)
-	menu_comp.on_quit_program += self.manager.leave_state
-        self.menu_comp = menu_comp
+
+        self._menu = MainMenu (layer)
+
+        self._menu.actions.quit.on_click += self.manager.leave_state
+        self._menu.actions.play.on_click += self._on_click_play
+
+    @signal.weak_slot
+    def _on_click_play (self, ev = None):
+        self.manager.change_state ('game', profile = self._menu.options.config)
         
     def do_release (self):
-        self.menu_comp.remove_myself ()
+        self._menu.remove_myself ()

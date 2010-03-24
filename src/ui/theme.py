@@ -9,6 +9,14 @@
 
 from PySFML import sf
 
+player_color = {
+    0: sf.Color.Blue,
+    1: sf.Color.Green,
+    2: sf.Color.Red,
+    3: sf.Color.Yellow,
+    4: sf.Color.Black,
+    5: sf.Color.Magenta }
+
 background_music = [
     'data/sfx/background/right-of-freedom.ogg',
     'data/sfx/background/the-age-of-innocence.ogg',
@@ -52,6 +60,8 @@ class select_button (small_button):
     class selected (small_button.active):
         border    = sf.Color (220, 50, 50, 255)
         color    = sf.Color (50, 0, 0, 200)
+
+line_edit = select_button
 
 class frame (small_button):
     class active (small_button.active):
