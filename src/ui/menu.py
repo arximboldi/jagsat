@@ -93,7 +93,7 @@ class MainActions (widget.HBox):
         super (MainActions, self).__init__ (parent, center = True, *a, **k)
         self.separation = 20
 
-        title_text (self, '> Actions ')
+        # title_text (self, '> Actions ')
         
         self.play = widget.Button (
             self, 'Play', 'data/icon/troops-small.png', vertical = False)
@@ -313,7 +313,7 @@ class MapSelector (widget.List):
         
         super (MapSelector, self).__init__ (parent      = parent,
                                             num_slots   = 4,
-                                            button_size = (400, 104), 
+                                            button_size = (340, 104), 
                                             contents    = contents,
                                             *a, **k)
         for x in self._slots:
