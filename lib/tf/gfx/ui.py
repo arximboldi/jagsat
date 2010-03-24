@@ -228,7 +228,8 @@ class View:
 
     def draw(self, window):
         window.window.SetView(self.view)
-        for lr in self.layers:
+        ordered = order_layers (self.layers)
+        for i, lr in ordered:
             lr.draw(window.window)
 
 
@@ -247,7 +248,8 @@ class Layer:
         #assert isinstance(_view, View)
         self._view = _view
         self._view.add_layer(self)
-
+        self.zorder = 0
+        
     def set_visible(self, is_visible):
         v = self._visible
         self._visible = is_visible
@@ -293,6 +295,10 @@ class Layer:
 
     remove_child = remove_object
 
+def order_layers (layers):
+    return sorted (enumerate (layers),
+                   lambda (i, x), (j, y):
+                   cmp (x.zorder, y.zorder) or cmp (i, j))
 
 class Space:
 

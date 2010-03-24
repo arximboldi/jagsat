@@ -23,6 +23,7 @@ from ui.game_menu import GameMenuComponent, GameHudComponent
 from ui           import widget
 from ui           import theme
 
+from root import RootSubstate
 from util import QuittableState
 
 from tf.gfx import ui
@@ -56,7 +57,7 @@ test_profile = ConfNode (
         'enabled'  : True },
       'map' : 'data/map/worldmap.xml' })
 
-class GameState (State):
+class GameState (RootSubstate):
 
     def __init__ (self, test_phase = None, *a, **k):
         super (GameState, self).__init__ (*a, **k)
@@ -73,7 +74,6 @@ class GameState (State):
         for x in self.ui_player.itervalues ():
             x.remove_myself ()
         self.ui_world.remove_myself ()
-        self.ui_bg.remove_myself ()
         self.ui_menu.remove_myself ()
         
     def do_unsink (self, *a, **k):
@@ -102,9 +102,6 @@ class GameState (State):
         self.ui_hud    = GameHudComponent (parent = self.ui_layer,
                                            world = self.world)
         
-        self.ui_bg = widget.Background (self.ui_layer)
-        self._ui_bg_disabled = []
-
     def exchange_cards (self, player, cards):
         value = cardset_value (cards)
         if value > 0:
@@ -164,21 +161,6 @@ class GameState (State):
             self.manager.leave_state ()
         else:
             self.manager.enter_state ('ingame_menu')
-
-    def enable_map (self):
-        self._ui_bg_disabled.pop ()
-        if not self._ui_bg_disabled:
-            self.ui_bg.set_enable_hitting (False)
-            return self.tasks.add (self.ui_bg.fade_out ())
-        return self.tasks.add (lambda t: None)
-
-    def disable_map (self):
-        # self._ui_bg_disabled.append (True)
-        if len (self._ui_bg_disabled) == 0:
-            self._ui_bg_disabled.append (True)
-            self.ui_bg.set_enable_hitting (True)
-            return self.tasks.add (self.ui_bg.fade_in ())
-        return self.tasks.add (lambda t: None)
     
 
 class GameMessageState (GameSubstate):
@@ -186,21 +168,21 @@ class GameMessageState (GameSubstate):
     def do_setup (self, message = '', *a, **k):
         super (GameMessageState, self).do_setup (*a, **k)
         
-        self.ui_text = ui.MultiLineString (self.game.ui_layer,
+        self.ui_text = ui.MultiLineString (self.root.ui_layer,
                                            unicode (message))
         self.ui_text.set_center_rel (.5, .5)
         self.ui_text.set_position_rel (.5, .5)
         self.ui_text.set_size (50)
 
-        self.game.disable_map ()
+        self.root.enable_bg ()
         self.tasks.add (task.sequence (
             self.make_fade_task (task.fade),
-            task.run (lambda: self.game.ui_bg.on_click.connect (
+            task.run (lambda: self.root.ui_bg.on_click.connect (
                 self.on_click_bg))))
     
     @weak_slot
     def on_click_bg (self):
-        self.game.enable_map ()
+        self.root.disable_bg ()
         self.tasks.add (task.sequence (
             self.make_fade_task (task.invfade),
             task.run (self.manager.leave_state)))

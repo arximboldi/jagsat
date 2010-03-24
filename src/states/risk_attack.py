@@ -35,8 +35,8 @@ class RiskAttackState (GameSubstate, ui.widget.VBox):
         self.defender = defender
         
         game = self.game
-        game.disable_map ()
-        self.ui_attack = AttackComponent (game.ui_layer,
+        self.root.game.enable_bg ()
+        self.ui_attack = AttackComponent (self.root.ui_layer,
                                           attacker.model,
                                           defender.model,
                                           self.manager.system.audio)
@@ -44,10 +44,10 @@ class RiskAttackState (GameSubstate, ui.widget.VBox):
         self.ui_attack.on_retreat  += self._on_retreat
         self.ui_attack.on_attack   += self._on_attack
         self.ui_attack.on_continue += self._attack_result
-        
+    
     @signal.weak_slot
     def _on_retreat (self):
-        self.game.enable_map ()
+        self.root.disable_bg ()
         self.ui_attack.remove_myself ()
         self.manager.leave_state ()
 

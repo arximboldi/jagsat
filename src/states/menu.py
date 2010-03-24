@@ -18,10 +18,10 @@ class MainMenuState (State):
     def do_setup (self, *a, **k):
 	
 	system = self.manager.system 
-        layer = ui.Layer (system.view)
+        self.ui_layer = ui.Layer (system.view)
 
-        self._menu = MainMenu (layer)
-
+        self._menu = MainMenu (self.ui_layer)
+        
         self._menu.actions.quit.on_click += self.manager.leave_state
         self._menu.actions.play.on_click += self._on_click_play
 

@@ -7,9 +7,9 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
-from core.state import State
+from root import RootSubstate
 
-class QuittableState (State):
+class QuittableState (RootSubstate):
 
     def quit_state (self):
         self.manager.leave_state (must_quit = True)

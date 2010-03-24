@@ -283,8 +283,8 @@ class Background (ui.Rectangle, object):
         super (Background, self).__init__ (
             parent, 0, 0,
             1024 * 2, 768 * 2, # HACK!
-            sf.Color (0, 0, 30, 128),
-            sf.Color (0, 0, 30, 128),
+            sf.Color (0, 0, 0, 0),
+            sf.Color (0, 0, 0, 0),
             1., *a, **k)
         self.set_center_rel (.5, .5)
         self.set_position_rel (.5, .5)

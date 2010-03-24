@@ -51,7 +51,7 @@ def create_default_profile ():
             'position' : 3,
             'enabled'  : False },
           'player-4':
-          { 'name'     : 'Julius Cesar',
+          { 'name'     : 'Julius Caesar',
             'color'    : 4,
             'position' : 4,
             'enabled'  : False },
@@ -74,10 +74,8 @@ class MainMenu (ui.Image):
     def __init__ (self, parent = None, *a, **k):
         super (MainMenu, self).__init__ (parent, 'data/image/texture01.jpg',
                                          *a, **k)
-
-        bg = widget.Background (self)
                 
-        self._vbox = widget.VBox (bg)        
+        self._vbox = widget.VBox (self)
                 
         self.profiles = ProfileChooser (self._vbox)
         self.options  = GameOptions (self._vbox)

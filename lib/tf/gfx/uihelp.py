@@ -188,7 +188,9 @@ class MouseState:
 
     def _component_at(self, event):
         for v in self.all_views[::-1]:
-            for layer in v.layers[::-1]:
+            # Sorts by z-order and addition order
+            ordered = ui.order_layers (v.layers)
+            for i, layer in ordered[::-1]:
                 hits = hit_sprites(layer,
                                    event.MouseButton.X * xratio,
                                    event.MouseButton.Y)
