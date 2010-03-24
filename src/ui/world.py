@@ -20,6 +20,8 @@ from model.world import RegionListener
 import theme
 import math
 
+from os import path
+
 _log = get_log (__name__)
 
 region_radius     = 17
@@ -40,7 +42,8 @@ class WorldComponent (ui.Image, object):
         
         super (WorldComponent, self).__init__ (
             parent = parent,
-            fname  = world.map.background,
+            fname  = path.join (path.dirname (world.map.file_name),
+                                world.map.background),
             *a, **k)
 
         self.operation = map_op.none

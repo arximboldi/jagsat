@@ -138,19 +138,19 @@ class GameState (State):
         self.tasks.add (self.ui_world.restore_transforms ())
         
     @weak_slot
-    def stop_map_operation (self):
+    def stop_map_operation (self, but = None):
         self.ui_world.operation = map_op.none
 
     @weak_slot
-    def start_map_move (self):
+    def start_map_move (self, but = None):
         self.ui_world.operation = map_op.move
 
     @weak_slot
-    def start_map_zoom (self):
+    def start_map_zoom (self, but = None):
         self.ui_world.operation = map_op.zoom
 
     @weak_slot
-    def start_map_rot (self):
+    def start_map_rot (self, but = None):
         self.ui_world.operation = map_op.rotate
 
     @weak_slot

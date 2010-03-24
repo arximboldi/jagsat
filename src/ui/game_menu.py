@@ -75,7 +75,7 @@ class GameMenuComponent (VBox, object):
             op.on_select += self._unselect_ops
     
     @signal.weak_slot
-    def _unselect_ops (self):
+    def _unselect_ops (self, but):
         for x in self.map_ops:
             x.unselect ()
 

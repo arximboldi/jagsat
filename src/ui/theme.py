@@ -30,6 +30,7 @@ class button:
         border    = sf.Color (0x97, 0xBF, 0x60)
         thickness = 5
         radius    = 15
+        text_size = 20
     class inactive (active): pass
     class clicked (active): pass
         
@@ -40,6 +41,7 @@ class small_button:
         border    = sf.Color (150, 150, 70, 255)
         thickness = 2
         radius    = 15
+        text_size = 16
     class inactive (active):
         color     = sf.Color (0, 0, 0, 100)
         border    = sf.Color (0, 0, 0, 0)

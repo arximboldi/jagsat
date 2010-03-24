@@ -19,23 +19,6 @@ import pickle
 
 save_game_ext = 'cog'
 
-test_profile = ConfNode (
-    { 'player-0' :
-      { 'name'     : 'jp',
-        'color'    : sf.Color (255, 0, 0),
-        'position' : 3,
-        'enabled'  : True },
-      'player-2' :
-      { 'name'     : 'pj',
-        'color'    : sf.Color (0, 255, 0),
-        'position' : 4,
-        'enabled'  : True },
-      'player-3' :
-      { 'name'     : 'pjj',
-        'color'    : sf.Color (0, 0, 255),
-        'position' : 5,
-        'enabled'  : True },
-      'map' : '../doc/map/worldmap.xml' })
 
 class WorldIOError (ModelError): pass
 

@@ -280,7 +280,7 @@ class MenuComponent (ui.Image):
                 pdic['enabled'] = True
                 dic['player-' + str(i)] = pdic
                     
-        dic['map'] = self.mapL.get_map()
+        dic['map'] = self.mapL.selected
         
         self._profile.fill(dic)   
 
@@ -397,7 +397,8 @@ class MenuComponent (ui.Image):
         lname = []
         lcol = []
         lpos = []
-        
+        if self.mapL.selected is None:
+            return False
         for i in range(0,6):
             pinf = self.infoplayerL.get_child(i)
             if pinf._active:
@@ -602,56 +603,28 @@ class ComboBox(ui.HBox):
     def get_text(self):
 	return self._text
 
-class MapSelector(ui.HBox):
 
-    def __init__(self, parent = None):
+def get_map_list (path):
+    return map (lambda f: f [:-4],
+                filter (lambda f: f [-4:] == '.xml',
+                        listdir (path)))
 
-	ui.HBox.__init__(self, parent)
-	self._path_img = 'doc/map/small/'
-	self._path = 'doc/map/'
+class MapSelector (widget.List):
 
-	self._listmaps = []
-	self.init_list()
+    def __init__ (self, parent = None):
+	        
+	path_img = 'data/map/small/'
+	path     = 'data/map/'
+	maplist  = get_map_list (path)
+        contents = zip (
+            map (lambda m: path_img + m + '_small.png', maplist),
+            maplist,
+            map (lambda m: path + m + '.xml', maplist))
+        
+        super (MapSelector, self).__init__ (parent      = parent,
+                                            num_slots   = 4,
+                                            button_size = (250, 104), 
+                                            contents    = contents)
 
-	self._num = len(self._listmaps)
-	self._index = 0
-	self.padding_right = 10
-
-	self.left = widget.Button(self, None,'data/icon/go-previous-small.png', True, theme.menu)
-	self._map = widget.Button(self, None, self._path_img + self._listmaps[self._index] + '_small.png', True, theme.menu)
-	self.right = widget.Button(self, None,'data/icon/go-next-small.png', True, theme.menu)
-
-	self.right.on_click = signal.Signal ()
-        self.right.signal_click.add (self.right.on_click)
-        self.right.on_click += self.next
-        self.right.set_enable_hitting (True)
-	self.right.set_position_rel (1, .1)
-
-	self.left.on_click = signal.Signal ()
-        self.left.signal_click.add (self.left.on_click)
-        self.left.on_click += self.prev
-        self.left.set_enable_hitting (True)
-		
-    def next(self,random):
-        self._index = (self._index+1)%self._num
-	self._map.set_image(self._path_img + self._listmaps[self._index] + '_small.png')
- 
-    def prev(self,random):
-        self._index = (self._index-1)%self._num
-	self._map.set_image(self._path_img + self._listmaps[self._index] + '_small.png')
-
-    def select(self, new_map):
-	img = new_map[len(self._path):-4]
-	self._index = self._listmaps.index(img)
-	self._map.set_image(self._path_img + self._listmaps[self._index] + '_small.png')
-
-    def get_map(self):
-	return self._path + self._listmaps[self._index] + '.xml'
-
-    def init_list(self):
-	l = listdir(self._path)
-	for i in l:
-	    if i[-4:] == '.xml':
-		self._listmaps.append(i[:-4])
 
 

@@ -905,6 +905,9 @@ class Image(Component):
             self.img = ImageFile.empty_image
         self._sprite = sf.Sprite(self.img.img)
 
+    def load_image (self, fname):
+        self.set_image (ImageFile.new_image (fname))
+
     def set_image(self, img):
         self.img = img
         self._sprite.SetImage(self.img.img)
@@ -1279,6 +1282,7 @@ class String(Component):
             raise TypeError("tf: Error: String " + string + " is not unicode.")
         Component.__init__(self, parent)
         self._sprite = sf.String(string, *args, **kwargs)
+        self._string = string
         # XXX would be nice to set the displaylist for strings
 
     def __repr__(self):
@@ -1297,6 +1301,7 @@ class String(Component):
 
     def set_string(self, string):
         #assert isinstance(string, unicode)
+        self._string = string
         self._sprite.SetText(string)
         self._recalculate_parent_chain()
 
@@ -1309,6 +1314,7 @@ class String(Component):
         return self._sprite.GetRect().GetWidth()
 
     def _get_unscaled_height(self):
+        if len (self._string) < 1: return 0
         return self._sprite.GetSize()
 
 

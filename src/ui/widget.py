@@ -16,6 +16,7 @@ from tf.gfx import ui
 import tf.gfx.widget.basic as ui2
 import tf.gfx.widget.intermediate as ui3
 import functools
+from itertools import islice
 
 Component = ui.Component
 VBox = ui.VBox
@@ -46,12 +47,11 @@ class Button (ui3.Button, object):
         
         self._box    = VBox (center = True) if vertical else HBox () 
         self.string = None
-        self.image  = None
-        if image:
-            self.image = ui.Image (self._box, image)
-        if text:
-            self.string = ui.String (self._box, unicode (text))
-            self.string.set_size (20)
+        self.image = ui.Image (self._box, image)
+
+        if text is None: text = u""
+        self.string = ui.MultiLineString (self._box, unicode (text))
+        self.string.set_size (theme.active.text_size)
             
         super (Button, self).__init__ (
             parent, self._box, theme, *a, **k)
@@ -59,8 +59,14 @@ class Button (ui3.Button, object):
         self.on_click = signal.Signal ()
         self.signal_click.add (self.on_click)
 
-    def set_image(self, img):
-	self.image = ui.Image(self._box, img)
+    def set_image (self, fname):
+        if self.image:
+            self.image.load_image (fname)
+
+    def set_string (self, string):
+        if self.string:
+            self.string.set_string (unicode (string))
+
 
 class SelectButton (Button):
 
@@ -77,13 +83,13 @@ class SelectButton (Button):
     
     def select (self):
         if not self._is_selected:
-            self.on_select ()
+            self.on_select (self)
             self._is_selected = True
             self._rebuild (self.theme.selected)
     
     def unselect (self):
         if self._is_selected:
-            self.on_unselect ()
+            self.on_unselect (self)
             self._is_selected = False
             self._rebuild (self.theme.active)
     
@@ -94,6 +100,123 @@ class SelectButton (Button):
         else:
             self.select ()
 
+
+class List (HBox):
+
+    def __init__ (self,
+                  parent      = None,
+                  num_slots   = None,
+                  contents    = None,
+                  button_size = None,
+                  *a, **k):
+        super (List, self).__init__ (parent)
+
+        self._slot_box     = VBox (self)
+        self._but_box      = VBox (self)
+        self._contents     = contents
+        self._num_slots    = num_slots
+
+        self._but_up       = SmallButton (self._but_box, None,
+                                          'data/icon/up-tiny.png')
+        self._but_down     = SmallButton (self._but_box, None,
+                                          'data/icon/down-tiny.png')
+        
+        self._slots        = map (lambda _: SelectButton (self._slot_box,
+                                                          vertical = False),
+                                  xrange (num_slots))
+
+        self._selected_idx = -1
+        self._offset       = 0
+
+        self._but_box.padding_bottom  = 6
+        self._slot_box.padding_bottom = 6
+        self.padding_right            = 6
+        
+        for i, s in enumerate (self._slots):
+            s.on_select   += self._on_select_slot
+            s.on_unselect += self._on_unselect_slot
+            if button_size:
+                s.set_expand (False, False)
+                s._width, s._height = button_size
+            s.deactivate ()
+
+        self._but_down.on_click += self.on_move_down
+        self._but_up.on_click   += self.on_move_up
+
+        self._rebuild ()
+
+    def _rebuild (self):
+        i = 0
+        for (i, (img, txt, _)) in enumerate (
+            islice (self._contents,
+                    self._offset,
+                    self._offset + self._num_slots)):
+            slot = self._slots [i]
+            slot.set_image (img)
+            slot.set_string (txt)
+            slot._list_idx = i + self._offset
+            slot.activate ()
+            if slot._list_idx == self._selected_idx:
+                slot.select ()
+            else:
+                slot.unselect ()
+
+        for j in range (i+1, self._num_slots):
+            slot = self._slots [j]
+            slot.set_string (" ")
+            slot.set_image (None)
+            slot.deactivate ()
+            slot._list_idx = -1
+
+        if self._offset + self._num_slots >= len (self._contents):
+            self._but_down.deactivate ()
+        else:
+            self._but_down.activate ()
+
+        if self._offset == 0:
+            self._but_up.deactivate ()
+        else:
+            self._but_up.activate ()
+    
+    @property
+    def selected (self):
+        if self._selected_idx < 0:
+            print "WTF: ", self._selected_idx
+            return None
+        try:
+            return self._contents [self._selected_idx] [2]
+        except Exception:
+            return None
+
+    @signal.weak_slot
+    def on_move_down (self, ev = None):
+        if self._offset < len (self._contents) - self._num_slots:
+            self._offset += 1
+            self._rebuild ()
+
+    @signal.weak_slot
+    def on_move_up (self, ev = None):
+        if self._offset > 0:
+            self._offset -= 1
+            self._rebuild ()
+
+    @signal.weak_slot
+    def _on_select_slot (self, slot):
+        if slot._list_idx < 0:
+            slot.unselect ()
+            return
+        for s in self._slots:
+            if s != slot:
+                s.unselect ()
+        print "Selecting: ", slot._list_idx
+        self._selected_idx = slot._list_idx
+
+    @signal.weak_slot
+    def _on_unselect_slot (self, slot):
+        if slot._list_idx == self._selected_idx:
+            print "Unselecting: ", self._selected_idx
+            self._selected_idx = -1
+    
 
 class Background (ui.Rectangle, object):
 
