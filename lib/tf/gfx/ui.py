@@ -1283,8 +1283,22 @@ class String(Component):
         Component.__init__(self, parent)
         self._sprite = sf.String(string, *args, **kwargs)
         self._string = string
+        self._recheck_size ()
         # XXX would be nice to set the displaylist for strings
 
+    def _recheck_size (self):
+        string = self._string
+        
+        if string and string [0] == "%":
+            print "checking string: ", string
+            idx   = string [1:].find ('%')
+            if idx >= 0:
+                size  = int (string [1:idx+1])
+                txt   = string [idx+2:]
+                print size, txt
+                self._sprite.SetSize (size)
+                self._sprite.SetText (txt)
+    
     def __repr__(self):
         n = ""
         if hasattr(self, "name"):
@@ -1297,12 +1311,15 @@ class String(Component):
         return s
 
     def set_size(self, size):
-        return self._sprite.SetSize(size)
-
+        ret = self._sprite.SetSize(size)
+        self._recheck_size ()
+        return ret
+    
     def set_string(self, string):
         #assert isinstance(string, unicode)
         self._string = string
         self._sprite.SetText(string)
+        self._recheck_size ()
         self._recalculate_parent_chain()
 
     def get_string(self):
@@ -1372,7 +1389,7 @@ class MultiLineString(VBox):
             self.set_strings(None, *args, **kwargs)
             return
         assert isinstance(string, unicode)
-        self.set_strings(string.split("\\n"), *args, **kwargs)
+        self.set_strings(string.split("\n"), *args, **kwargs)
 
     def set_strings(self, strings, *args, **kwargs):
         if strings is not None:

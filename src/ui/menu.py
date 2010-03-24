@@ -11,16 +11,21 @@ from PySFML import sf
 from tf.gfx import ui
 from tf.gfx.widget.intermediate import Button, Button2
 from tf.gfx.widget.intermediate import LineEdit
+from tf.gfx.widget.basic import Keyboard
+
 from base.conf import ConfNode, GlobalConf
 from base import signal
 from base import util
 from base.log import get_log
-from tf.gfx.widget.basic import Keyboard
 
-from os import listdir
-
+from model.map import load_map_meta, load_map
 import theme
 import widget
+
+from os import listdir
+from os import path
+from functools import partial
+
 
 _log = get_log (__name__)
 
@@ -302,7 +307,7 @@ class MenuComponent (ui.Image):
                 'color'    : COLOR [2],
                 'position' : 2,
                 'enabled'  : True },
-              'map' : 'doc/map/worldmap.xml' })
+              'map' : 'data/map/worldmap.xml' })
 
         GlobalConf ().path('profiles').adopt(cfg, 'Default')	
 	
@@ -605,25 +610,32 @@ class ComboBox(ui.HBox):
 
 
 def get_map_list (path):
-    return map (lambda f: f [:-4],
-                filter (lambda f: f [-4:] == '.xml',
-                        listdir (path)))
+    return filter (lambda f: f [-4:] == '.xml', listdir (path))
 
 class MapSelector (widget.List):
 
     def __init__ (self, parent = None):
 	        
-	path_img = 'data/map/small/'
-	path     = 'data/map/'
-	maplist  = get_map_list (path)
+        mappath  = path.join ('data', 'map')
+        maplist  = get_map_list (mappath)
+        abslist  = map (partial (path.join, mappath), maplist)
+        mapmetas = map (load_map, abslist)
+        
         contents = zip (
-            map (lambda m: path_img + m + '_small.png', maplist),
-            maplist,
-            map (lambda m: path + m + '.xml', maplist))
+            map (lambda m: path.join (mappath, m.meta.thumbnail), mapmetas),
+            map (lambda (n, m):
+                 '%%24%%%s\n'
+                 '%%15%%by %s\n'
+                 '%%15%%with %i regions.\n'
+                 '%%13%%\n'
+                 '%%18%%%s' %
+                 (n, m.meta.author, len (m.regions), m.meta.description),
+                 zip (map (lambda m: m [:-4], maplist), mapmetas)),
+            abslist)
         
         super (MapSelector, self).__init__ (parent      = parent,
                                             num_slots   = 4,
-                                            button_size = (250, 104), 
+                                            button_size = (400, 104), 
                                             contents    = contents)
 
 

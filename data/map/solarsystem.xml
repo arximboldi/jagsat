@@ -2,12 +2,18 @@
 <!DOCTYPE map SYSTEM "file:map-file.dtd">
 
 <map bg="solarsystem.png" 
-     xscale="4" yscale="2.8" xoffset="0" yoffset="150" zoom="2">
-  <meta>
-    <author>The JAGSAT Development team.</author>
-    <description>solarsystem map.</description>
-  </meta>
+     xscale="4" 
+     yscale="2.8" 
+     xoffset="0" 
+     yoffset="150" 
+     zoom="2">
 
+  <meta>
+    <thumbnail>solarsystem-thumb.png</thumbnail>
+    <author>The JAGSAT Development team.</author>
+    <description>War in the solar system.</description>
+  </meta>
+  
   <!-- continent mercury, venus, tellus -->
 
   <continent name="mercury venus and tellus"

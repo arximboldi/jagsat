@@ -2,10 +2,16 @@
 <!DOCTYPE map SYSTEM "file:map-file.dtd">
 
 <map bg="galaxymap.png" 
-     xscale="4" yscale="2.8" xoffset="0" yoffset="150" zoom="2">
+     xscale="4" 
+     yscale="2.8" 
+     xoffset="0" 
+     yoffset="150" 
+     zoom="2">
+
   <meta>
+    <thumbnail>galaxymap-thumb.png</thumbnail>
     <author>The JAGSAT Development team.</author>
-    <description>solarsystem map.</description>
+    <description>Fight for the universe!</description>
   </meta>
 
   <!-- continent Starburst -->

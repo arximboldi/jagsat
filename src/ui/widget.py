@@ -7,6 +7,8 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
+from base.log import get_log
+from base import util
 from base import signal
 from core import task
 import theme
@@ -17,6 +19,8 @@ import tf.gfx.widget.basic as ui2
 import tf.gfx.widget.intermediate as ui3
 import functools
 from itertools import islice
+
+_log = get_log (__name__)
 
 Component = ui.Component
 VBox = ui.VBox
@@ -44,8 +48,13 @@ class Button (ui3.Button, object):
                   vertical = True,
                   theme  = theme.button,
                   *a, **k):
+
+        if vertical:
+            self._box    = VBox (center = True)
+        else:
+            self._box    = HBox ()
+            self._box.padding_right = 6
         
-        self._box    = VBox (center = True) if vertical else HBox () 
         self.string = None
         self.image = ui.Image (self._box, image)
 
@@ -177,6 +186,12 @@ class List (HBox):
             self._but_up.deactivate ()
         else:
             self._but_up.activate ()
+
+    def select (self, cnt):
+        _log.debug ("Trying to select: %s" % cnt)
+        idx = util.index_if (lambda (i,t,c): c == cnt, self._contents)
+        self._selected_idx = idx
+        self._rebuild ()
     
     @property
     def selected (self):

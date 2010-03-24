@@ -13,6 +13,12 @@ import functools
 
 near0 = 0.0001
 
+def index_if (cond, list):
+    for i, x in enumerate (list):
+        if cond (x):
+            return i
+    raise IndexError, "Element not found."
+
 def const (val):
     return lambda: val
 

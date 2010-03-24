@@ -21,6 +21,11 @@ _log = get_log (__name__)
 class MapError (ModelError):
     pass
 
+def load_map_meta (file_name):
+    """
+    TODO: Optimize.
+    """
+    return load_map (file_name).meta
 
 def load_map (file_name):
     try:
@@ -65,6 +70,10 @@ class MapContentHandler (AutoContentHandler):
         
     def _new_meta (self, attrs):
         self.map.meta = MetaDef ()
+
+    def _new_thumbnail (self, attrs): pass
+    def _chr_thumbnail (self, content):
+        self.map.meta.thumbnail = content
 
     def _new_author (self, attrs): pass
     def _chr_author (self, content):
@@ -174,12 +183,15 @@ class MapContentHandler (AutoContentHandler):
 class MetaDef (object):
 
     def __init__ (self,
-                  author = '',
+                  thumbnail   = '',
+                  author      = '',
                   description = '',
                   *a, **k):
         super (MetaDef, self).__init__ (*a, **k)
-        self.author = author
-        self.description = ''
+
+        self.thumbnail   = thumbnail
+        self.author      = author
+        self.description = description
 
 
 class MapDef (object):
