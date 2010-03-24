@@ -72,9 +72,9 @@ def title_text (parent, text):
 class MainMenu (ui.Image):
 
     def __init__ (self, parent = None, *a, **k):
-        super (MainMenu, self).__init__ (parent, 'data/image/texture01.jpg',
+        super (MainMenu, self).__init__ (parent, 'data/image/texture03.jpg',
                                          *a, **k)
-                
+
         self._vbox = widget.VBox (self)
                 
         self.profiles = ProfileChooser (self._vbox)
@@ -84,7 +84,7 @@ class MainMenu (ui.Image):
         self._vbox.separation = 30
 
         self._vbox.set_center_rel (.5, .5)
-        self._vbox.set_position_rel (.52, .513)
+        self._vbox.set_position_rel (.53, .52)
 
 
 class MainActions (widget.HBox):
@@ -303,10 +303,10 @@ class MapSelector (widget.List):
             map (lambda m: path.join (mappath, m.meta.thumbnail), mapmetas),
             map (lambda (n, m):
                  '%%24%%%s\n'
-                 '%%15%%by %s\n'
-                 '%%15%%with %i regions.\n'
-                 '%%13%%\n'
-                 '%%18%%%s' %
+                 '%%12%%by %s\n'
+                 '%%12%%with %i regions.\n'
+                 '%%8%%\n'
+                 '%%16%%%s' %
                  (n, m.meta.author, len (m.regions), m.meta.description),
                  zip (map (lambda m: m [:-4], maplist), mapmetas)),
             abslist)
@@ -316,6 +316,8 @@ class MapSelector (widget.List):
                                             button_size = (400, 104), 
                                             contents    = contents,
                                             *a, **k)
+        for x in self._slots:
+            x.string.set_color (sf.Color (255, 255, 255, 180))
 
 
 

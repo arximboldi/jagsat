@@ -62,7 +62,9 @@ class Button (ui3.Button, object):
         if text is None: text = u""
         self.string = ui.MultiLineString (self._box, unicode (text))
         self.string.set_size (theme.active.text_size)
-        
+        if not vertical:
+            self.string.margin_bottom = 7
+
         super (Button, self).__init__ (
             parent, self._box, theme, *a, **k)
 
