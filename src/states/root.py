@@ -110,7 +110,7 @@ class RootDialogState (RootSubstate):
     def do_setup (self, mk_dialog = None, *a, **k):
         assert mk_dialog
         self.root.enable_bg ()
-        self._dialog = mk_dialog (self.root.ui_layer)
+        self._dialog = mk_dialog (self.root.ui_layer, *a, **k)
         self._dialog.on_dialog_exit += self._on_dialog_exit
         self._dialog.set_center_rel (.5, .5)
         self._dialog.set_position_rel (.5, .5)

@@ -35,9 +35,9 @@ class YesNoDialog (widget.VBox, DialogBase):
         self._but_box.separation = 20
         
         self.yes_button = widget.Button (
-            self._but_box, 'Yes', 'data/icon/accept.png')
+            self._but_box, 'Yes', 'data/icon/accept.png', vertical = False)
         self.no_button  = widget.Button (
-            self._but_box, 'No', 'data/icon/no.png')
+            self._but_box, 'No', 'data/icon/no.png', vertical = False)
 
         self.yes_button.on_click += lambda _: self.on_dialog_exit (ret = 'yes')
         self.no_button.on_click  += lambda _: self.on_dialog_exit (ret = 'no')

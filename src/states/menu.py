@@ -12,12 +12,15 @@ from base import conf
 
 from root import RootSubstate
 from tf.gfx import ui
-from ui.menu import MainMenu, ProfileChanger, ProfileChangeReturn
+from ui.menu import (MainMenu, ProfileChangerDialog, ProfileChangeReturn,
+                     RulesOptionsDialog)
 
 
 def validate_profile (cfg):
     players = filter (lambda c: c.child ('enabled').value,
                       map (lambda i: cfg.child ('player-%i'%i), range (6)))
+    if not c.child ('map').value:
+        return "You must choose a map."
     if len (players) < 3:
         return "There must be at least 3 players to play."
     for i, x in enumerate (players):
@@ -29,6 +32,7 @@ def validate_profile (cfg):
             if x.child ('name').value == y.child ('name').value:
                 return "Two players have the same name."
     return None
+
         
 class MainMenuState (RootSubstate):
     
@@ -53,6 +57,13 @@ class MainMenuState (RootSubstate):
         self.menu.profiles.del_profile.on_click += self._on_del_profile
         self.menu.profiles.add_profile.on_click += self._on_add_profile
 
+        self.menu.options.rules.on_click += self._on_change_rules
+
+    @signal.weak_slot
+    def _on_change_rules (self, ev):
+        self.manager.enter_state ('dialog', mk_dialog = RulesOptionsDialog,
+                                  config = self.menu.profiles.current)
+    
     @signal.weak_slot
     def _on_add_profile (self, ev):
         profiles = self.menu.profiles
@@ -71,7 +82,7 @@ class MainMenuState (RootSubstate):
 
     @signal.weak_slot
     def _on_change_profile (self, ev = None):
-        self.manager.enter_state ('dialog', mk_dialog = ProfileChanger)
+        self.manager.enter_state ('dialog', mk_dialog = ProfileChangerDialog)
     
     @signal.weak_slot
     def _on_click_play (self, ev = None):

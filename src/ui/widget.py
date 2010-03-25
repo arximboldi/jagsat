@@ -104,9 +104,15 @@ class SelectButton (Button):
         self._is_selected = False
         self._selected_img = selected_img
         self._unselected_img = unselected_img
-        self.on_select   = signal.Signal ()
-        self.on_unselect = signal.Signal ()
-        self.on_click += self.toggle_select
+
+        self.on_select    = signal.Signal ()
+        self.on_unselect  = signal.Signal ()
+        self.on_toggle    = signal.Signal ()
+
+        self.on_select   += self.on_toggle
+        self.on_unselect += self.on_toggle
+        self.on_click    += self.toggle_select
+
         if unselected_img:
             self.set_image (self._unselected_img)
         if selected:
@@ -158,6 +164,15 @@ class CheckButton (SelectButton):
             unselected_img = 'data/icon/empty-tiny.png',
             *a, **k)
 
+
+class CheckedText (HBox):
+
+    def __init__ (self, parent = None, text = u'', *a, **k):
+        super (CheckedText, self).__init__ (parent, center = True)
+        self.separation = 10
+        self.check = CheckButton (self)
+        self.text =  Text (self, unicode (text))
+        self.text.set_size (20)
 
 class List (HBox):
 

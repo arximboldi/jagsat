@@ -66,7 +66,9 @@ def create_default_profile ():
             'color'    : 5,
             'position' : 5,
             'enabled'  : False },
-          'map' : 'data/map/worldmap.xml' })
+          'map'         : 'data/map/worldmap.xml',
+          'used-attack' : True,
+          'used-move'   : True })
 
 def title_text (parent, text):
     string = ui.String (parent, unicode (text))
@@ -111,16 +113,16 @@ class MainActions (widget.HBox):
 
 
 class ProfileChangeReturn (dialog.DialogReturn): pass
-class ProfileChanger (widget.VBox, dialog.DialogBase):
+class ProfileChangerDialog (widget.VBox, dialog.DialogBase):
 
     def __init__ (self, parent = None,
                   config = GlobalConf (),
                   *a, **k):
 
-        super (ProfileChanger, self).__init__ (parent)
+        super (ProfileChangerDialog, self).__init__ (parent)
 
         self.separation = 15
-        self._text = widget.Text (self, unicode ("%30%Choose a profile:"))
+        title_text (self, "> Choose a profile")
 
         self._prof_list = widget.List (
             parent    = self,
@@ -207,6 +209,45 @@ class ProfileManager (widget.HBox):
         return new_name
 
 
+class RulesOptionsDialog (widget.VBox, dialog.DialogBase):
+
+    def __init__ (self, parent = None, config = None, *a, **k):
+        super (RulesOptionsDialog, self).__init__ (parent = parent, *a, **k)
+
+        self.separation = 25
+        self._config = config
+        
+        title_text (self, "> Rules configuration")
+
+        self._options = widget.VBox (self)
+        self._options.separation = 10
+        self._opt_used_attack = widget.CheckedText (
+            self._options, "Troops get tired on attack.")
+        self._opt_used_move = widget.CheckedText (
+            self._options, "Troops get tired on movement.")
+
+        if config.child ('used-attack').value:
+            self._opt_used_attack.check.select ()
+        if config.child ('used-move').value:
+            self._opt_used_move.check.select ()
+        
+        self._but_ok = widget.Button (
+            self, 'Done', 'data/icon/accept-small.png', vertical = False)
+
+        self._but_ok.on_click += self.on_dialog_exit
+        
+        self._opt_used_attack.check.on_toggle += self._update_used_attack
+        self._opt_used_move.check.on_toggle   += self._update_used_move
+
+    @signal.weak_slot
+    def _update_used_attack (self, but):
+        self._config.child ('used-attack').value = but.is_selected
+
+    @signal.weak_slot
+    def _update_used_move (self, but):
+        self._config.child ('used-move').value = but.is_selected
+
+        
 class GameOptions (widget.HBox):
     
     def __init__ (self, parent = None, config = create_default_profile ()):
@@ -232,7 +273,8 @@ class GameOptions (widget.HBox):
         txt.padding_top = 10
         self._box_extra = widget.HBox (self._box_left)
         self._box_extra.separation = 10
-        self._but_rules = widget.SmallButton (self._box_extra,
+
+        self.rules = widget.SmallButton (self._box_extra,
             'Rules', 'data/icon/world-small.png', vertical = False)
 
         self._but_music = widget.SelectButton (
