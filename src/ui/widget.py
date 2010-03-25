@@ -340,18 +340,21 @@ class Background (ui.Rectangle, object):
         self.set_position_rel (.5, .5)
         self.on_click = signal.Signal ()
         self.signal_click.add (lambda ev: self.on_click ())
+        self._fade_value = 0.
         
     def fade_in (self, duration = .75):
         """ TODO: Make generic for any widget, but its not trivial """
-        return self._make_fade_task (task.fade, duration)
+        return  task.sinusoid (self._set_fade, self._fade_value, 1.,
+                               duration = duration)
 
     def fade_out (self, duration = .75):
-        return self._make_fade_task (task.invfade, duration)
+        return  task.sinusoid (self._set_fade, self._fade_value, 0.,
+                               duration = duration)
+    
+    def _set_fade (self, value):
+        self._fade_value = value
+        self.set_color (sf.Color (0, 0, 0, value*210)),
 
-    def _make_fade_task (self, fade_task, duration = .75):
-        return fade_task (lambda x:
-                       self.set_color (sf.Color (0, 0, 0, x*210)),
-                       init = True, duration = duration)
 
 def move_in (comp, vertical = False, duration = .75, inverse = False):
     start = sf.Vector2 (-1, 0) if not vertical else sf.Vector2 (0, -1)

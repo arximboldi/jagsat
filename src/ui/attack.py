@@ -168,11 +168,11 @@ class AttackComponent (ui.FreeformContainer, object):
 
         if use_on_attack:
             self._txt_attacker = ui.String (self._box_attacker, unicode (
-                self.attacker.definition.name +
+                self.attacker.definition.name.title () +
                 ": %i/%i" % (self.attacker.troops, self.attacker.used)))
         else:
             self._txt_attacker = ui.String (self._box_attacker, unicode (
-                self.attacker.definition.name +
+                self.attacker.definition.name.title () +
                 ": %i" % (self.attacker.troops)))
             
         set_attacker_text_style (self._txt_attacker)
@@ -187,7 +187,7 @@ class AttackComponent (ui.FreeformContainer, object):
         self._box_defender_txt = widget.HBox (self._box_defender)
         self._box_defender_txt.padding_left = 10 # DIRTY HACK, bugs in TF
         self._txt_defender = ui.String (self._box_defender_txt, unicode (
-            self.defender.definition.name + 
+            self.defender.definition.name.title () + 
             ": %i" % self.defender.troops))
         set_defender_text_style (self._txt_defender)
         
@@ -250,16 +250,17 @@ class AttackComponent (ui.FreeformContainer, object):
     def _on_change_attacker_txt (self, reg, val):
         if self.use_on_attack:
             self._txt_attacker.set_string (
-                self.attacker.definition.name +
+                self.attacker.definition.name.title () +
                 ": %i/%i" % (self.attacker.troops, self.attacker.used))
         else:
             self._txt_attacker.set_string (
-                self.attacker.definition.name +
+                self.attacker.definition.name.title () +
                 ": %i" % (self.attacker.troops))
             
     def _on_change_defender_txt (self, reg, val):
         self._txt_defender.set_string (
-            self.defender.definition.name + ": %i" % self.defender.troops)
+            self.defender.definition.name.title () + ": %i" %
+            self.defender.troops)
 
     def restore (self):
         """ Use this method to re-setup the UI to handle a new attack. """

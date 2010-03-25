@@ -24,13 +24,16 @@ from base import util
 from base.log import get_log
 
 from model.map import load_map_meta, load_map
+from model.worldio import save_game_ext
 import theme
 import widget
 import dialog
 
-from os import listdir
-from os import path
+from os import listdir, stat, path
+import time
+
 from functools import partial
+import string
 
 _log = get_log (__name__)
 
@@ -66,7 +69,7 @@ def create_default_profile ():
             'color'    : 5,
             'position' : 5,
             'enabled'  : False },
-          'map'         : 'data/map/worldmap.xml',
+          'map'         : 'data/map/world_map.xml',
           'use-on-attack' : True,
           'use-on-move'   : True })
 
@@ -112,7 +115,66 @@ class MainActions (widget.HBox):
             self, 'Quit', 'data/icon/quit-small.png', vertical = False)
 
 
-class ProfileChangeReturn (dialog.DialogReturn): pass
+class LoadGameReturn (dialog.DialogReturn): pass
+class DeleteGameReturn (dialog.DialogReturn): pass
+class LoadGameDialog (widget.VBox, dialog.DialogBase):
+
+    def __init__ (self, parent = None,
+                  save_folder = '',
+                  *a, **k):
+        super (LoadGameDialog, self).__init__ (parent, *a, **k)
+
+        self.separation = 20
+        title_text (self, '> Load Game')
+
+        extension = '.' + save_game_ext
+        
+        contents = [ ('data/icon/save-small.png',
+                      "%%22%%%s\n%%14%%%s" %
+                      (s [:-len (extension)],
+                       time.asctime (
+                           #"%b %e  %Y",
+                           time.gmtime (
+                               stat (path.join (save_folder, s)).st_mtime))),
+                      path.join (save_folder, s))
+                     for s in listdir (save_folder)
+                     if s [-len (extension):] == extension]
+        print contents
+        print listdir (save_folder)
+        self._save_list = widget.List (parent = self,
+                                       num_slots = 6,
+                                       contents = contents,
+                                       button_size = (450, 56))
+
+        self._but_box = widget.HBox (self)
+        self._but_box.separation = 15
+
+        self._but_load = widget.Button (
+            self._but_box, 'Load', 'data/icon/load-small.png', vertical = False)
+        self._but_delete = widget.Button (
+            self._but_box, 'Delete', 'data/icon/cancel-small.png',
+            vertical = False)
+        self._but_back = widget.Button (
+            self._but_box, 'Back', 'data/icon/undo-small.png', vertical = False)
+
+        self._but_load.on_click   += self._on_load_game
+        self._but_delete.on_click += self._on_delete_game
+        self._but_back.on_click   += self._on_go_back
+
+    @signal.weak_slot
+    def _on_load_game (self, ev):
+        self.on_dialog_exit (LoadGameReturn (self._save_list.selected))
+
+    @signal.weak_slot
+    def _on_delete_game (self, ev):
+        self.on_dialog_exit (DeleteGameReturn (self._save_list.selected))
+
+    @signal.weak_slot
+    def _on_go_back (self, ev):
+        self.on_dialog_exit (None)
+
+
+class ProfileChangerReturn (dialog.DialogReturn): pass
 class ProfileChangerDialog (widget.VBox, dialog.DialogBase):
 
     def __init__ (self, parent = None,
@@ -134,7 +196,7 @@ class ProfileChangerDialog (widget.VBox, dialog.DialogBase):
         
         self._prof_list.select (config.child ('current-profile').value)
         self._prof_list.on_change_select += lambda x: self.on_dialog_exit (
-            ProfileChangeReturn (self._prof_list.selected))
+            ProfileChangerReturn (self._prof_list.selected))
 
 
 class ProfileManager (widget.HBox):
@@ -293,8 +355,13 @@ class GameOptions (widget.HBox):
         
         self._map_selector = MapSelector (parent = self._box_map)
         self._map_selector.on_change_select += self._update_map
-        self._map_selector.select (config.child ('map').value)
-
+        try:
+            self._map_selector.select (config.child ('map').value)
+        except Exception:
+            try:
+                self._map_selector.select (self._map_selector._contents [0][2])
+            except Exception: pass
+        
         self.separation    = 50
 
     @property
@@ -434,7 +501,8 @@ class MapSelector (widget.List):
                  '%%12%%with %i regions.\n'
                  '%%8%%\n'
                  '%%16%%%s' %
-                 (n, m.meta.author, len (m.regions), m.meta.description),
+                 (n.translate (string.maketrans ('_',' ')).title (),
+                  m.meta.author, len (m.regions), m.meta.description),
                  zip (map (lambda m: m [:-4], maplist), mapmetas)),
             abslist)
         

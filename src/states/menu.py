@@ -12,9 +12,12 @@ from base import conf
 
 from root import RootSubstate
 from tf.gfx import ui
-from ui.menu import (MainMenu, ProfileChangerDialog, ProfileChangeReturn,
-                     RulesOptionsDialog)
+from ui.menu import (MainMenu, ProfileChangerDialog, ProfileChangerReturn,
+                     RulesOptionsDialog, LoadGameDialog, LoadGameReturn,
+                     DeleteGameReturn)
 
+import os.path
+import os
 
 def validate_profile (cfg):
     players = filter (lambda c: c.child ('enabled').value,
@@ -52,6 +55,7 @@ class MainMenuState (RootSubstate):
 
         self.menu.actions.quit.on_click += self.manager.leave_state
         self.menu.actions.play.on_click += self._on_click_play
+        self.menu.actions.load.on_click += self._on_click_load
 
         self.menu.profiles.change_profile.on_click += self._on_change_profile
         self.menu.profiles.del_profile.on_click += self._on_del_profile
@@ -63,7 +67,12 @@ class MainMenuState (RootSubstate):
     def _on_change_rules (self, ev):
         self.manager.enter_state ('dialog', mk_dialog = RulesOptionsDialog,
                                   config = self.menu.profiles.current)
-    
+
+    @signal.weak_slot
+    def _on_click_load (self, ev = None):
+        self.manager.enter_state ('dialog', mk_dialog = LoadGameDialog,
+                                  save_folder = self.manager.get_save_folder ())
+        
     @signal.weak_slot
     def _on_add_profile (self, ev):
         profiles = self.menu.profiles
@@ -111,10 +120,32 @@ class MainMenuState (RootSubstate):
                 selection.value = 'default'
             self._rebuild ()
 
-        elif isinstance (dialog_ret, ProfileChangeReturn):
+        elif isinstance (dialog_yes, tuple):
+            action, param = dialog_yes
+            if action == 'remove_savegame':
+                os.remove (param)
+                self._on_click_load ()                
+
+        elif isinstance (dialog_ret, ProfileChangerReturn):
             self.menu.profiles.selection.value = dialog_ret.retval
             self._rebuild ()
-    
+
+        elif isinstance (dialog_ret, LoadGameReturn):
+            pass
+
+        elif isinstance (dialog_ret, DeleteGameReturn):
+            if dialog_ret.retval:
+                self.manager.enter_state (
+                    'yes_no_dialog',
+                    message =
+                    'Are you sure you want to remove\n'
+                    'the save game: %s?'
+                % os.path.basename (dialog_ret.retval) [:-4],
+                yes_ret = ('remove_savegame', dialog_ret.retval))
+            else:
+                self.manager.enter_state ('message',
+                                          message = 'Nothing to remove.')
+                
     def do_release (self):
         super (MainMenuState, self).do_release ()
         self.menu.remove_myself ()

@@ -87,20 +87,22 @@ class RiskAttackState (GameSubstate, ui.widget.VBox):
             if old_owner.alive:
                 self.manager.change_state (
                     'message', message =
-                    "Player %s conquered %s." % (attacker.owner.name,
-                                                 defender.definition.name))
+                    "Player %s conquered %s." % (
+                        attacker.owner.name,
+                        defender.definition.name.title ()))
             else:
                 self.manager.change_state (
                     'message', message =
                     "Player %s conquered %s.\nPlayer %s is now dead." %
-                    (attacker.owner.name, defender.definition.name,
+                    (attacker.owner.name, defender.definition.name.title (),
                      old_owner.name))
                 self.manager.system.audio.play_sound (
                     'data/sfx/marchs/killed_player.wav')
                 
         elif not attacker.can_attack:
             self.manager.change_state ('message', message =
-                "No more availible troops in %s." % attacker.definition.name)
+                "No more availible troops in %s." %
+                                       attacker.definition.name.title ())
         else:
             self.ui_attack.restore ()
     

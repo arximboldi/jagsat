@@ -74,8 +74,8 @@ class PlayerComponent (widget.VBox, object):
             self._menu_main, None, 'data/icon/troops-small.png')
         self._but_mission = widget.SmallButton (
             self._menu_main, None, 'data/icon/world-small.png')
-        self._but_undo = widget.SmallButton (
-            self._menu_main, None, 'data/icon/undo-small.png')
+        # self._but_undo = widget.SmallButton (
+        #    self._menu_main, None, 'data/icon/undo-small.png')
         
         self.padding_bottom = 0
         self._menu_main.padding_bottom = 6
@@ -85,7 +85,7 @@ class PlayerComponent (widget.VBox, object):
         self._but_mission.on_click += self._on_show_mission
         self._but_cards.on_click   += self._on_show_cards
 
-        self._but_undo.deactivate ()
+        # self._but_undo.deactivate ()
         self._but_pass.deactivate ()
 
         self._but_pass.on_click += self.on_toggle_menu

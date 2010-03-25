@@ -19,7 +19,6 @@ import pickle
 
 save_game_ext = 'cog'
 
-
 class WorldIOError (ModelError): pass
 
 def load_game (fname):

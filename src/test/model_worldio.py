@@ -35,7 +35,7 @@ _test_profile = ConfNode (
         'color'    : sf.Color (0, 0, 255),
         'position' : 5,
         'enabled'  : True },
-      'map' : 'data/map/worldmap.xml' })
+      'map' : 'data/map/world_map.xml' })
 
 
 class TestWorldIO (unittest.TestCase):

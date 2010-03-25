@@ -31,6 +31,9 @@ from states.attack	   import AttackState
 from states.move	   import MovementState
 from states.risk_attack    import RiskAttackState
 
+import os
+import os.path
+
 _log = get_log (__name__)
 
 class JagsatApp (GameApp):
@@ -66,7 +69,16 @@ Game options:
         self._arg_rhack = OptionFlag ()
         
         self.root_state = 'root'
-        
+
+    def get_save_folder (self):
+        return self._save_folder
+
+    def setup_folders (self):
+        super (JagsatApp, self).setup_folders ()
+        self._save_folder = os.path.join (self.get_config_folder (), 'save')
+        if not os.path.isdir (self._save_folder):
+            os.makedirs (self._save_folder)
+    
     def do_prepare (self, args):
         super (JagsatApp, self).do_prepare (args)
 

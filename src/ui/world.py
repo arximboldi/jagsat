@@ -114,8 +114,9 @@ class WorldComponent (ui.Image, object):
         _log.debug ('Start panning: ' + str ((ex, ey)))
         self._last_pan_pos = ex, ey
          
-    def end_pan (self, ev):
-        _log.debug ('End panning: ' + str (ev))
+    def end_pan (self, (ex, ey)):
+        _log.debug ('End panning: ' + str ((ex, ey)))
+        self._last_pan_pos = ex, ey
         
     def do_pan (self, (nx, ny)):
         _log.debug ('Do panning: ' + str ((nx, ny)))
@@ -151,7 +152,7 @@ class WorldComponent (ui.Image, object):
                                              1./self.model.map.zoom),
                               task.sinusoid (self.SetRotation,
                                              rot, shortest_angle (rot, 0)),
-                              task.sinusoid (lambda x: self.SetCenter (
+                              task.sinusoid (lambda x: self.set_center (
                                   util.linear (sx, dx, x),
                                   util.linear (sy, dy, x))))
 
