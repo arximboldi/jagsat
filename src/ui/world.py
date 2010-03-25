@@ -71,8 +71,37 @@ class WorldComponent (ui.Image, object):
         self.click_cond = lambda r: True
         self.set_enable_hitting(True)
         self.model  = world
-        self._regions = []
+
+        self._build_continents ()
+        self._build_regions ()
         
+        self._last_pan_pos = None
+        self.set_center_rel (.5, .5)
+        self.set_position_rel (.5, .5)
+        self.set_scale (1./world.map.zoom, 1./world.map.zoom)
+
+    def _build_continents (self):
+        world = self.model
+        self._continents = []
+        for c in world.map.continents.itervalues ():
+            px, py = 0, 0
+            for r in c.regions:
+                px += (r.shape.center.x + region_radius) * world.map.zoom
+                py += (r.shape.center.y + region_radius) * world.map.zoom
+            total = float (len (c.regions))
+            px /= total
+            py /= total
+            continent = ui.String (self, c.name.title () + " (%i)" % c.troops)
+            continent.set_size (60)
+            continent.set_color (sf.Color (255, 255, 255, 50))
+            continent.set_center_rel (.5, .5)
+            continent.set_position (px, py)
+            continent._sprite.SetStyle (sf.String.Bold)
+            self._continents.append (continent)
+    
+    def _build_regions (self):
+        world = self.model
+        self._regions = []
         for r in world.regions.itervalues ():
             comp = RegionComponent (self, r, zoom = world.map.zoom)
             pos  = r.definition.shape.center
@@ -80,12 +109,7 @@ class WorldComponent (ui.Image, object):
                                (pos.y + region_radius) * world.map.zoom)
             comp.on_click += self._on_click_region
             self._regions.append (comp)
-
-        self._last_pan_pos = None
-        self.set_center_rel (.5, .5)
-        self.set_position_rel (.5, .5)
-        self.set_scale (1./world.map.zoom, 1./world.map.zoom)
-        
+            
     def start_pan (self, (ex, ey)):
         _log.debug ('Start panning: ' + str ((ex, ey)))
         self._last_pan_pos = ex, ey
@@ -132,12 +156,18 @@ class WorldComponent (ui.Image, object):
                                   util.linear (sy, dy, x))))
 
     def rotate_to_player (self, player):
-        return task.parallel (* [ r.rotate_to_player (player)
-                                  for r in self._regions ])
+        return task.parallel (* [ self.rotate_sth_to_player (s, player)
+                                  for s in (self._regions + self._continents )])
 
     def rotate_to_owner (self):
-        return task.parallel (* [ r.rotate_to_player (r.model.owner)
+        return task.parallel (* [ self.rotate_sth_to_player (r, r.model.owner)
                                   for r in self._regions ])
+
+    def rotate_sth_to_player (self, sth, p):
+        old_rot = sth.GetRotation ()
+        new_rot = player.rotation [p.position]
+        return task.sinusoid (sth.SetRotation,
+                              old_rot, shortest_angle (old_rot, new_rot))
     
     @signal.weak_slot
     def _on_click_region (self, r):
@@ -262,12 +292,6 @@ class RegionComponent (RegionListener, ui.Circle, object):
         self.set_scale (zoom, zoom)
         self.set_center_rel (.5, .5)
         
-    def rotate_to_player (self, p):
-        old_rot = self.GetRotation ()
-        new_rot = player.rotation [p.position]
-        return task.sinusoid (self.SetRotation,
-                              old_rot, shortest_angle (old_rot, new_rot))
-
     def highlight (self):
         self._outline_color = sf.Color (255, 255, 96)
         self._outline_width = 3.0
