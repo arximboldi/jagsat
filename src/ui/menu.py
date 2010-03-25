@@ -72,7 +72,7 @@ def title_text (parent, text):
 class MainMenu (ui.Image):
 
     def __init__ (self, parent = None, *a, **k):
-        super (MainMenu, self).__init__ (parent, 'data/image/texture03.jpg',
+        super (MainMenu, self).__init__ (parent, 'data/image/texture04.jpg',
                                          *a, **k)
 
         self._vbox = widget.VBox (self)

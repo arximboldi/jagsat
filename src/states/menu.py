@@ -37,7 +37,7 @@ class MainMenuState (RootSubstate):
         self.ui_layer.zorder = -1
 
         self._menu = None
-        self._menu._rebuild ()
+        self._rebuild ()
 
     def _rebuild (self):
         if self._menu:
@@ -47,7 +47,7 @@ class MainMenuState (RootSubstate):
         self._menu.actions.quit.on_click += self.manager.leave_state
         self._menu.actions.play.on_click += self._on_click_play
 
-        self._menu.profile.change.on_click += self._on_change_profile
+        self._menu.profiles.change_profile.on_click += self._on_change_profile
 
     @signal.weak_slot
     def _on_change_profile (self, ev = None):
