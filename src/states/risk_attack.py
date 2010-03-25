@@ -34,12 +34,12 @@ class RiskAttackState (GameSubstate, ui.widget.VBox):
         self.attacker = attacker
         self.defender = defender
         
-        game = self.game
         self.root.enable_bg ()
         self.ui_attack = AttackComponent (self.root.ui_layer,
                                           attacker.model,
                                           defender.model,
-                                          self.manager.system.audio)
+                                          self.manager.system.audio,
+                                          self.game.world.use_on_attack)
 
         self.ui_attack.on_retreat  += self._on_retreat
         self.ui_attack.on_attack   += self._on_attack
@@ -61,18 +61,25 @@ class RiskAttackState (GameSubstate, ui.widget.VBox):
     def _attack_result (self):
         defender = self.defender.model
         attacker = self.attacker.model
+        use_on_attack = self.game.world.use_on_attack
         
         if defender.troops == 0:
             # Note that it is impossible to the country to be conquered
             # if the defender killed a unit
             conquerors = len (self.ui_attack.attacker_dices.dices)
 
-            defender.used += conquerors
-            attacker.used -= conquerors
-
+            if use_on_attack:
+                defender.used += conquerors
+                attacker.used -= conquerors
+            else:
+                defender.troops += conquerors
+                attacker.troops -= conquerors
+                
             old_owner = defender.owner
             defender.owner = attacker.owner
-            self.defender.enable_used ()
+
+            if use_on_attack:
+                self.defender.enable_used ()
             attacker.owner.conquered += 1
 
             old_owner.alive = self.game.world.check_alive (old_owner)
@@ -106,6 +113,7 @@ class RiskAttackState (GameSubstate, ui.widget.VBox):
             zip (sorted_attack, sorted_defend))))
 
     def _make_dice_eval_task (self, dice_iter):
+        use_on_attack = self.game.world.use_on_attack
         def eval_dice_fn ():
             try:
                 attack_dice, defend_dice = dice_iter.next ()
@@ -116,7 +124,10 @@ class RiskAttackState (GameSubstate, ui.widget.VBox):
                 else:
                     attack_dice.fail ()
                     defend_dice.win ()
-                    self.attacker.model.used -= 1
+                    if use_on_attack:
+                        self.attacker.model.used -= 1
+                    else:
+                        self.attacker.model.troops -= 1
                 self.manager.system.audio.play_sound (random.choice (map (
                     lambda i: 'data/sfx/swords/sword_%i.wav'%i, range (1,7))))
                 self.tasks.add (self._make_dice_eval_task (dice_iter))

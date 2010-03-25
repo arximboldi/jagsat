@@ -64,7 +64,8 @@ class InitGameState (GameSubstate):
         Give troops to player.
         """
         world = self.game.world
-        standard_troops = 50 - len (world.players) * 5 
+        factor =  len (self.game.world.regions) / 44.
+        standard_troops = int (50 * factor - len (world.players) * 5 * factor) 
         for p in world.players.itervalues ():
             p.troops = standard_troops - len (world.regions_of (p))
     

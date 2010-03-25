@@ -131,6 +131,7 @@ class AttackComponent (ui.FreeformContainer, object):
                   attacker = None,
                   defender = None,
                   audio = None,
+                  use_on_attack = True,
                   *a, **k):
         super (AttackComponent, self).__init__ (parent, *a, **k)
 
@@ -141,6 +142,7 @@ class AttackComponent (ui.FreeformContainer, object):
         self.width = 1024
         self.height = 768
         self.audio = audio
+        self.use_on_attack = use_on_attack
         
 	self._dice_enabled = False
         self._sprite = None
@@ -150,8 +152,10 @@ class AttackComponent (ui.FreeformContainer, object):
 
         self._attacker_dices = DiceBox (self, 'data/icon/rdice%i.png', .58)
         self._defender_dices = DiceBox (self, 'data/icon/bdice%i.png', .42)
-        self.attacker.used   += 1
-        self.attacker.troops -= 1
+
+        if self.use_on_attack:
+            self.attacker.used   += 1
+            self.attacker.troops -= 1
         
         self._but_continue = widget.Button (
             self, 'Continue', 'data/icon/next.png')
@@ -162,9 +166,15 @@ class AttackComponent (ui.FreeformContainer, object):
 
         self._box_attacker = widget.VBox (self)
 
-        self._txt_attacker = ui.String (self._box_attacker, unicode (
-            self.attacker.definition.name +
-            ": %i/%i" % (self.attacker.troops, self.attacker.used)))            
+        if use_on_attack:
+            self._txt_attacker = ui.String (self._box_attacker, unicode (
+                self.attacker.definition.name +
+                ": %i/%i" % (self.attacker.troops, self.attacker.used)))
+        else:
+            self._txt_attacker = ui.String (self._box_attacker, unicode (
+                self.attacker.definition.name +
+                ": %i" % (self.attacker.troops)))
+            
         set_attacker_text_style (self._txt_attacker)
        
         self._box_attacker_a = widget.HBox (self._box_attacker)
@@ -222,8 +232,9 @@ class AttackComponent (ui.FreeformContainer, object):
 
     @signal.weak_slot
     def _on_attack_retreat (self, ev):
-        self.attacker.used   -= self.attacker_dices.num_dices
-        self.attacker.troops += self.attacker_dices.num_dices
+        if self.use_on_attack:
+            self.attacker.used   -= self.attacker_dices.num_dices
+            self.attacker.troops += self.attacker_dices.num_dices
         self.on_retreat ()
 
     @signal.weak_slot
@@ -237,10 +248,15 @@ class AttackComponent (ui.FreeformContainer, object):
         self._but_continue.set_visible (False)
     
     def _on_change_attacker_txt (self, reg, val):
-        self._txt_attacker.set_string (
-            self.attacker.definition.name +
-            ": %i/%i" % (self.attacker.troops, self.attacker.used))
-
+        if self.use_on_attack:
+            self._txt_attacker.set_string (
+                self.attacker.definition.name +
+                ": %i/%i" % (self.attacker.troops, self.attacker.used))
+        else:
+            self._txt_attacker.set_string (
+                self.attacker.definition.name +
+                ": %i" % (self.attacker.troops))
+            
     def _on_change_defender_txt (self, reg, val):
         self._txt_defender.set_string (
             self.defender.definition.name + ": %i" % self.defender.troops)
@@ -258,8 +274,10 @@ class AttackComponent (ui.FreeformContainer, object):
         attacker_max_dices = self.attacker.troops
         while self.attacker_dices.num_dices > attacker_max_dices:
             self.attacker_dices.del_dice ()
-        self.attacker.troops -= self.attacker_dices.num_dices
-        self.attacker.used   += self.attacker_dices.num_dices
+
+        if self.use_on_attack:
+            self.attacker.troops -= self.attacker_dices.num_dices
+            self.attacker.used   += self.attacker_dices.num_dices
         
         for d in self._attacker_dices.dices:
             d.clear ()
@@ -289,14 +307,17 @@ class AttackComponent (ui.FreeformContainer, object):
     @signal.weak_slot
     def _attacker_troops_inc (self, ev):
         num_dices = self._attacker_dices.num_dices
-	if not (self.attacker.troops == 1 and num_dices == self.attacker.used) \
-               and num_dices < 3 and self.attacker.can_attack:
-            # The first condition avoids the possibility of losing the country
-            # in the combat.
+	if (((not self.use_on_attack and self.attacker.troops > num_dices+1) or
+             (self.use_on_attack     and not (self.attacker.troops == 1 and
+                                              num_dices == self.attacker.used)))
+            and num_dices < 3 and self.attacker.can_attack):
+            # The first condition on the use_on_attack path avoids the
+            # possibility of losing the country in the combat.
 	    self._attacker_dices.add_dice ()
             self.audio.play_sound (theme.ok_click)
-            self.attacker.troops -= 1
-            self.attacker.used   += 1
+            if self.use_on_attack:
+                self.attacker.troops -= 1
+                self.attacker.used   += 1
         else:
             self.audio.play_sound (theme.bad_click)
 
@@ -305,8 +326,9 @@ class AttackComponent (ui.FreeformContainer, object):
 	if self._attacker_dices.num_dices > 1:
 	    self._attacker_dices.del_dice ()
             self.audio.play_sound (theme.ok_click)
-            self.attacker.troops += 1
-            self.attacker.used   -= 1
+            if self.use_on_attack:
+                self.attacker.troops += 1
+                self.attacker.used   -= 1
         else:
             self.audio.play_sound (theme.bad_click)
 

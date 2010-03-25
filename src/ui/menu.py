@@ -67,8 +67,8 @@ def create_default_profile ():
             'position' : 5,
             'enabled'  : False },
           'map'         : 'data/map/worldmap.xml',
-          'used-attack' : True,
-          'used-move'   : True })
+          'use-on-attack' : True,
+          'use-on-move'   : True })
 
 def title_text (parent, text):
     string = ui.String (parent, unicode (text))

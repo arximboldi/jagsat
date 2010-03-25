@@ -213,22 +213,6 @@ class MapDef (object):
         self.background = background
 
 
-class ContinentDef (object):
-
-    def __init__ (self,
-                  name = '',
-                  troops = 0,
-                  regions = None,
-                  *a, **k):
-        super (ContinentDef, self).__init__ (*a, **k)
-        if regions is None:
-            regions = []
-
-        self.regions = regions
-        self.troops  = troops
-        self.name    = name
-
-        
 class RegionDef (object):
 
     def __init__ (self,
@@ -243,7 +227,23 @@ class RegionDef (object):
         self.continent  = continent
         self.neighbours = [] if neighbours is None else neighbours
         self.shape      = shape
-
+    
     def link (self, r):
         self.neighbours.append (r)
         r.neighbours.append (self)
+
+
+class ContinentDef (object):
+
+    def __init__ (self,
+                  name = '',
+                  troops = 0,
+                  regions = None,
+                  *a, **k):
+        super (ContinentDef, self).__init__ (*a, **k)
+        if regions is None:
+            regions = []
+
+        self.regions = regions
+        self.troops  = troops
+        self.name    = name

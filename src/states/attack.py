@@ -30,8 +30,9 @@ class AttackState (GameSubstate):
         game = self.game
 
 	game.world.phase = 'attack'
-        
-        game.ui_world.enable_used ()
+
+        if game.world.use_on_attack:
+            game.ui_world.enable_used ()
         game.ui_world.enable_picking (
             lambda r:
             r.model.owner == game.world.current_player and
@@ -45,8 +46,9 @@ class AttackState (GameSubstate):
             "You are ready to attack your enemies.")
 
     def do_release (self):
-        self.game.world.clean_used ()
-        self.game.ui_world.disable_used ()
+        if self.game.world.use_on_attack:
+            self.game.world.clean_used ()
+            self.game.ui_world.disable_used ()
 	self.game.ui_world.disable_picking ()
         super (AttackState, self).do_release ()
     

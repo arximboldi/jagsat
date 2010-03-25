@@ -93,6 +93,28 @@ class World (WorldSubject):
 
     def check_alive (self, player):
         return bool (self.regions_of (player))
+                
+    def find_components (self, criteria = lambda x: True):
+        for r in self.regions.itervalues ():
+            if criteria (r):
+                self.find_component (r, set (), criteria)
+            else:
+                r.component.clear ()
+
+    def find_component (self,
+                        region,
+                        component,
+                        criteria = lambda x: True):
+        if region.component:
+            return
+        region.component = component
+        region.component.add (region)
+        for r in region.definition.neighbours:
+            r = self.regions [r.name]
+            if criteria (r):
+                self.find_component (r, region.component, criteria)
+            else:
+                r.component.clear ()
 
 
 RegionSubject, RegionListener = \
@@ -112,6 +134,7 @@ class Region (RegionSubject):
         super (Region, self).__init__ (*a, **k)
         
         self.definition = definition
+        self.component  = set ()
 
     @property
     def total (self):
@@ -120,7 +143,6 @@ class Region (RegionSubject):
     @property
     def can_attack (self):
         return self.total > 1 and self.troops > 0
-
 
 class card:
     infantry, cavalry, artillery, wildcard = range (4)
