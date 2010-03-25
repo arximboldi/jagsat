@@ -8,10 +8,12 @@
 #
 
 from base import signal
+from base import conf
 
 from root import RootSubstate
 from tf.gfx import ui
-from ui.menu import *
+from ui.menu import MainMenu, ProfileChanger, ProfileChangeReturn
+
 
 def validate_profile (cfg):
     players = filter (lambda c: c.child ('enabled').value,
@@ -36,26 +38,44 @@ class MainMenuState (RootSubstate):
         self.ui_layer = ui.Layer (system.view)
         self.ui_layer.zorder = -1
 
-        self._menu = None
+        self.menu = None
         self._rebuild ()
 
     def _rebuild (self):
-        if self._menu:
-            self._menu.remove_myself ()
-        self._menu = MainMenu (self.ui_layer)
+        if self.menu:
+            self.menu.remove_myself ()
+        self.menu = MainMenu (self.ui_layer)
 
-        self._menu.actions.quit.on_click += self.manager.leave_state
-        self._menu.actions.play.on_click += self._on_click_play
+        self.menu.actions.quit.on_click += self.manager.leave_state
+        self.menu.actions.play.on_click += self._on_click_play
 
-        self._menu.profiles.change_profile.on_click += self._on_change_profile
+        self.menu.profiles.change_profile.on_click += self._on_change_profile
+        self.menu.profiles.del_profile.on_click += self._on_del_profile
+        self.menu.profiles.add_profile.on_click += self._on_add_profile
+
+    @signal.weak_slot
+    def _on_add_profile (self, ev):
+        profiles = self.menu.profiles
+        new_name = profiles.find_valid_name ('new profile')
+        profiles.selection.value = new_name
+        profiles.profiles.adopt (profiles.current.dict_copy (), new_name)
+        self._rebuild ()
+    
+    @signal.weak_slot
+    def _on_del_profile (self, ev):
+        self.manager.enter_state (
+            'yes_no_dialog',
+            message = 'Are you sure you want to delete\nthe profile: %s?' %
+            self.menu.profiles.current.name,
+            yes_ret = 'remove_profile')
 
     @signal.weak_slot
     def _on_change_profile (self, ev = None):
-        pass
+        self.manager.enter_state ('dialog', mk_dialog = ProfileChanger)
     
     @signal.weak_slot
     def _on_click_play (self, ev = None):
-        profile = self._menu.options.config
+        profile = self.menu.options.config
         check = validate_profile (profile)
         if check is not None:
             self.manager.enter_state (
@@ -63,6 +83,27 @@ class MainMenuState (RootSubstate):
                 "Invalid game options:\n%%30%%%s" % check)
         else:
             self.manager.change_state ('game', profile = profile)
+
+    def do_unsink (self,
+                   dialog_ret = None,
+                   dialog_yes = None,
+                   dialog_no = None):
         
+        if dialog_yes == 'remove_profile':
+            selection = self.menu.profiles.selection
+            profiles = self.menu.profiles.profiles
+            profiles.remove (selection.value)
+            proflist = profiles.childs ()
+            if profiles.childs ():
+                selection.value = proflist [0].name
+            else:
+                selection.value = 'default'
+            self._rebuild ()
+
+        elif isinstance (dialog_ret, ProfileChangeReturn):
+            self.menu.profiles.selection.value = dialog_ret.retval
+            self._rebuild ()
+    
     def do_release (self):
-        self._menu.remove_myself ()
+        super (MainMenuState, self).do_release ()
+        self.menu.remove_myself ()

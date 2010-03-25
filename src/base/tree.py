@@ -190,7 +190,7 @@ class AutoTree (object):
         child._name = self._traits.name_type ()
 
         return child
-
+    
     def rename (self, name):
         """
         Changes the name of this node to 'name'

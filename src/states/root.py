@@ -12,9 +12,11 @@ from base.util  import lazyprop, nop
 from base.log   import get_log
 from core.state import State
 from core       import task
+
 from ui.music   import MusicPlayer
 from ui         import widget
 from ui         import theme
+from ui         import dialog
 
 from PySFML import sf
 from tf.gfx import ui
@@ -97,12 +99,40 @@ class RootDialogState (RootSubstate):
         self._dialog.on_dialog_exit += self._on_dialog_exit
         self._dialog.set_center_rel (.5, .5)
         self._dialog.set_position_rel (.5, .5)
-        
+
+    @property
+    def dialog (self):
+        return self._dialog
+    
     @weak_slot
     def _on_dialog_exit (self, ret):
-        self.manager.leave_state (dialog_return = ret)
+        self.manager.leave_state (dialog_ret = ret)
+
+    def do_release (self):
+        super (RootDialogState, self).do_release ()
         self._dialog.remove_myself ()
         self.root.disable_bg ()
+
+
+class RootYesNoDialogState (RootDialogState):
+
+    def do_setup (self,
+                  message = '',
+                  yes_ret = 'yes',
+                  no_ret  = 'no',
+                  *a, **k):
+        super (RootYesNoDialogState, self).do_setup (
+            lambda parent: dialog.YesNoDialog (parent, message),
+            *a, **k)
+        self.yes_ret = yes_ret
+        self.no_ret  = no_ret
+
+    @weak_slot
+    def _on_dialog_exit (self, ret):
+        if ret == 'yes':
+            self.manager.leave_state (dialog_yes = self.yes_ret)
+        else:
+            self.manager.leave_state (dialog_no  = self.no_ret)
 
 
 class RootMessageState (RootSubstate):

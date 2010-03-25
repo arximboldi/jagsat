@@ -93,6 +93,19 @@ class ConfNode (ConfSubject, AutoTree):
                 self.child (key).fill (val)
             else:
                 self.child (key).value = val
+
+    def to_dict (self):
+        """
+        NOTE: This might loose information if some node has both value
+        and childs.
+        """
+        if self._childs:
+            return dict ([(name, conf.to_dict ())
+                          for name, conf in self._childs.iteritems ()])
+        return self.value
+
+    def dict_copy (self):
+        return ConfNode (self.to_dict ())
     
     def parent (self):
         return self._parent

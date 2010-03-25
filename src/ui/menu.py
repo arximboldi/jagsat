@@ -7,6 +7,11 @@
 #  completely forbidden without explicit permission of their authors.
 #
 
+"""
+Main menu ui part.
+TODO: Making it more MVC would simplify states.menu a bit.
+"""
+
 from PySFML import sf
 from tf.gfx import ui
 from tf.gfx.widget.intermediate import Button, Button2
@@ -21,6 +26,7 @@ from base.log import get_log
 from model.map import load_map_meta, load_map
 import theme
 import widget
+import dialog
 
 from os import listdir
 from os import path
@@ -77,7 +83,7 @@ class MainMenu (ui.Image):
 
         self._vbox = widget.VBox (self)
                 
-        self.profiles = ProfileChooser (self._vbox)
+        self.profiles = ProfileManager (self._vbox)
         self.options  = GameOptions (self._vbox, config =
                                      self.profiles.current)
         self.actions  = MainActions (self._vbox)
@@ -102,14 +108,39 @@ class MainActions (widget.HBox):
             self, 'Load', 'data/icon/load-small.png', vertical = False)
         self.quit = widget.Button (
             self, 'Quit', 'data/icon/quit-small.png', vertical = False)
-    
 
-class ProfileChooser (widget.HBox):
+
+class ProfileChangeReturn (dialog.DialogReturn): pass
+class ProfileChanger (widget.VBox, dialog.DialogBase):
+
+    def __init__ (self, parent = None,
+                  config = GlobalConf (),
+                  *a, **k):
+
+        super (ProfileChanger, self).__init__ (parent)
+
+        self.separation = 15
+        self._text = widget.Text (self, unicode ("%30%Choose a profile:"))
+
+        self._prof_list = widget.List (
+            parent    = self,
+            contents  = [ ('data/icon/credits-tiny.png', p.name, p.name)
+                          for p in config.child ('profiles').childs () ],
+            num_slots = 8,
+            button_size = (400, 40),
+            *a, **k)
+        
+        self._prof_list.select (config.child ('current-profile').value)
+        self._prof_list.on_change_select += lambda x: self.on_dialog_exit (
+            ProfileChangeReturn (self._prof_list.selected))
+
+
+class ProfileManager (widget.HBox):
 
     def __init__ (self, parent = None,
                   config = GlobalConf (), *a, **k):
 
-        super (ProfileChooser, self).__init__ (parent, center = True, *a, **k)
+        super (ProfileManager, self).__init__ (parent, center = True, *a, **k)
         
         self._cfg_root     = config
         self._cfg_profiles = config.child ('profiles')
@@ -148,22 +179,30 @@ class ProfileChooser (widget.HBox):
     @property
     def current (self):
         return self._cfg_current
+
+    @property
+    def profiles (self):
+        return self._cfg_profiles
+
+    @property
+    def selection (self):
+        return self._cfg_root.child ('current-profile')
     
     @signal.weak_slot
     def _on_profile_rename (self, name):
         if name == self._cfg_root.child ('current-profile').value:
             return # No changes.
-        new_name = self._find_valid_name (name)
+        new_name = self.find_valid_name (name)
 
         self._cfg_current.rename (new_name)
         self._cfg_root.child ('current-profile').value = new_name
         self._edit_profile.on_edit (new_name)
 
-    def _find_valid_name (self, name):
+    def find_valid_name (self, name):
         i = 1
         new_name = name
         while self._cfg_profiles.has_child (new_name):
-            new_name = name + '-%i'%i
+            new_name = name + ' %i'%i
             i += 1
         return new_name
 

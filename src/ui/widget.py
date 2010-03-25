@@ -37,7 +37,8 @@ class Frame (ui.RoundedRectangle, object):
                                       theme.active.thickness)
         self.set_expand (True, True)
     
-Text = ui.String
+Text   = ui.MultiLineString
+String = ui.String
 
 class Button (ui3.Button, object):
 
@@ -118,19 +119,27 @@ class SelectButton (Button):
     
     def select (self):
         if not self._is_selected:
+            self._select ()
+            self.on_select (self)
+
+    def _select (self):
+        if not self._is_selected:
             self._is_selected = True
             if self._selected_img:
                 self.set_image (self._selected_img)
             self._rebuild (self.theme.selected)
-            self.on_select (self)
             
     def unselect (self):
+        if self._is_selected:
+            self._unselect ()
+            self.on_unselect (self)
+
+    def _unselect (self):
         if self._is_selected:
             self._is_selected = False
             if self._unselected_img:
                 self.set_image (self._unselected_img)
             self._rebuild (self.theme.active)
-            self.on_unselect (self)
             
     @signal.weak_slot
     def toggle_select (self, ev = None):
@@ -206,9 +215,9 @@ class List (HBox):
             slot._list_idx = i + self._offset
             slot.activate ()
             if slot._list_idx == self._selected_idx:
-                slot.select ()
+                slot._select ()
             else:
-                slot.unselect ()
+                slot._unselect ()
 
         for j in range (i+1, self._num_slots):
             slot = self._slots [j]
