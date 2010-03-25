@@ -29,8 +29,11 @@ def create_game (cfg):
 
     map_ = load_map (cfg.child ('map').value)
     
-    return World (map_, players)
+    world = World (map_, players)
+    world.use_on_attack = cfg.child ('use-on-attack').value
+    world.use_on_move   = cfg.child ('use-on-move').value
 
+    return world
 
 def create_player (cfg):
     """

@@ -221,31 +221,31 @@ class RulesOptionsDialog (widget.VBox, dialog.DialogBase):
 
         self._options = widget.VBox (self)
         self._options.separation = 10
-        self._opt_used_attack = widget.CheckedText (
+        self._opt_use_on_attack = widget.CheckedText (
             self._options, "Troops get tired on attack.")
-        self._opt_used_move = widget.CheckedText (
+        self._opt_use_on_move = widget.CheckedText (
             self._options, "Troops get tired on movement.")
 
-        if config.child ('used-attack').value:
-            self._opt_used_attack.check.select ()
-        if config.child ('used-move').value:
-            self._opt_used_move.check.select ()
+        if config.child ('use-on-attack').value:
+            self._opt_use_on_attack.check.select ()
+        if config.child ('use-on-move').value:
+            self._opt_use_on_move.check.select ()
         
         self._but_ok = widget.Button (
             self, 'Done', 'data/icon/accept-small.png', vertical = False)
 
         self._but_ok.on_click += self.on_dialog_exit
         
-        self._opt_used_attack.check.on_toggle += self._update_used_attack
-        self._opt_used_move.check.on_toggle   += self._update_used_move
+        self._opt_use_on_attack.check.on_toggle += self._update_use_on_attack
+        self._opt_use_on_move.check.on_toggle   += self._update_use_on_move
 
     @signal.weak_slot
-    def _update_used_attack (self, but):
-        self._config.child ('used-attack').value = but.is_selected
+    def _update_use_on_attack (self, but):
+        self._config.child ('use-on-attack').value = but.is_selected
 
     @signal.weak_slot
-    def _update_used_move (self, but):
-        self._config.child ('used-move').value = but.is_selected
+    def _update_use_on_move (self, but):
+        self._config.child ('use-on-move').value = but.is_selected
 
         
 class GameOptions (widget.HBox):

@@ -19,7 +19,7 @@ from ui.menu import (MainMenu, ProfileChangerDialog, ProfileChangeReturn,
 def validate_profile (cfg):
     players = filter (lambda c: c.child ('enabled').value,
                       map (lambda i: cfg.child ('player-%i'%i), range (6)))
-    if not c.child ('map').value:
+    if not cfg.child ('map').value:
         return "You must choose a map."
     if len (players) < 3:
         return "There must be at least 3 players to play."
