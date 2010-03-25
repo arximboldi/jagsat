@@ -1289,6 +1289,7 @@ class BigImage(Component):
 class String(Component):
 
     def __init__(self, parent = None, string = u"", *args, **kwargs):
+        string = unicode (string) # HACK?
         if not isinstance(string, unicode):
             raise TypeError("tf: Error: String " + string + " is not unicode.")
         Component.__init__(self, parent)

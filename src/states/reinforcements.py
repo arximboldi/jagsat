@@ -29,7 +29,8 @@ class ReinforcementState (GameSubstate):
         game.ui_world.click_cond = lambda r: player.troops > 0 and \
                                        r.model.owner == player
         game.ui_player [game.world.current_player].enable_exchange_cards ()
-	
+	self.tasks.add (game.ui_world.rotate_to_player (player))
+        
         self.manager.system.audio.play_sound (
             'data/sfx/horses/horse_galloping.wav')
         self.manager.enter_state ('message', message =

@@ -18,6 +18,9 @@ from core import task
 
 from model.world import RegionListener
 import theme
+import widget
+import player
+
 import math
 
 from os import path
@@ -29,6 +32,12 @@ region_free_color = sf.Color (128, 128, 128)
 
 class map_op:
     none, move, rotate, zoom = range (4)
+
+def shortest_angle (old_rot, new_rot):
+    inv_rot = new_rot + (360 if old_rot > new_rot else -360)
+    if abs (old_rot - inv_rot) < abs (old_rot - new_rot):
+        new_rot = inv_rot
+    return new_rot
 
 class WorldComponent (ui.Image, object):
 
@@ -67,7 +76,8 @@ class WorldComponent (ui.Image, object):
         for r in world.regions.itervalues ():
             comp = RegionComponent (self, r, zoom = world.map.zoom)
             pos  = r.definition.shape.center
-            comp.set_position (pos.x * world.map.zoom, pos.y * world.map.zoom)
+            comp.set_position ((pos.x + region_radius) * world.map.zoom,
+                               (pos.y + region_radius) * world.map.zoom)
             comp.on_click += self._on_click_region
             self._regions.append (comp)
 
@@ -112,16 +122,22 @@ class WorldComponent (ui.Image, object):
         sx, sy = self.GetCenter ()
         dx, dy = 1024./2 * self.model.map.zoom, 768/2. * self.model.map.zoom
         rot = self.GetRotation ()
-        dest_rot = 360. if rot > 180. else 0.
         return task.parallel (task.sinusoid (lambda x: self.SetScale (x, x),
                                              self.GetScale () [0],
                                              1./self.model.map.zoom),
                               task.sinusoid (self.SetRotation,
-                                             self.GetRotation (),
-                                             dest_rot),
+                                             rot, shortest_angle (rot, 0)),
                               task.sinusoid (lambda x: self.SetCenter (
                                   util.linear (sx, dx, x),
                                   util.linear (sy, dy, x))))
+
+    def rotate_to_player (self, player):
+        return task.parallel (* [ r.rotate_to_player (player)
+                                  for r in self._regions ])
+
+    def rotate_to_owner (self):
+        return task.parallel (* [ r.rotate_to_player (r.model.owner)
+                                  for r in self._regions ])
     
     @signal.weak_slot
     def _on_click_region (self, r):
@@ -211,8 +227,7 @@ class RegionComponent (RegionListener, ui.Circle, object):
 
         self.on_click = signal.Signal ()
         self.signal_click.add (lambda ev: self.on_click (self))
-        self.on_click += lambda ev: _log.debug ("Region clicked: " +
-                                                self.model.definition.name)
+
         self.set_enable_hitting (True)
         
         self.model = model
@@ -238,7 +253,20 @@ class RegionComponent (RegionListener, ui.Circle, object):
         self._txt_used.set_color (sf.Color (255, 255, 255))
         self._txt_used.set_visible (False)
 
+        self._txt_name = widget.String (self, model.definition.name.title ())
+        self._txt_name.set_center_rel (.5, -1.3)
+        self._txt_name.set_position_rel (.5, .45)
+        self._txt_name.set_color (sf.Color (255, 255, 255, 128))
+        self._txt_name.set_size (15)
+        
         self.set_scale (zoom, zoom)
+        self.set_center_rel (.5, .5)
+        
+    def rotate_to_player (self, p):
+        old_rot = self.GetRotation ()
+        new_rot = player.rotation [p.position]
+        return task.sinusoid (self.SetRotation,
+                              old_rot, shortest_angle (old_rot, new_rot))
 
     def highlight (self):
         self._outline_color = sf.Color (255, 255, 96)
