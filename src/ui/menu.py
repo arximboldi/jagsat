@@ -78,7 +78,8 @@ class MainMenu (ui.Image):
         self._vbox = widget.VBox (self)
                 
         self.profiles = ProfileChooser (self._vbox)
-        self.options  = GameOptions (self._vbox)
+        self.options  = GameOptions (self._vbox, config =
+                                     self.profiles.current)
         self.actions  = MainActions (self._vbox)
 
         self._vbox.separation = 30
@@ -99,8 +100,6 @@ class MainActions (widget.HBox):
             self, 'Play', 'data/icon/troops-small.png', vertical = False)
         self.load = widget.Button (
             self, 'Load', 'data/icon/load-small.png', vertical = False)
-        self.credits = widget.Button (
-            self, None, 'data/icon/credits-small.png')
         self.quit = widget.Button (
             self, 'Quit', 'data/icon/quit-small.png', vertical = False)
     
@@ -146,6 +145,10 @@ class ProfileChooser (widget.HBox):
 
         self.separation = 15
 
+    @property
+    def current (self):
+        return self._cfg_current
+    
     @signal.weak_slot
     def _on_profile_rename (self, name):
         if name == self._cfg_root.child ('current-profile').value:
