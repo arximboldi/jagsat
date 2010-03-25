@@ -75,6 +75,7 @@ class GameState (RootSubstate):
             x.remove_myself ()
         self.ui_world.remove_myself ()
         self.ui_menu.remove_myself ()
+        self.ui_hud.remove_myself ()
         
     def do_unsink (self, *a, **k):
         if self.parent_state: # We are not running in test mode, go to menu
@@ -161,33 +162,4 @@ class GameState (RootSubstate):
             self.manager.leave_state ()
         else:
             self.manager.enter_state ('ingame_menu')
-    
 
-class GameMessageState (GameSubstate):
-
-    def do_setup (self, message = '', *a, **k):
-        super (GameMessageState, self).do_setup (*a, **k)
-        
-        self.ui_text = ui.MultiLineString (self.root.ui_layer,
-                                           unicode (message))
-        self.ui_text.set_center_rel (.5, .5)
-        self.ui_text.set_position_rel (.5, .5)
-        self.ui_text.set_size (50)
-
-        self.root.enable_bg ()
-        self.tasks.add (task.sequence (
-            self.make_fade_task (task.fade),
-            task.run (lambda: self.root.ui_bg.on_click.connect (
-                self.on_click_bg))))
-    
-    @weak_slot
-    def on_click_bg (self):
-        self.root.disable_bg ()
-        self.tasks.add (task.sequence (
-            self.make_fade_task (task.invfade),
-            task.run (self.manager.leave_state)))
-
-    def make_fade_task (self, fade_task):
-        return fade_task (lambda x:
-                          self.ui_text.set_color (sf.Color (255,255,255,x*255)),
-                          init = True, duration = .75)

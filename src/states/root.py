@@ -7,13 +7,16 @@
 #  completly forbidden without explicit permission of their authors.
 #
 
+from base.signal import weak_slot
 from base.util  import lazyprop, nop
 from base.log   import get_log
 from core.state import State
+from core       import task
 from ui.music   import MusicPlayer
 from ui         import widget
 from ui         import theme
 
+from PySFML import sf
 from tf.gfx import ui
 from tf.gfx.widget import basic
 
@@ -83,3 +86,50 @@ class RootState (State):
             self.ui_bg.set_enable_hitting (True)
             return self.tasks.add (self.ui_bg.fade_in ())
         return self.tasks.add (lambda t: None)
+
+
+class RootDialogState (RootSubstate):
+
+    def do_setup (self, mk_dialog = None, *a, **k):
+        assert mk_dialog
+        self.root.enable_bg ()
+        self._dialog = mk_dialog (self.root.ui_layer)
+        self._dialog.on_dialog_exit += self._on_dialog_exit
+        self._dialog.set_center_rel (.5, .5)
+        self._dialog.set_position_rel (.5, .5)
+        
+    @weak_slot
+    def _on_dialog_exit (self, ret):
+        self.manager.leave_state (dialog_return = ret)
+        self._dialog.remove_myself ()
+        self.root.disable_bg ()
+
+
+class RootMessageState (RootSubstate):
+
+    def do_setup (self, message = '', *a, **k):
+        super (RootMessageState, self).do_setup (*a, **k)
+        
+        self.ui_text = ui.MultiLineString (self.root.ui_layer,
+                                           unicode (message))
+        self.ui_text.set_center_rel (.5, .5)
+        self.ui_text.set_position_rel (.5, .5)
+        self.ui_text.set_size (50)
+
+        self.root.enable_bg ()
+        self.tasks.add (task.sequence (
+            self.make_fade_task (task.fade),
+            task.run (lambda: self.root.ui_bg.on_click.connect (
+                self.on_click_bg))))
+    
+    @weak_slot
+    def on_click_bg (self):
+        self.root.disable_bg ()
+        self.tasks.add (task.sequence (
+            self.make_fade_task (task.invfade),
+            task.run (self.manager.leave_state)))
+
+    def make_fade_task (self, fade_task):
+        return fade_task (lambda x:
+                          self.ui_text.set_color (sf.Color (255,255,255,x*255)),
+                          init = True, duration = .75)

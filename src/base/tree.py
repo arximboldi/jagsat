@@ -93,6 +93,9 @@ class AutoTree (object):
             self.adopt (child, name)
         
         return child
+
+    def has_child (self, name):
+        return name in self._childs
     
     get_child = child
     

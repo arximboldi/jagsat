@@ -112,27 +112,59 @@ class ProfileChooser (widget.HBox):
 
         super (ProfileChooser, self).__init__ (parent, center = True, *a, **k)
         
-        self._config = config
+        self._cfg_root     = config
+        self._cfg_profiles = config.child ('profiles')
 
-        profile = config.child ('profile').value
-        if profile is None:
-            profile = 'default'
-            config.child ('profile').value = profile
-        
+        profile_name = config.child ('current-profile').value
+        if profile_name is None:
+            profile_name = 'default'
+            config.child ('current-profile').value = profile_name
+
+        if self._cfg_profiles.has_child (profile_name):
+            self._cfg_current = self._cfg_profiles.child (profile_name)
+        else:
+            self._cfg_current = self._cfg_root.child ('profiles').adopt (
+                create_default_profile (), profile_name)
+
         title_text (self, '> Profile ')
         
-        self._edit_profile = widget.LineEdit (self, text = profile)
+        self._edit_profile = widget.LineEdit (self,
+                                              text = profile_name,
+                                              theme = theme.small_button_green)
         self._edit_profile.activate ()
-        
-        self._but_add = widget.SmallButton (
-            self, 'Add', 'data/icon/add-tiny.png', vertical = False)
-        self._but_add = widget.SmallButton (
-            self, 'Delete', 'data/icon/cancel-tiny.png', vertical = False)
-        self._but_change = widget.SmallButton (
-            self, 'Change', 'data/icon/retreat-tiny.png', vertical = False)
+        self._edit_profile.on_edit += self._on_profile_rename
+
+        self.add_profile = widget.Button (
+            self, 'Add', 'data/icon/add-tiny.png', vertical = False,
+            theme = theme.small_button_green)
+        self.del_profile = widget.Button (
+            self, 'Delete', 'data/icon/cancel-tiny.png', vertical = False,
+            theme = theme.small_button_green)
+        self.change_profile = widget.Button (
+            self, 'Change', 'data/icon/retreat-tiny.png', vertical = False,
+            theme = theme.small_button_green)
 
         self.separation = 15
-        
+
+    @signal.weak_slot
+    def _on_profile_rename (self, name):
+        if name == self._cfg_root.child ('current-profile').value:
+            return # No changes.
+        new_name = self._find_valid_name (name)
+
+        self._cfg_current.rename (new_name)
+        self._cfg_root.child ('current-profile').value = new_name
+        self._edit_profile.on_edit (new_name)
+
+    def _find_valid_name (self, name):
+        i = 1
+        new_name = name
+        while self._cfg_profiles.has_child (new_name):
+            new_name = name + '-%i'%i
+            i += 1
+        return new_name
+
+
 class GameOptions (widget.HBox):
     
     def __init__ (self, parent = None, config = create_default_profile ()):
@@ -171,6 +203,7 @@ class GameOptions (widget.HBox):
         
         self._map_selector = MapSelector (parent = self._box_map)
         self._map_selector.on_change_select += self._update_map
+        self._map_selector.select (config.child ('map').value)
 
         self.separation    = 50
 
@@ -227,7 +260,7 @@ class PlayerOptions (widget.HBox):
 
     @signal.weak_slot
     def _update_name (self, ev = None):
-        self._config.child ('position').value = self._name.text
+        self._config.child ('name').value = self._name.text
 
     @signal.weak_slot
     def _update_enabled (self, but = None):

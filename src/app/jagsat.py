@@ -17,8 +17,9 @@ from tf.gfx import uihelp
 
 from states.sandbox        import Sandbox
 from states.root           import RootState
+from states.root           import RootDialogState
+from states.root           import RootMessageState
 from states.game           import GameState
-from states.game           import GameMessageState
 from states.init_game      import InitGameState
 from states.ingame_menu    import IngameMenuState
 from states.round          import GameRoundState
@@ -80,7 +81,8 @@ Game options:
 	self.add_state ('attack',	    AttackState)
 	self.add_state ('move',		    MovementState)
 	self.add_state ('risk_attack',      RiskAttackState)
-        self.add_state ('message',          GameMessageState)
+        self.add_state ('message',          RootMessageState)
+        self.add_state ('dialog',           RootDialogState)
 
         self.add_state ('test_reinforce', partial (GameState,
                                                    test_phase='reinforce'))

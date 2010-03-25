@@ -157,6 +157,7 @@ class List (HBox):
                   num_slots   = None,
                   contents    = None,
                   button_size = None,
+                  default_selected = -1, 
                   *a, **k):
         super (List, self).__init__ (parent)
 
@@ -176,7 +177,7 @@ class List (HBox):
             self._slot_box, vertical = False, button_size = button_size),
                                   xrange (num_slots))
 
-        self._selected_idx = 0 if contents else -1
+        self._selected_idx = default_selected
         self._offset       = 0
 
         self._but_box.separation  = 6

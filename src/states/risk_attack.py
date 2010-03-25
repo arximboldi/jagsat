@@ -35,7 +35,7 @@ class RiskAttackState (GameSubstate, ui.widget.VBox):
         self.defender = defender
         
         game = self.game
-        self.root.game.enable_bg ()
+        self.root.enable_bg ()
         self.ui_attack = AttackComponent (self.root.ui_layer,
                                           attacker.model,
                                           defender.model,

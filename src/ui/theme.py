@@ -35,7 +35,8 @@ class button:
     margin    = 5
     class active:
         color     = sf.Color (0, 0, 0)
-        border    = sf.Color (0x97, 0xBF, 0x60)
+        border    = sf.Color (0x67, 0x9F, 0x30, 200)
+        #border    = sf.Color (0x97, 0x90, 0xBF, 200)
         thickness = 5
         radius    = 15
         text_size = 20
@@ -68,6 +69,10 @@ class select_button (small_button):
     class selected (small_button.active):
         border    = sf.Color (220, 50, 50, 255)
         color    = sf.Color (50, 0, 0, 200)
+
+class small_button_green (select_button):
+    class active (small_button.active):
+        border    = button.active.border
 
 line_edit = select_button
 
