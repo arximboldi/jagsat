@@ -234,11 +234,17 @@ class GameOptions (widget.HBox):
         self._box_extra.separation = 10
         self._but_rules = widget.SmallButton (self._box_extra,
             'Rules', 'data/icon/world-small.png', vertical = False)
+
         self._but_music = widget.SelectButton (
             self._box_extra, text = 'Music',  vertical = False,
             selected_img = 'data/icon/music-small.png',
             unselected_img = 'data/icon/nomusic-small.png')
-
+        # HACK
+        if GlobalConf ().child ('global-music').value:
+            self._but_music.select ()
+        self._but_music.on_select   += self._update_music
+        self._but_music.on_unselect += self._update_music
+        
         self._box_map  = widget.VBox (self)
         title_text (self._box_map, '> War map')
         self._box_map.separation = 10
@@ -252,7 +258,11 @@ class GameOptions (widget.HBox):
     @property
     def config (self):
         return self._config
-        
+
+    @signal.weak_slot
+    def _update_music_on (self, value):
+        self._config.child ('map').value = value
+
     @signal.weak_slot
     def _update_map (self, value):
         self._config.child ('map').value = value

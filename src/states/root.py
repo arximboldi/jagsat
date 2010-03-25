@@ -10,13 +10,15 @@
 from base.signal import weak_slot
 from base.util  import lazyprop, nop
 from base.log   import get_log
+from base       import conf
+
 from core.state import State
 from core       import task
 
-from ui.music   import MusicPlayer
-from ui         import widget
-from ui         import theme
-from ui         import dialog
+from ui import music
+from ui import widget
+from ui import theme
+from ui import dialog
 
 from PySFML import sf
 from tf.gfx import ui
@@ -43,8 +45,13 @@ class RootState (State):
 
     def do_setup (self, *a, **k):
         super (RootState, self).do_setup (*a, **k)
-        self._music = self.tasks.add (MusicPlayer (self.manager.system.audio))
-        self._music.play ()
+
+        cfg_music = conf.GlobalConf ().child ('global-music')
+        cfg_music.on_conf_change += self._on_music_change
+        self._music = self.tasks.add (
+            music.MusicPlayer (self.manager.system.audio))
+        if cfg_music.value:
+            self._music.play ()
 
         system = self.manager.system
         self.ui_layer = ui.Layer (system.view)
@@ -54,10 +61,18 @@ class RootState (State):
         self._ui_bg_disabled = True
 
         self.ui_keyboard = basic.Keyboard (self.ui_layer, theme.keyboard)
+
         # HACK
         widget.get_keyboard_input = self._get_keyboard_input
                 
         self.manager.enter_state ('main_menu')
+
+    @weak_slot
+    def _on_music_change (self, cfg):
+        if cfg.value and self._music.state != music.state.playing:
+            self._music.play ()
+        elif not cfg.value and self._music.state != music.state.idle:
+            self._music.stop ()
 
     def _get_keyboard_input (self, originstr, callback):
         self.enable_bg ()
