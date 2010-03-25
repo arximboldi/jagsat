@@ -1,0 +1,32 @@
+Instructions for installing and running project JAGSAT in linux.
+
+You need to have the following packages installed:
+
+Python
+Python-sfml
+Python-opengl
+
+If you are missing any of these packages you can follow these steps:
+
+
+1.If you don't have apt installed you can install by running:
+
+	~$ sudo yum install apt
+
+	~$ sudo apt-get update
+
+2. Install the packages via apt-get:
+
+	~$ sudo apt-get install python
+
+	~$ sudo apt-get install python-sfml
+
+	~$ sudo apt-get install python-opengl
+
+3. To run the game do the following:
+
+	Enter folder where the game is located
+
+	~$ cd prjc0910-group1/trunk/
+
+	~$ ./run.sh
