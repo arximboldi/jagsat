@@ -11,6 +11,7 @@ from functools import partial
 
 from base.arg_parser import OptionWith, OptionFlag
 from base.log import get_log
+from base.conf import OptionConfFlag, GlobalConf
 from core.app import GameApp
 
 from tf.gfx import uihelp
@@ -40,6 +41,8 @@ class JagsatApp (GameApp):
 """
 Game options:
   -m, --map <file>    Map file to load.
+      --music-on      Enable music.
+      --music-off     Disable music.
   -s, --state <state> Initial state.
       --ratio-hack    Enable hack for the Asus tablet.
 """
@@ -70,6 +73,10 @@ Game options:
         args.add ('m',  'map',        self._arg_map)
         args.add ('s',  'state',      self._arg_state)
         args.add (None, 'ratio-hack', self._arg_rhack)
+        args.add (None, 'music-on', OptionConfFlag (
+            GlobalConf ().child ('global-music'), True))
+        args.add (None, 'music-off', OptionConfFlag (
+            GlobalConf ().child ('global-music'), False))
         
         self.add_state ('sandbox',          Sandbox)
         self.add_state ('root',             RootState)
@@ -94,6 +101,7 @@ Game options:
                                                    test_phase='move'))
     
     def do_execute (self, freeargs):
+        GlobalConf ().child ('global-music').default (True)
         if self._arg_state.value:
             self.root_state = self._arg_state.value
 

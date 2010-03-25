@@ -260,8 +260,8 @@ class GameOptions (widget.HBox):
         return self._config
 
     @signal.weak_slot
-    def _update_music_on (self, value):
-        self._config.child ('map').value = value
+    def _update_music (self, but):
+        GlobalConf ().child ('global-music').value = but.is_selected
 
     @signal.weak_slot
     def _update_map (self, value):

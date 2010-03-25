@@ -82,9 +82,11 @@ class MusicPlayer (task.Task):
         self._state = state.playing
         
     def stop (self):
-        self._music.Stop ()
-        self._music = None
-    
+        if self._music and self.state != state.idle: 
+            self._music.Stop ()
+            self._music = None
+            self._state = state.idle
+        
     def do_update (self, timer):
         super (MusicPlayer, self).do_update (timer)
         if self._music and self._music.GetStatus () == sf.Sound.Stopped:
