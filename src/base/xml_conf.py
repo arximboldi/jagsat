@@ -9,6 +9,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import string
 from util import flip_dict
 from conf import NullBackend, ConfNode, ConfError
 from log import *
@@ -21,6 +22,7 @@ def read_bool (msg):
 
 XML_CONF_TYPES = { "int"     : int,
                    "string"  : str,
+                   "unicode" : unicode,
                    "float"   : float,
                    "bool"    : read_bool,
                    "default" : str }
@@ -49,7 +51,7 @@ class XmlConfBackend (NullBackend):
 
         try:
             fh = open (self.file_name, 'r')
-        except IOError, e:
+        except IOError:
             raise XmlConfError (message =
                                 'Could not open config file. ' +
                                 'If this is the first time you ' +
@@ -73,6 +75,9 @@ class XmlConfBackend (NullBackend):
         if self.save_on_nudge:
             self._do_save (node)
 
+def sanitize (s):
+    return str (s).translate (string.maketrans ('', ''), '<>"')    
+
 class XmlConfWriter (object):
     
     def __init__ (self, fh):
@@ -89,10 +94,10 @@ class XmlConfWriter (object):
         self._fh.write (indent + '<' + node_tag)
 
         if node.get_name ():
-            self._fh.write (' name="' + node.get_name() + '"')
+            self._fh.write (' name="' + sanitize (node.get_name ()) + '"')
         if not node.value is None:
             self._fh.write (' type="' + node.value.__class__.__name__ + '"')
-            self._fh.write (' value="' + str (node.value) + '"')
+            self._fh.write (' value="' + sanitize (node.value) + '"')
                     
         childs = node.childs ()
         if len (childs) > 0:
