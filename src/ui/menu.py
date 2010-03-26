@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 #  Copyright (C) 2009 The JAGSAT project team.
 #
@@ -74,11 +75,11 @@ def create_default_profile ():
           'use-on-move'   : True })
 
 def title_text (parent, text):
-    string = ui.String (parent, unicode (text))
-    string.set_size  (25)
-    string.set_color (sf.Color (255, 255, 255, 70))
-    string._sprite.SetStyle (sf.String.Bold)
-    return string
+    txt = ui.String (parent, unicode (text))
+    txt.set_size  (25)
+    txt.set_color (sf.Color (255, 255, 255, 70))
+    txt._sprite.SetStyle (sf.String.Bold)
+    return txt
 
 class MainMenu (ui.Image):
 
@@ -98,6 +99,44 @@ class MainMenu (ui.Image):
         self._vbox.set_center_rel (.5, .5)
         self._vbox.set_position_rel (.53, .52)
 
+
+class CreditsDialog (ui.FreeformContainer, dialog.DialogBase):
+    """
+    TODO: Add artwork makers.
+    """
+    
+    def __init__ (self, parent = None, *a, **k):
+        super (CreditsDialog, self).__init__ (parent, *a, **k)
+        self.width  = 1024
+        self.height = 768
+        self.set_enable_hitting (True)
+        self.activate ()
+        self.signal_click.add (lambda ev: self.on_dialog_exit ('credits'))
+        
+        self._box = widget.VBox (self)
+        self._box.separation = 20
+        
+        title_text (self._box, '> The JAGSAT Team')
+        ui.MultiLineString (self._box, unicode (
+            "%25%Juan Pedro Bolivar Puente\n"
+            "%15%Main Programmer\n%8%\n"
+            "%25%Aksel Junkkila\n"
+            "%15%Game Designer\n%8%\n"
+            "%25%Guillem Medina\n"
+            "%15%Progammer\n%8%\n"
+            "%25%Sarah Lidstrom\n"
+            "%15%Bussiness Consultant\n%8%\n"
+            "%25%Alberto Villegas Erce\n"
+            "%15%Documentation Manager\n%8%\n"
+            "%25%Thomas Forss\n"
+            "%15%Project Manager\n%8%\n"))
+
+        ui.MultiLineString (self._box, unicode (
+            "%15%(Click to quit or wait 5 seconds)")).set_color (
+            sf.Color (255, 255, 0, 200))
+
+        self._box.set_center_rel (.5, .5)
+        self._box.set_position_rel (.5, .5)
 
 class MainActions (widget.HBox):
 

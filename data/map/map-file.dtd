@@ -18,6 +18,7 @@
 <!ELEMENT map (meta?,(continent|link)*)>
 <!ATTLIST map
 	  bg CDATA #REQUIRED
+	  zoom CDATA #IMPLIED
 	  xscale CDATA #IMPLIED
 	  yscale CDATA #IMPLIED
 	  xoffset CDATA #IMPLIED
@@ -29,8 +30,9 @@
    or just for credit purposes.
 
 -->
-<!ELEMENT meta (author?, description?, title?)>
+<!ELEMENT meta (author?, description?, title?, thumbnail?)>
 <!ELEMENT author (#PCDATA)> 
+<!ELEMENT thumbnail (#PCDATA)> 
 <!ELEMENT description (#PCDATA)>
 <!ELEMENT title (#PCDATA)>
 

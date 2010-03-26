@@ -11,11 +11,12 @@ from base.log import get_log
 from base import signal
 from base import conf
 
+from core import task
 from root import RootSubstate
 from tf.gfx import ui
 from ui.menu import (MainMenu, ProfileChangerDialog, ProfileChangerReturn,
                      RulesOptionsDialog, LoadGameDialog, LoadGameReturn,
-                     DeleteGameReturn)
+                     DeleteGameReturn, CreditsDialog)
 
 import os.path
 import os
@@ -56,7 +57,7 @@ class MainMenuState (RootSubstate):
             self.menu.remove_myself ()
         self.menu = MainMenu (self.ui_layer)
 
-        self.menu.actions.quit.on_click += self.manager.leave_state
+        self.menu.actions.quit.on_click += self._on_click_quit
         self.menu.actions.play.on_click += self._on_click_play
         self.menu.actions.load.on_click += self._on_click_load
 
@@ -95,7 +96,15 @@ class MainMenuState (RootSubstate):
     @signal.weak_slot
     def _on_change_profile (self, ev = None):
         self.manager.enter_state ('dialog', mk_dialog = ProfileChangerDialog)
-    
+
+    @signal.weak_slot
+    def _on_click_quit (self, ev = None):
+        self.manager.enter_state ('dialog', mk_dialog = CreditsDialog)
+        self.parent_state.tasks.add (task.sequence (
+            task.wait (5.),
+            task.run (self.manager.leave_state),
+            task.run (self.manager.leave_state)))
+
     @signal.weak_slot
     def _on_click_play (self, ev = None):
         profile = self.menu.options.config
@@ -111,8 +120,11 @@ class MainMenuState (RootSubstate):
                    dialog_ret = None,
                    dialog_yes = None,
                    dialog_no = None):
-        
-        if dialog_yes == 'remove_profile':
+
+        if dialog_ret == 'credits':
+            self.manager.leave_state ()
+            
+        elif dialog_yes == 'remove_profile':
             selection = self.menu.profiles.selection
             profiles = self.menu.profiles.profiles
             profiles.remove (selection.value)
