@@ -173,7 +173,7 @@ class LoadGameDialog (widget.VBox, dialog.DialogBase):
                       (s [:-len (extension)],
                        time.asctime (
                            #"%b %e  %Y",
-                           time.gmtime (
+                           time.localtime (
                                stat (path.join (save_folder, s)).st_mtime))),
                       path.join (save_folder, s))
                      for s in listdir (save_folder)
