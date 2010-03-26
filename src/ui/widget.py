@@ -94,12 +94,16 @@ class SelectButton (Button):
 
     def __init__ (self,
                   parent = None,
+                  text = None,
+                  image = None,
                   selected = False,
                   theme = theme.select_button,
                   selected_img = None,
                   unselected_img = None,
                   *a, **k):
         super (SelectButton, self).__init__ (parent = parent,
+                                             text = text,
+                                             image = image,
                                              theme = theme, *a, **k)
         self._is_selected = False
         self._selected_img = selected_img

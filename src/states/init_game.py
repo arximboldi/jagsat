@@ -31,8 +31,9 @@ class InitGameState (GameSubstate):
         self.game.phase = 'init'
 
         if self.game._load_game: # HACK?
-            self._finished = [ p for p in self.game.world.players.itervalues ()
-                               if p.troops == 0 ]
+            self._finished = set ([
+                p for p in self.game.world.players.itervalues ()
+                if p.troops == 0 ])
         else:
             self._give_regions ()
             self._give_troops ()
