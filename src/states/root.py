@@ -19,6 +19,7 @@ from ui import music
 from ui import widget
 from ui import theme
 from ui import dialog
+from ui import player
 
 from PySFML import sf
 from tf.gfx import ui
@@ -189,15 +190,17 @@ class RootInputDialogState (RootDialogState):
 
 class RootMessageState (RootSubstate):
 
-    def do_setup (self, message = '', *a, **k):
+    def do_setup (self, message = '', position = None, *a, **k):
         super (RootMessageState, self).do_setup (*a, **k)
         
         self.ui_text = ui.MultiLineString (self.root.ui_layer,
                                            unicode (message))
         self.ui_text.set_center_rel (.5, .5)
         self.ui_text.set_position_rel (.5, .5)
-        self.ui_text.set_size (50)
+        self.ui_text.set_size (40)
 
+        if position is not None:
+            self.ui_text.set_rotation (player.rotation [position])
         self.root.enable_bg ()
         self.tasks.add (task.sequence (
             self.make_fade_task (task.fade),

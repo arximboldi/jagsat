@@ -35,7 +35,8 @@ class ReinforcementState (GameSubstate):
             'data/sfx/horses/horse_galloping.wav')
         self.manager.enter_state ('message', message =
             "New turn for player: %s.\n%s" % (game.world.current_player.name,
-            "Place your reinforcements on the map."))
+            "%30%Place your reinforcements on the map."),
+                                  position = game.world.current_player.position)
 
     def do_release (self):
         game = self.game

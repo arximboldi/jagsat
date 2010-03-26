@@ -50,8 +50,12 @@ class MovementState (GameSubstate):
 
         game.ui_world.on_pick_regions += self.on_move
         game.ui_world.on_click_region += self.on_click_region
-        self.manager.enter_state ('message', message =
-                                  'Move your troops among your countries.')
+        self.manager.enter_state (
+            'message', message =
+            'Movement phase for player %s.\n'
+            '%%30%%Move your troops among your countries.' %
+            game.world.current_player.name,
+            position = game.world.current_player.position)
 
     def do_release (self):
         super (MovementState, self).do_release ()

@@ -42,8 +42,12 @@ class AttackState (GameSubstate):
             r.model.definition in p.model.definition.neighbours)
         game.ui_world.on_pick_regions += self._on_attack
         
-        self.manager.enter_state ('message', message =
-            "You are ready to attack your enemies.")
+        self.manager.enter_state (
+            'message', message =
+            "Attack phase for player %s.\n"
+            "%%30%%You are ready to attack your enemies."
+            % game.world.current_player.name,
+            position = game.world.current_player.position)
 
     def do_release (self):
         if self.game.world.use_on_attack:

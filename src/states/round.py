@@ -96,7 +96,8 @@ class GameRoundState (GameSubstate):
         if player.mission.check_mission (self.game.world):
             self.manager.enter_state (
                 'message', message =
-                'Player %s won the game!' % player.name)
+                '%%50%%Game Finished.\nPlayer %s won the game!' % player.name,
+                position = player.position)
             self.manager.system.audio.play_sound (
                 'data/sfx/marchs/winning_player.wav')
             self._action_iter = iter ([ self.manager.leave_state ])
@@ -107,11 +108,13 @@ class GameRoundState (GameSubstate):
                 player.add_card (self._next_card ())
                 self.manager.enter_state (
                     'message', message =
-                    'Player %s got a new reinforcement card.' % player.name)
+                    'Player %s got a new reinforcement card.' % player.name,
+                    position = player.position)
             else:
                 self.manager.enter_state ('message', message =
                                           'Player %s can not get more cards.' %
-                                          player.name)
+                                          player.name,
+                                          position = player.position)
         else:
             self._action_iter.next () ()
     

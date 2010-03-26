@@ -49,7 +49,7 @@ class InitGameState (GameSubstate):
                 'data/sfx/drums/drum_march_2.wav')
             self.manager.enter_state (
                 'message', message =
-                "Welcome to the game, emperors.\n"
+                "%50%Welcome to the game, emperors.\n"
                 "Check your missions and place the troops.\n")
         else:
             self._change_to_test ()
