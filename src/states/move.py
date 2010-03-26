@@ -37,9 +37,9 @@ class MovementState (GameSubstate):
             is_reachable = lambda p, r: \
                 r.model.definition in p.model.definition.neighbours
         else:
-            game.world.find_components (
+            table = game.world.find_components (
                 lambda r: r.owner == game.world.current_player)
-            is_reachable = lambda p, r: r.model in p.model.component
+            is_reachable = lambda p, r: r.model in table [p.model]
         
         game.ui_world.enable_picking (
             lambda r:

@@ -99,27 +99,25 @@ class World (WorldSubject):
         return bool (self.regions_of (player))
                 
     def find_components (self, criteria = lambda x: True):
+        table = defaultdict (set)
         for r in self.regions.itervalues ():
             if criteria (r):
-                self.find_component (r, set (), criteria)
-            else:
-                r.component.clear ()
+                self.find_component (r, table, set (), criteria)
+        return table
 
     def find_component (self,
                         region,
+                        table,
                         component,
                         criteria = lambda x: True):
-        if region.component:
+        if table [region]:
             return
-        region.component = component
-        region.component.add (region)
+        table [region] = component
+        component.add (region)
         for r in region.definition.neighbours:
             r = self.regions [r.name]
             if criteria (r):
-                self.find_component (r, region.component, criteria)
-            else:
-                r.component.clear ()
-
+                self.find_component (r, table, component, criteria)
 
 RegionSubject, RegionListener = \
     make_observer (['on_set_region_troops',
@@ -138,8 +136,7 @@ class Region (RegionSubject):
         super (Region, self).__init__ (*a, **k)
         
         self.definition = definition
-        self.component  = set ()
-        
+                
     @property
     def total (self):
         return self.troops + self.used
