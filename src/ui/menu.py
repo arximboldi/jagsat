@@ -551,7 +551,7 @@ class MapSelector (widget.List):
                                             contents    = contents,
                                             *a, **k)
         for x in self._slots:
-            x.string.set_color (sf.Color (255, 255, 255, 180))
+            x.string.set_color (sf.Color (255, 255, 255, 200))
 
 
 
