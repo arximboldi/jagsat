@@ -74,10 +74,10 @@ class GameRoundState (GameSubstate):
         if old_player:
             game.ui_player [old_player].but_pass.deactivate ()
         else:
-            self._first_player = new_player # Hack
-        if new_player == self._first_player:
+            game.world.first_player = new_player # Not-so hack
+        if new_player == game.world.first_player:
             game.world.round += 1
-
+        
         if not new_player.alive:
             self._next_turn ()
         else:

@@ -68,6 +68,7 @@ class World (WorldSubject):
         self.map            = map_
         self.name           = name
         self.current_player = None
+        self.first_player   = None
         self._players = {} if players is None \
                            else dict ((p.name, p) for p in players)
         self._regions = dict ((r.name, Region (r))
@@ -138,7 +139,7 @@ class Region (RegionSubject):
         
         self.definition = definition
         self.component  = set ()
-
+        
     @property
     def total (self):
         return self.troops + self.used
