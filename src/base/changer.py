@@ -20,6 +20,7 @@ class Changer (object):
     
     def __init__ (self,
                   func = None,
+                  name = None,
                   value = None,
                   *a, **k):
         """
@@ -32,8 +33,8 @@ class Changer (object):
         assert func
         super (Changer, self).__init__ (*a, **k)
         
-        self._signal = func
-        self._name = '__Changer_' + str (id (self))
+        self._signal  = func
+        self._name    = '__Changer_' + (name or str (id (self)))
         self._default = value
 
     def __get__ (self, obj, cls):
@@ -47,9 +48,12 @@ class Changer (object):
 class InstChanger (Changer):
 
     def __init__ (self,
+                  func_name = None,
                   name = None,
-                  value_ = None,
+                  value = None,
                   *a, **k):
         super (InstChanger, self).__init__ (
-            func  = lambda obj, val: getattr (obj, name) (obj, val),
-            value = value_)
+            func  = lambda obj, val: getattr (obj, func_name) (obj, val),
+            name  = name,
+            value = value,
+            *a, **k)

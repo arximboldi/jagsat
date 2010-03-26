@@ -41,3 +41,21 @@ class YesNoDialog (widget.VBox, DialogBase):
 
         self.yes_button.on_click += lambda _: self.on_dialog_exit (ret = 'yes')
         self.no_button.on_click  += lambda _: self.on_dialog_exit (ret = 'no')
+
+
+class InputDialog (widget.VBox, DialogBase):
+
+    def __init__ (self,
+                  parent = None,
+                  message = None,
+                  input_text = 'Enter text here.',
+                  *a, **k):
+        super (InputDialog, self).__init__ (parent, center = True, *a, **k)
+
+        self.margin_bottom = 400
+        self.message = widget.Text (self, unicode (message))
+        self.message.set_size (50)
+        
+        widget.get_keyboard_input (input_text, lambda text:
+                                   self.on_dialog_exit (text))
+

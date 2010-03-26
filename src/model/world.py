@@ -32,7 +32,8 @@ def create_game (cfg):
     world = World (map_, players)
     world.use_on_attack = cfg.child ('use-on-attack').value
     world.use_on_move   = cfg.child ('use-on-move').value
-
+    world.name          = cfg.name
+    
     return world
 
 def create_player (cfg):
@@ -53,18 +54,20 @@ WorldSubject, WorldListener = \
 
 class World (WorldSubject):
 
-    phase          = InstChanger ('on_set_world_phase',          'init') # TODO
-    round          = InstChanger ('on_set_world_round',          0)
-    current_player = InstChanger ('on_set_world_current_player', None)
+    phase          = InstChanger ('on_set_world_phase', 'phase', 'init')
+    round          = InstChanger ('on_set_world_round', 'round', 0)
+    current_player = InstChanger ('on_set_world_current_player',
+                                  'current_player', None)
 
-    def __init__ (self, map_ = None, players = None, *a, **k):
+    def __init__ (self, map_ = None, players = None, name = 'default', *a, **k):
         assert map_
         super (World, self).__init__ (*a, **k)
 
         self.use_on_move    = True
         self.use_on_attack  = True
         self.map            = map_
-        
+        self.name           = name
+        self.current_player = None
         self._players = {} if players is None \
                            else dict ((p.name, p) for p in players)
         self._regions = dict ((r.name, Region (r))
@@ -125,9 +128,9 @@ RegionSubject, RegionListener = \
 
 class Region (RegionSubject):
     
-    troops = InstChanger ('on_set_region_troops', 0)
-    used   = InstChanger ('on_set_region_used',   0)
-    owner  = InstChanger ('on_set_region_owner',  None)
+    troops = InstChanger ('on_set_region_troops', 'troops', 0)
+    used   = InstChanger ('on_set_region_used',   'used', 0)
+    owner  = InstChanger ('on_set_region_owner',  'owner', None)
     
     def __init__ (self, definition = None, *a, **k):
         assert definition
@@ -180,8 +183,8 @@ PlayerSubject, PlayerListener = \
 
 class Player (PlayerSubject):
 
-    troops = InstChanger ('on_set_player_troops', 0)
-    alive  = InstChanger ('on_set_player_alive',  True)
+    troops = InstChanger ('on_set_player_troops', 'troops', 0)
+    alive  = InstChanger ('on_set_player_alive',  'alive',  True)
     
     def __init__ (self,
                   name = 'Unnamed',

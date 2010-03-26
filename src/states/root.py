@@ -31,7 +31,6 @@ test_playlist = [ 'data/sfx/clicks/failed_click.wav',
                   'data/sfx/clicks/successful_click.wav',
                   'data/sfx/clicks/successful_click2.wav' ]
 
-
 class RootSubstate (State):
 
     @lazyprop
@@ -148,6 +147,44 @@ class RootYesNoDialogState (RootDialogState):
             self.manager.leave_state (dialog_yes = self.yes_ret)
         else:
             self.manager.leave_state (dialog_no  = self.no_ret)
+
+
+class RootYesNoDialogState (RootDialogState):
+
+    def do_setup (self,
+                  message = '',
+                  yes_ret = 'yes',
+                  no_ret  = 'no',
+                  *a, **k):
+        super (RootYesNoDialogState, self).do_setup (
+            dialog.YesNoDialog, message = message,
+            *a, **k)
+        self.yes_ret = yes_ret
+        self.no_ret  = no_ret
+
+    @weak_slot
+    def _on_dialog_exit (self, ret):
+        if ret == 'yes':
+            self.manager.leave_state (dialog_yes = self.yes_ret)
+        else:
+            self.manager.leave_state (dialog_no  = self.no_ret)
+
+
+class RootInputDialogState (RootDialogState):
+
+    def do_setup (self,
+                  message = '',
+                  input_text = '',
+                  *a, **k):
+        super (RootInputDialogState, self).do_setup (
+            dialog.InputDialog,
+            message = message,
+            input_text = input_text,
+            *a, **k)
+
+    @weak_slot
+    def _on_dialog_exit (self, ret):
+        self.manager.leave_state (dialog_input = ret)
 
 
 class RootMessageState (RootSubstate):

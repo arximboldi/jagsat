@@ -21,7 +21,9 @@ class IngameMenu (widget.HBox, object):
         super (IngameMenu, self).__init__ (*a, **k)
 
         self.on_quit_game  = signal.Signal ()
+        self.on_save_game  = signal.Signal ()
         self.on_close_menu = signal.Signal ()
+        self.on_show_help  = signal.Signal ()
 
         self.set_position_rel (0.5, 0.5)
         self.set_center_rel (0.5, 0.5)
@@ -37,9 +39,9 @@ class IngameMenu (widget.HBox, object):
             self, 'Quit', 'data/icon/quit.png')
 
         self._but_close.on_click += lambda ev: self.on_close_menu ()
-        self._but_help.on_click += self.show_help
-        self._but_save.on_click += self.show_save
-        self._but_quit.on_click += lambda ev: self.on_quit_game ()
+        self._but_help.on_click  += lambda ev: self.on_show_help ()
+        self._but_save.on_click  += lambda ev: self.on_save_game ()
+        self._but_quit.on_click  += lambda ev: self.on_quit_game ()
         
     def show_help (self, ev):
 	_log.debug ('Showing the help...')

@@ -32,7 +32,7 @@ class EventLoop:
 
     def _add_default_keybindings(self):
         km = self.thegameloop.get_keyboardmanager()
-
+        
         ks = keyboard.KeyShortcut(sf.Key.C,
                                   requires_ctrl = True)
         km.create_keyboard_shortcut(\
@@ -72,30 +72,30 @@ class EventLoop:
                     self.mainwindow)
 
             elif event.Type == sf.Event.KeyPressed:
-                print "KeyPressed (code, alt, ctrl, shift)", \
-                    event.Key.Code, \
-                    event.Key.Alt, \
-                    event.Key.Control, \
-                    event.Key.Shift
+                # print "KeyPressed (code, alt, ctrl, shift)", \
+                #     event.Key.Code, \
+                #     event.Key.Alt, \
+                #     event.Key.Control, \
+                #     event.Key.Shift
                 km = self.thegameloop.get_keyboardmanager()
                 km.call_key(event.Key.Code,
                             event.Key.Alt,
                             event.Key.Control,
                             event.Key.Shift)
             elif event.Type == sf.Event.Resized:
-                print "Event: Resized"
+                #print "Event: Resized"
                 #recalculate_views(configuration.mainwindow)
                 pass
             elif event.Type == sf.Event.LostFocus:
-                print "Event: LostFocus "
+                pass #print "Event: LostFocus "
             elif event.Type == sf.Event.GainedFocus:
-                print "Event: GainedFocus"
+                pass #print "Event: GainedFocus"
             elif event.Type == sf.Event.TextEntered:
-                print "Event: TextEntered"
+                pass #print "Event: TextEntered"
             elif event.Type == sf.Event.KeyReleased:
-                print "Event: KeyReleased"
+                pass #print "Event: KeyReleased"
             elif event.Type == sf.Event.MouseWheelMoved:
-                print "Event: MouseWheelMoved"
+                pass #print "Event: MouseWheelMoved"
             elif event.Type == sf.Event.MouseButtonPressed:
                 self.themousestate.mousebutton_pressed(self.thegameloop,
                                                        event)
@@ -106,17 +106,17 @@ class EventLoop:
                 self.themousestate.mouse_move(self.thegameloop,
                                               event)
             elif event.Type == sf.Event.MouseEntered:
-                print "Event: MouseEntered"
+                pass #print "Event: MouseEntered"
             elif event.Type == sf.Event.MouseLeft:
-                print "Event: MouseLeft"
+                pass #print "Event: MouseLeft"
             elif event.Type == sf.Event.JoyButtonPressed:
-                print "Event: JoyButtonPressed"
+                pass #print "Event: JoyButtonPressed"
             elif event.Type == sf.Event.JoyButtonReleased:
-                print "Event: JoyButtonReleased"
+                pass #print "Event: JoyButtonReleased"
             elif event.Type == sf.Event.JoyMoved:
-                print "Event: JoyMoved"
+                pass #print "Event: JoyMoved"
             else:
-                print "Unknown event", event.Type
+                pass #print "Unknown event", event.Type
                 assert 0
 
         for v in self.mainwindow.views:
@@ -154,4 +154,4 @@ class EventLoop:
                 tf.gfx.widget.debug.create_error(s,
                                                  lr)
             except IndexError, e:
-                print "(FIXME, USE LOG), ERROR: ", s
+                pass #print "(FIXME, USE LOG), ERROR: ", s

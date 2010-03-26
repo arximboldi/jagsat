@@ -29,11 +29,15 @@ class InitGameState (GameSubstate):
     def do_setup (self, *a, **k):
 
         self.game.phase = 'init'
-        
-        self._give_regions ()
-        self._give_troops ()
-	self._give_missions ()
-        self._finished = set ()
+
+        if self.game._load_game: # HACK?
+            self._finished = [ p for p in self.game.world.players.itervalues ()
+                               if p.troops == 0 ]
+        else:
+            self._give_regions ()
+            self._give_troops ()
+            self._give_missions ()
+            self._finished = set ()
         
 	self.game.ui_world.on_click_region += self.on_place_troop
         self.game.ui_world.click_cond = lambda r: r.model.owner.troops > 0

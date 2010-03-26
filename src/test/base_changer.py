@@ -16,7 +16,7 @@ class TestChanger (unittest.TestCase):
 
     def test_member (self):
         class Mock (object):
-            changer = Changer (mock_raiser, 0)
+            changer = Changer (mock_raiser, value = 0)
 
         a = Mock ()
         self.assertEquals (a.changer, 0)

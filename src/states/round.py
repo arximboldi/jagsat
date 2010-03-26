@@ -30,33 +30,45 @@ class GameRoundState (GameSubstate):
         for p in game.ui_player.itervalues ():
             p.but_pass.deactivate ()
             p.but_pass.on_click += lambda ev: self.manager.leave_state ()
-            # This would break if the players could pass in a state that is not
-            # just above this one in the stack.
-            
-	game.world.current_player = None
+
+        self._setup_actions ()
+        if game.world.phase != 'init':
+            self._setup_loading ()
+        self._action_iter.next () ()
+
+    def _setup_loading (self):
+        game = self.game
+        while self._player_iter.next () != game.world.current_player:
+            pass
+        skip = ['init', 'reinforce', 'attack', 'move'].index (game.world.phase)
+        for i in xrange (skip):
+            self._action_iter.next ()
+        game.ui_player [game.world.current_player].but_pass.activate ()
         
+    def _setup_actions (self):
+        game = self.game
         players = game.world.ordered_players ()        
-        player_iter = islice (cycle (players), randint (0, len (players)), None)
+        self._player_iter = islice (cycle (players),
+                                    randint (0, len (players)), None)
 
         if game.test_phase:
             self._action_iter = iter (
-                [ lambda: self._next_turn (player_iter),
+                [ lambda: self._next_turn (),
                   lambda: self.manager.enter_state (game.test_phase),
                   lambda: self.manager.leave_state () ])
         else:
             self._action_iter = cycle (
-                [ lambda: self._next_turn (player_iter),
+                [ lambda: self._next_turn (),
                   lambda: self.manager.enter_state ('reinforce'),
                   lambda: self.manager.enter_state ('attack'),
                   lambda: self.manager.enter_state ('move'),
                   lambda: self._finish_turn () ])
-        self._action_iter.next () ()
 
-    def _next_turn (self, player_iter):
+    def _next_turn (self):
         game = self.game
         
         old_player = game.world.current_player
-        new_player = player_iter.next ()
+        new_player = self._player_iter.next ()
         game.world.current_player = new_player
         game.ui_player [new_player].but_pass.activate ()
         if old_player:
@@ -67,7 +79,7 @@ class GameRoundState (GameSubstate):
             game.world.round += 1
 
         if not new_player.alive:
-            self._next_turn (player_iter)
+            self._next_turn ()
         else:
             new_player.mission.pre_check_mission (game.world)
             self._action_iter.next () ()

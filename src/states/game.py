@@ -9,25 +9,29 @@
 
 from PySFML import sf
 
-from base.signal import weak_slot
-from base.conf   import ConfNode
-from base.util   import lazyprop
-from core.state  import State
-from core.input  import key
-from core        import task
-from model.world import create_game, cardset_value
-
-from ui.world     import WorldComponent, map_op
-from ui.player    import PlayerComponent
-from ui.game_menu import GameMenuComponent, GameHudComponent
-from ui           import widget
-from ui           import theme
+from base.log      import get_log
+from base.error    import LoggableError
+from base.signal   import weak_slot
+from base.conf     import ConfNode
+from base.util     import lazyprop
+from core.state    import State
+from core.input    import key
+from core          import task
+from model.world   import create_game, cardset_value
+from model.worldio import load_game
+from ui.world      import WorldComponent, map_op
+from ui.player     import PlayerComponent
+from ui.game_menu  import GameMenuComponent, GameHudComponent
+from ui            import widget
+from ui            import theme
 
 from root import RootSubstate
 from util import QuittableState
 
 from tf.gfx import ui
 from functools import partial
+
+_log = get_log (__name__)
 
 class GameSubstate (QuittableState):
 
@@ -57,18 +61,31 @@ test_profile = ConfNode (
         'enabled'  : True },
       'map' : 'data/map/world_map.xml' })
 
+
 class GameState (RootSubstate):
 
     def __init__ (self, test_phase = None, *a, **k):
         super (GameState, self).__init__ (*a, **k)
         self.test_phase = test_phase
         
-    def do_setup (self, profile = None, *a, **k):
+    def do_setup (self,
+                  profile = None,
+                  load_game = None,
+                  *a, **k):
         super (GameState, self).do_setup (*a, **k)
-        self._setup_state (profile)
-        self._setup_ui ()
-        self._setup_logic ()
-        self.manager.enter_state ('init_game')
+
+        self._profile   = profile
+        self._load_game = load_game
+        
+        self._setup_state ()
+        if self.world:
+            self._setup_ui ()
+            self._setup_logic ()
+            self._enter_game ()
+
+    def do_unsink (self, *a, **k):
+        if self.parent_state: # We are not running in test mode, go to menu
+            self.manager.change_state ('main_menu')
 
     def do_release (self):
         for x in self.ui_player.itervalues ():
@@ -76,16 +93,26 @@ class GameState (RootSubstate):
         self.ui_world.remove_myself ()
         self.ui_menu.remove_myself ()
         self.ui_hud.remove_myself ()
-        
-    def do_unsink (self, *a, **k):
-        if self.parent_state: # We are not running in test mode, go to menu
-            self.manager.change_state ('main_menu')
-        else:
-            self.manager.leave_state ()
-    
-    def _setup_state (self, profile):
-        self.world = create_game (profile or test_profile)
 
+    def _enter_game (self):
+        if self.world.phase == 'init':
+            self.manager.enter_state ('init_game')
+        else:
+            self.manager.enter_state ('game_round')
+    
+    def _setup_state (self):
+        if self._load_game is None:
+            _log.debug ('Starting new game.')
+            self.world = create_game (self._profile or test_profile)
+        else:
+            _log.debug ('Loading game: ' + self._load_game)
+            try:
+                self.world = load_game (self._load_game)
+            except LoggableError, e:
+                e.log ()
+                self.manager.change_state ('message', message =
+                                           'Error while loading game :(')
+    
     def _setup_ui (self):
         system = self.manager.system
 

@@ -56,7 +56,7 @@ class PlayerComponent (widget.VBox, object):
             self, None, 'data/icon/small.png', theme = self._but_theme)
         self._but_main.on_click += lambda ev: self.on_toggle_menu (self)
         
-        self._txt_troops = ui.String (self._but_main, u"0")
+        self._txt_troops = ui.String (self._but_main, player.troops or '')
         self._txt_troops.set_center_rel (0.5, 0.5)
         self._txt_troops.set_position (28, 26)
         self._txt_troops.set_size (20)
@@ -85,7 +85,6 @@ class PlayerComponent (widget.VBox, object):
         self._but_mission.on_click += self._on_show_mission
         self._but_cards.on_click   += self._on_show_cards
 
-        # self._but_undo.deactivate ()
         self._but_pass.deactivate ()
 
         self._but_pass.on_click += self.on_toggle_menu

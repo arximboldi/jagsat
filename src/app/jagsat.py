@@ -21,6 +21,7 @@ from states.root           import RootState
 from states.root           import RootDialogState
 from states.root           import RootYesNoDialogState
 from states.root           import RootMessageState
+from states.root           import RootInputDialogState
 from states.game           import GameState
 from states.init_game      import InitGameState
 from states.ingame_menu    import IngameMenuState
@@ -104,6 +105,7 @@ Game options:
         self.add_state ('message',          RootMessageState)
         self.add_state ('dialog',           RootDialogState)
         self.add_state ('yes_no_dialog',    RootYesNoDialogState)
+        self.add_state ('input_dialog',     RootInputDialogState)
 
         self.add_state ('test_reinforce', partial (GameState,
                                                    test_phase='reinforce'))

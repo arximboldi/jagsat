@@ -7,6 +7,7 @@
 #  completely forbidden without explicit permission of their authors.
 #
 
+from base.log import get_log
 from base import signal
 from base import conf
 
@@ -18,6 +19,8 @@ from ui.menu import (MainMenu, ProfileChangerDialog, ProfileChangerReturn,
 
 import os.path
 import os
+
+_log = get_log (__name__)
 
 def validate_profile (cfg):
     players = filter (lambda c: c.child ('enabled').value,
@@ -131,7 +134,9 @@ class MainMenuState (RootSubstate):
             self._rebuild ()
 
         elif isinstance (dialog_ret, LoadGameReturn):
-            pass
+            _log.debug ('Loading game: ' + str (dialog_ret.retval))
+            self.manager.change_state ('game',
+                                       load_game = dialog_ret.retval)
 
         elif isinstance (dialog_ret, DeleteGameReturn):
             if dialog_ret.retval:
@@ -149,3 +154,4 @@ class MainMenuState (RootSubstate):
     def do_release (self):
         super (MainMenuState, self).do_release ()
         self.menu.remove_myself ()
+        conf.GlobalConf ().save () # Be safe if the game crashes later... ;)

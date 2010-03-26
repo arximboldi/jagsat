@@ -162,7 +162,7 @@ class WorldComponent (ui.Image, object):
 
     def rotate_to_owner (self):
         return task.parallel (* [ self.rotate_sth_to_player (r, r.model.owner)
-                                  for r in self._regions ])
+                                  for r in self._regions if r.model.owner ])
 
     def rotate_sth_to_player (self, sth, p):
         old_rot = sth.GetRotation ()
@@ -292,6 +292,9 @@ class RegionComponent (RegionListener, ui.Circle, object):
         
         self.set_scale (zoom, zoom)
         self.set_center_rel (.5, .5)
+
+        self._update_troops ()
+        self._update_owner ()
         
     def highlight (self):
         self._outline_color = sf.Color (255, 255, 96)
@@ -317,6 +320,17 @@ class RegionComponent (RegionListener, ui.Circle, object):
     def set_show_used (self, val):
         self._txt_troops.set_visible (not val)
         self._txt_used.set_visible (val)
+
+    def _update_owner (self):
+        self._fill_color = (self.model.owner and \
+                            theme.player_color [self.model.owner.color]) \
+                           or region_free_color
+        self._rebuild_sprite ()
+
+    def _update_troops (self):
+        self._txt_troops.set_string (str (self.model.troops))
+        self._txt_used.set_string (str (self.model.troops) + '/' +
+                                   str (self.model.used))
         
     def on_set_region_troops (self, region, troops):
         self._txt_troops.set_string (unicode (troops))

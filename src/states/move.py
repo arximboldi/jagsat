@@ -27,7 +27,7 @@ class MovementState (GameSubstate):
         super (MovementState, self).do_setup (*a, **k)
         game = self.game
 
-        game.world.phase = 'movement'
+        game.world.phase = 'move'
 
         if game.world.use_on_move:
             game.ui_world.enable_used ()

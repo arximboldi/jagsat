@@ -114,9 +114,9 @@ class View:
     """
 
     def __init__(self, window, sfview):
-        print window
-        print window.__class__
-        print "W", Window
+        #print window
+        #print window.__class__
+        #print "W", Window
         assert isinstance(window, Window)
         self.window = window
         self.view = sfview
@@ -278,8 +278,9 @@ class Layer:
         assert obj
         assert obj not in self.objects
         if not hasattr(obj, "draw"):
-            print "tiloc: ERROR, you are drawing a", obj, \
-                ", this is possibly a PySFML native object."
+            pass
+            #print "tiloc: ERROR, you are drawing a", obj, \
+            #    ", this is possibly a PySFML native object."
         self.objects.append(obj)
         assert obj._layer is None
         obj._layer = self
@@ -1302,12 +1303,10 @@ class String(Component):
         string = self._string
         
         if string and string [0] == "%":
-            print "checking string: ", string
             idx   = string [1:].find ('%')
             if idx >= 0:
                 size  = int (string [1:idx+1])
                 txt   = string [idx+2:]
-                print size, txt
                 self._sprite.SetSize (size)
                 self._sprite.SetText (txt)
     
@@ -1351,7 +1350,7 @@ class i18nString(String):
 
     def __init__(self, parent, lcn, key, *args, **kwargs):
         if not key:
-            print "tf: Error: i18nstring should have key!"
+            #print "tf: Error: i18nstring should have key!"
             assert 0
         assert isinstance(key, str)
         # use key temporarily
@@ -1430,7 +1429,7 @@ class i18nMultiLineString(MultiLineString):
 
     def __init__(self, parent, lcn, key, *args, **kwargs):
         if not key:
-            print "tf: Error: i18nstring should have key!"
+            #print "tf: Error: i18nstring should have key!"
             assert 0
         assert isinstance(key, str)
         # use key temporarily
