@@ -29,6 +29,9 @@ class MovementState (GameSubstate):
 
         game.world.phase = 'move'
 
+        self.tasks.add (game.ui_world.rotate_to_player (
+            game.world.current_player))
+
         if game.world.use_on_move:
             game.ui_world.enable_used ()
             is_reachable = lambda p, r: \

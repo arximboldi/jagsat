@@ -31,6 +31,9 @@ class AttackState (GameSubstate):
 
 	game.world.phase = 'attack'
 
+        self.tasks.add (game.ui_world.rotate_to_player (
+            game.world.current_player))
+
         if game.world.use_on_attack:
             game.ui_world.enable_used ()
         game.ui_world.enable_picking (
