@@ -11,9 +11,9 @@ from PySFML import sf
 
 player_color = {
     0: sf.Color.Blue,
-    1: sf.Color.Green,
+    1: sf.Color (0, 230, 0),
     2: sf.Color.Red,
-    3: sf.Color.Yellow,
+    3: sf.Color (255, 220, 0),
     4: sf.Color.Black,
     5: sf.Color.Magenta }
 

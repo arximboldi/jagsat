@@ -50,8 +50,11 @@ class PlayerComponent (widget.VBox, object):
         self._but_theme = theme.copy_button_theme (theme.small_button)
         pc = theme.player_color [player.color]
         self._but_theme.active.color  = pc
-        self._but_theme.active.border = sf.Color (pc.r*.4, pc.g*.4, pc.b*.4)
-
+        if (pc.r + pc.g + pc.b) / 3. > 64:
+            self._but_theme.active.border = sf.Color (pc.r*.4, pc.g*.4, pc.b*.4)
+        else:
+            self._but_theme.active.border = sf.Color (pc.r+40, pc.g+40, pc.b+40)
+            
         self._but_main = widget.Button (
             self, None, 'data/icon/small.png', theme = self._but_theme)
         self._but_main.on_click += lambda ev: self.on_toggle_menu (self)
