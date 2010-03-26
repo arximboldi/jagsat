@@ -147,9 +147,12 @@ class MainMenuState (RootSubstate):
 
         elif isinstance (dialog_ret, LoadGameReturn):
             _log.debug ('Loading game: ' + str (dialog_ret.retval))
-            self.manager.change_state ('game',
-                                       load_game = dialog_ret.retval)
-
+            if dialog_ret.retval:
+                self.manager.change_state ('game',
+                                           load_game = dialog_ret.retval)
+            else:
+                self.manager.enter_state ('message',
+                                          message = 'Nothing to load.')
         elif isinstance (dialog_ret, DeleteGameReturn):
             if dialog_ret.retval:
                 self.manager.enter_state (
