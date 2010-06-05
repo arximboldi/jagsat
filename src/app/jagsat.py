@@ -1,14 +1,14 @@
 #
 #  Copyright (C) 2009, 2010 JAGSAT Development Team (see below)
 #  
-#  This file is part of TF.
+#  This file is part of JAGSAT.
 #  
-#  TF is free software: you can redistribute it and/or
+#  JAGSAT is free software: you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
 #  published by the Free Software Foundation, either version 3 of the
 #  License, or (at your option) any later version.
 #  
-#  TF is distributed in the hope that it will be useful,
+#  JAGSAT is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
@@ -68,15 +68,7 @@ Game options:
   -s, --state <state> Initial state.
       --ratio-hack    Enable hack for the Asus tablet.
 """
-
-    LICENSE = \
-"""
-  This software is in development and the distribution terms have not
-  been decided yet. Therefore, its distribution outside the JAGSAT
-  project team or the Project Course evalautors in Abo Akademy is
-  completly forbidden without explicit permission of their authors.
-"""
-
+    
     AUTHOR = 'The JAGSAT development team.'
     COPYRIGHT = 'Copyright (C) 2009 The JAGSAT development team.'
 
