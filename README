@@ -1,60 +1,74 @@
-This is the README for the JAGSAT project -- Code of Greed.
+Code of Greed
+=============
 
-Copyright (C) 2009, 2010 JAGSAT Development Team (see below)
+Code of Greed is an innovative Risk clone aimed at tablet devices. It
+assumes that the tablet PC is laying on a board with the players
+sitting around. The user interface rotates to face each of the players
+when it is her turn.  Also, it includes customizable maps, and rule
+variations, profiles, saving and loading the game and more.
 
-This file is part of JAGSAT.
+![screenshot](http://sinusoid.es/screens/jagsat.png)
 
-JAGSAT is free software: you can redistribute it and/or
-modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
-
-JAGSAT is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-JAGSAT Development Team is:
-  - Juan Pedro Bolivar Puente
-  - Alberto Villegas Erce
-  - Guillem Medina
-  - Sarah Lindstrom
-  - Aksel Junkkila
-  - Thomas Forss
-
-Further licensing information in data/README.
-
-Instructions for installing and running project JAGSAT in GNU/linux
-===================================================================
+Installing in GNU/Linux
+-----------------------
 
 You need to have the following packages installed:
 
-Python
-Python-sfml
-Python-opengl
+* Python
+* Python-sfml
+* Python-opengl
 
-If you are missing any of these packages you can follow these steps:
+If you are missing any of these packages you can follow these steps.
 
+1. If you don't have `apt` installed you can install by running:
 
-1.If you don't have apt installed you can install by running:
-
-	~$ sudo yum install apt
-
-	~$ sudo apt-get update
+   > ```
+   > sudo yum install apt
+   > sudo apt-get update
+   > ```
 
 2. Install the packages via apt-get:
 
-	~$ sudo apt-get install python
+   > ```
+   > sudo apt-get install python
+   > sudo apt-get install python-sfml
+   > sudo apt-get install python-opengl
+   > ```
 
-	~$ sudo apt-get install python-sfml
+3. To run the game do the following, enter folder where the game is
+located and then:
 
-	~$ sudo apt-get install python-opengl
+   > ```
+   > ./run.sh
+   > ```
 
-3. To run the game do the following:
+License
+-------
 
-	Enter folder where the game is located
+> Copyright (C) 2009, 2010 JAGSAT Development Team (see below)
+>
+> This file is part of JAGSAT.
+>
+> JAGSAT is free software: you can redistribute it and/or
+> modify it under the terms of the GNU General Public License as
+> published by the Free Software Foundation, either version 3 of the
+> License, or (at your option) any later version.
+>
+> JAGSAT is distributed in the hope that it will be useful,
+> but WITHOUT ANY WARRANTY; without even the implied warranty of
+> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> GNU General Public License for more details.
+>
+> You should have received a copy of the GNU General Public License
+> along with this program.  If not, see <http://www.gnu.org/licenses/>.
+>
+> JAGSAT Development Team is:
+>   - Juan Pedro Bolivar Puente
+>   - Alberto Villegas Erce
+>   - Guillem Medina
+>   - Sarah Lindstrom
+>   - Aksel Junkkila
+>   - Thomas Forss
+>
 
-	~$ ./run.sh
+Further licensing information in data/README.
